@@ -193,6 +193,16 @@ body{
 .nav-wallet.bump{animation:walletBump 0.4s cubic-bezier(0.34,1.56,0.64,1);}
 @keyframes walletBump{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
+/* ===== AUTO-SAVE INDICATOR (NEW) ===== */
+.save-indicator{
+  position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
+  background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);
+  color:rgba(34,197,94,0.7);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;
+  padding:5px 14px;border-radius:20px;z-index:500;
+  opacity:0;transition:opacity 0.4s;pointer-events:none;
+}
+.save-indicator.show{opacity:1;}
+
 .logout-btn{
   padding:6px 14px;border:1px solid rgba(255,215,0,0.1);border-radius:2px;
   background:transparent;color:rgba(255,255,255,0.25);
@@ -881,6 +891,9 @@ body{
 <div class="bg-layer bg-vignette"></div>
 <canvas class="particle-canvas" id="particleCanvas"></canvas>
 
+<!-- ===== AUTO-SAVE INDICATOR (NEW) ===== -->
+<div class="save-indicator" id="saveIndicator">✓ SAVED</div>
+
 <!-- OVERLAYS -->
 <div class="win-flash" id="winFlash"></div>
 <div class="toast" id="toast"></div>
@@ -1052,7 +1065,6 @@ body{
       <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
       <div class="corner corner-bl"></div><div class="corner corner-br"></div>
 
-      <!-- Level badge -->
       <div style="text-align:center;margin-bottom:12px;">
         <div class="level-badge">LEVEL <span class="lvl-num" id="lvlNum">1</span> &nbsp;·&nbsp; <span id="lvlTitle">Bronze</span></div>
         <div class="xp-bar-wrap"><div class="xp-bar" id="xpBar" style="width:0%"></div></div>
@@ -1369,6 +1381,28 @@ let freeSpins=0,inBonus=false;
 let historyFilter='all';
 const PROMPTPAY='1478400029318';
 
+// ===== [FIX 1] AUTO-SAVE — save ใน background ทุกครั้งที่ state เปลี่ยน =====
+let _saveTimer=null;
+function scheduleSave(){
+  clearTimeout(_saveTimer);
+  _saveTimer=setTimeout(async()=>{
+    if(!currentUser||!currentUserData)return;
+    try{
+      currentUserData.coins=gameState.coins;
+      currentUserData.won=gameState.won;
+      currentUserData.spins=gameState.spins;
+      currentUserData.xp=gameState.xp||0;
+      currentUserData.achievements=gameState.achievements||[];
+      await db.collection('users').doc(currentUser).set(currentUserData);
+      // แสดง indicator เล็กๆ ว่า saved แล้ว
+      const ind=document.getElementById('saveIndicator');
+      ind.classList.add('show');
+      clearTimeout(ind._t);
+      ind._t=setTimeout(()=>ind.classList.remove('show'),1800);
+    }catch(e){/* silent retry next time */}
+  },1500);
+}
+
 const SYMBOLS=[
   {sym:'🍒',name:'cherry',mult:3},
   {sym:'🍋',name:'lemon',mult:4},
@@ -1520,6 +1554,8 @@ function loginSuccess(u){
   renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();
 }
 async function doLogout(){
+  // Force immediate save before logout
+  clearTimeout(_saveTimer);
   await saveGameState();
   currentUser=null;currentUserData=null;
   sessionStorage.removeItem('ls_session');
@@ -1545,6 +1581,7 @@ function updateUI(){
   document.getElementById('navCoins').textContent=gameState.coins.toLocaleString();
   const w=document.getElementById('navWallet');
   w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump');
+  scheduleSave(); // [FIX 1] auto-save ทุกครั้งที่ UI อัปเดต
 }
 
 // ===== DAILY LOGIN =====
@@ -1756,9 +1793,9 @@ function setMsg(txt,cls){const el=document.getElementById('slotMsg');el.textCont
 
 // ===== STREAK FREE SPIN STATE =====
 let streakActive=false;
-let streakMult=0;      // how many consecutive 3-of-a-kind
-let streakTotalWon=0;  // total won this streak
-let pendingStreakSpin=false; // flag: do next spin as streak free spin
+let streakMult=0;
+let streakTotalWon=0;
+let pendingStreakSpin=false;
 
 function showStreakBadge(mult,total){
   const b=document.getElementById('streakBadge');
@@ -1783,10 +1820,9 @@ function evaluateResult(syms){
     setTimeout(()=>triggerBonusRound(sp),300);
     setMsg('🎁 BONUS ROUND! '+sp+' Free Spins Awarded','bonus');
     playBonus();
-    // end any streak
     streakActive=false;streakMult=0;streakTotalWon=0;pendingStreakSpin=false;
     hideStreakBadge();
-    return false; // not a 3-of-a-kind win for streak purposes
+    return false;
   }
 
   const allSame=syms[0].name===syms[1].name&&syms[1].name===syms[2].name;
@@ -1794,7 +1830,6 @@ function evaluateResult(syms){
 
   if(allSame){
     const win=bet*syms[0].mult;
-    // ===== STREAK LOGIC =====
     streakMult++;
     streakTotalWon+=win;
     gameState.coins+=win;gameState.won+=win;
@@ -1818,16 +1853,13 @@ function evaluateResult(syms){
       playWin();
     }
     flashWin(syms[0].name==='seven');
-    // mark next spin as streak free spin
     pendingStreakSpin=true;
     streakActive=true;
     showStreakBadge(streakMult,streakTotalWon);
     addXP(1);checkAchievements();
-    return true; // was a win
+    return true;
   }else{
-    // === END STREAK ===
     if(streakActive&&streakMult>0){
-      // streak ended
       const finalTotal=streakTotalWon;
       const finalMult=streakMult;
       setMsg('🎊 STREAK จบที่ ×'+finalMult+'  รวมได้ +'+finalTotal.toLocaleString()+' coins!','win');
@@ -1889,7 +1921,7 @@ function endBonus(){
   showToast('Bonus Round finished! 🎊','','green');
 }
 
-// ===== CORE SPIN LOGIC (shared by manual + auto + streak) =====
+// ===== CORE SPIN LOGIC =====
 async function executeSpin(){
   if(spinning)return false;
   try{getAudio().resume();}catch(e){}
@@ -1905,7 +1937,7 @@ async function executeSpin(){
   }
 
   spinning=true;
-  pendingStreakSpin=false; // consume
+  pendingStreakSpin=false;
 
   if(isBonusFree){
     freeSpins--;updateFSBadge();
@@ -1958,12 +1990,9 @@ async function executeSpin(){
 
 // MANUAL SPIN
 async function doSpin(){
-  if(autoRunning)return; // block manual during auto
+  if(autoRunning)return;
   await executeSpin();
-  // if streak is active, show streak badge hint but don't auto-fire — user must press again
-  // (streak free spin fires automatically via executeSpin's pendingStreakSpin flag on next call)
   if(pendingStreakSpin){
-    // auto-trigger streak free spin after short delay
     setTimeout(()=>doStreakContinue(),900);
   }
 }
@@ -1976,8 +2005,8 @@ async function doStreakContinue(){
   }
 }
 
-// ===== AUTO SPIN =====
-let autoCount=0;        // selected count (-1 = infinite)
+// ===== [FIX 2] AUTO SPIN — หยุดอัตโนมัติเมื่อครบรอบ =====
+let autoCount=0;
 let autoSpinsDone=0;
 let autoRunning=false;
 let autoStopRequested=false;
@@ -2025,24 +2054,37 @@ async function toggleAuto(){
   document.getElementById('spinBtn').disabled=true;
   updateAutoStatus();
 
-  while(autoRunning&&!autoStopRequested){
-    if(autoCount!==-1&&autoSpinsDone>=autoCount){stopAuto();break;}
+  // [FIX 2] loop ที่ break ออกทันทีเมื่อครบรอบ
+  while(autoRunning && !autoStopRequested){
+    // ตรวจว่าครบรอบหรือยัง (ยกเว้น infinite)
+    if(autoCount !== -1 && autoSpinsDone >= autoCount) break;
+
     if(gameState.coins<bet&&freeSpins===0&&!pendingStreakSpin){
       stopAuto();showEmptyOverlay();break;
     }
+
     await executeSpin();
     autoSpinsDone++;
     updateAutoStatus();
-    // if streak free spin is pending, let it fire — but count it
+
+    // จัดการ streak free spins ภายใน auto
     while(pendingStreakSpin&&!autoStopRequested){
       await new Promise(r=>setTimeout(r,600));
       await executeSpin();
       autoSpinsDone++;
       updateAutoStatus();
     }
-    if(!autoStopRequested)await new Promise(r=>setTimeout(r,400));
+
+    // เช็คอีกครั้งหลัง streak
+    if(autoCount !== -1 && autoSpinsDone >= autoCount) break;
+
+    if(!autoStopRequested) await new Promise(r=>setTimeout(r,400));
   }
+
+  // loop จบ — ตรวจว่าครบรอบหรือ user กด stop
+  const finished = !autoStopRequested && autoCount !== -1 && autoSpinsDone >= autoCount;
   stopAuto();
+  if(finished) showToast('Auto Spin เสร็จ! ครบ '+autoCount+' รอบ ✓','','green');
 }
 
 function stopAuto(){
@@ -2111,7 +2153,6 @@ function drawWheel(angle){
     ctx.fillStyle='rgba(255,215,0,0.8)';ctx.font="bold 12px 'Cinzel',serif";
     ctx.fillText(seg.label,r-12,4);ctx.restore();
   });
-  // outer ring
   ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);
   ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=2;ctx.stroke();
   ctx.restore();
@@ -2139,7 +2180,6 @@ function spinWheel(){
     if(prog<1){requestAnimationFrame(animate);}
     else{
       wheelAngle=targetAngle%(Math.PI*2);
-      // figure out winner: pointer at top = angle 0 from top
       const n=WHEEL_SEGMENTS.length;
       const arc=(2*Math.PI)/n;
       const normalised=(((-wheelAngle)%(Math.PI*2))+(Math.PI*2))%(Math.PI*2);
@@ -2177,9 +2217,7 @@ function newScratchCard(){
   playClick();
   gameState.coins-=30;updateUI();
   scratchActive=true;scratchRevealed=0;
-  // generate 3 symbols
   const pick=()=>SCRATCH_SYMS[Math.floor(Math.random()*SCRATCH_SYMS.length)];
-  // rigged to win ~30% of the time
   if(Math.random()<0.3){
     const s=pick();scratchResult=[s,s,s];
   }else{
@@ -2187,10 +2225,8 @@ function newScratchCard(){
     while(scratchResult[0]===scratchResult[1]&&scratchResult[1]===scratchResult[2]);
   }
   const VALS={'🍒':100,'💎':500,'⭐':200,'🎁':300,'7️⃣':1000,'🔔':150};
-  // render cells
   const res=document.getElementById('scratchResult');
   res.innerHTML=scratchResult.map(s=>`<div class="scratch-cell"><div class="sc-sym">${s}</div><div class="sc-val">+${VALS[s]}</div></div>`).join('');
-  // draw scratch layer
   const canvas=document.getElementById('scratchCanvas');
   const wrap=document.querySelector('.scratch-wrap');
   canvas.width=wrap.offsetWidth||320;canvas.height=160;
@@ -2349,6 +2385,8 @@ function showPanel(name){
   document.getElementById(panelMap[name]).classList.add('active');
   document.getElementById(navMap[name]).classList.add('active');
   if(name==='ach'){renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();}
+  // [FIX 3] wallet panel — refresh history จาก memory ทันที ไม่ต้องรีโหลด
+  if(name==='topup'){renderHistory();}
 }
 
 function showToast(msg,type,theme){
