@@ -193,7 +193,7 @@ body{
 .nav-wallet.bump{animation:walletBump 0.4s cubic-bezier(0.34,1.56,0.64,1);}
 @keyframes walletBump{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 
-/* ===== AUTO-SAVE INDICATOR (NEW) ===== */
+/* ===== AUTO-SAVE INDICATOR ===== */
 .save-indicator{
   position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
   background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);
@@ -202,6 +202,19 @@ body{
   opacity:0;transition:opacity 0.4s;pointer-events:none;
 }
 .save-indicator.show{opacity:1;}
+
+/* ===== REAL-TIME SYNC INDICATOR (NEW) ===== */
+.sync-indicator{
+  position:fixed;top:68px;right:16px;z-index:500;
+  display:flex;align-items:center;gap:6px;
+  background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);
+  color:rgba(0,229,255,0.7);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;
+  padding:5px 12px;border-radius:20px;pointer-events:none;
+  opacity:0;transition:opacity 0.5s;
+}
+.sync-indicator.show{opacity:1;}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:rgba(0,229,255,0.8);animation:syncPulse 1s ease infinite;}
+@keyframes syncPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
 
 .logout-btn{
   padding:6px 14px;border:1px solid rgba(255,215,0,0.1);border-radius:2px;
@@ -891,8 +904,14 @@ body{
 <div class="bg-layer bg-vignette"></div>
 <canvas class="particle-canvas" id="particleCanvas"></canvas>
 
-<!-- ===== AUTO-SAVE INDICATOR (NEW) ===== -->
+<!-- AUTO-SAVE INDICATOR -->
 <div class="save-indicator" id="saveIndicator">✓ SAVED</div>
+
+<!-- ===== REAL-TIME SYNC INDICATOR (NEW) ===== -->
+<div class="sync-indicator" id="syncIndicator">
+  <div class="sync-dot"></div>
+  <span>LIVE SYNC</span>
+</div>
 
 <!-- OVERLAYS -->
 <div class="win-flash" id="winFlash"></div>
@@ -1375,13 +1394,14 @@ const db=firebase.firestore();
 
 // ===== STATE =====
 let currentUser=null,currentUserData=null;
+let _userListener=null; // ★ FIX: real-time listener reference
 let gameState={coins:0,won:0,spins:0,xp:0,achievements:[]};
 let bet=10,spinning=false,reelPools=[[],[],[]];
 let freeSpins=0,inBonus=false;
 let historyFilter='all';
 const PROMPTPAY='1478400029318';
 
-// ===== [FIX 1] AUTO-SAVE — save ใน background ทุกครั้งที่ state เปลี่ยน =====
+// ===== AUTO-SAVE =====
 let _saveTimer=null;
 function scheduleSave(){
   clearTimeout(_saveTimer);
@@ -1394,12 +1414,11 @@ function scheduleSave(){
       currentUserData.xp=gameState.xp||0;
       currentUserData.achievements=gameState.achievements||[];
       await db.collection('users').doc(currentUser).set(currentUserData);
-      // แสดง indicator เล็กๆ ว่า saved แล้ว
       const ind=document.getElementById('saveIndicator');
       ind.classList.add('show');
       clearTimeout(ind._t);
       ind._t=setTimeout(()=>ind.classList.remove('show'),1800);
-    }catch(e){/* silent retry next time */}
+    }catch(e){}
   },1500);
 }
 
@@ -1496,6 +1515,14 @@ function updateLevelUI(){
   document.getElementById('xpNext').textContent=prog.needed>0?prog.needed+' to next':'MAX LEVEL';
 }
 
+// ===== SHOW SYNC INDICATOR =====
+function showSyncFlash(){
+  const el=document.getElementById('syncIndicator');
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t=setTimeout(()=>el.classList.remove('show'),2500);
+}
+
 // ===== AUTH =====
 function switchTab(t){
   document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(i===0)===(t==='login')));
@@ -1540,6 +1567,7 @@ async function doSignup(){
     loginSuccess(u);
   }catch(e2){err.textContent='Error, please retry';}
 }
+
 function loginSuccess(u){
   currentUser=u;
   gameState.coins=currentUserData.coins||0;
@@ -1548,13 +1576,45 @@ function loginSuccess(u){
   gameState.xp=currentUserData.xp||0;
   gameState.achievements=currentUserData.achievements||[];
   sessionStorage.setItem('ls_session',u);
+
+  // ★★★ FIX: REAL-TIME FIRESTORE LISTENER ★★★
+  // unsubscribe listener เก่าก่อน (กรณี re-login)
+  if(_userListener){_userListener();_userListener=null;}
+
+  _userListener = db.collection('users').doc(u).onSnapshot(snap=>{
+    if(!snap.exists||!currentUser)return;
+    const d=snap.data();
+
+    // อัปเดตเฉพาะตอนไม่ spinning เพื่อหลีกเลี่ยง race condition
+    if(!spinning){
+      if(d.coins!==undefined && d.coins!==gameState.coins){
+        gameState.coins=d.coins;
+      }
+      if(d.won!==undefined) gameState.won=d.won;
+      if(d.spins!==undefined) gameState.spins=d.spins;
+    }
+    if(d.xp!==undefined) gameState.xp=d.xp;
+    if(d.achievements) gameState.achievements=d.achievements;
+    // sync winRate จาก admin
+    if(d.winRate!==undefined) currentUserData.winRate=d.winRate;
+    else delete currentUserData.winRate;
+
+    currentUserData=d;
+    updateUI();
+    updateLevelUI();
+    showSyncFlash(); // แสดง indicator เล็กๆ ว่า sync แล้ว
+  });
+  // ★★★ END FIX ★★★
+
   document.getElementById('authPage').classList.remove('active');
   document.getElementById('gamePage').classList.add('active');
   updateUI();initReels();renderPaytable();renderHistory();
   renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();
 }
+
 async function doLogout(){
-  // Force immediate save before logout
+  // ★ FIX: unsubscribe real-time listener ก่อน logout
+  if(_userListener){_userListener();_userListener=null;}
   clearTimeout(_saveTimer);
   await saveGameState();
   currentUser=null;currentUserData=null;
@@ -1564,6 +1624,7 @@ async function doLogout(){
   document.getElementById('loginUser').value='';
   document.getElementById('loginPass').value='';
 }
+
 async function saveGameState(){
   if(!currentUser||!currentUserData)return;
   currentUserData.coins=gameState.coins;
@@ -1581,7 +1642,7 @@ function updateUI(){
   document.getElementById('navCoins').textContent=gameState.coins.toLocaleString();
   const w=document.getElementById('navWallet');
   w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump');
-  scheduleSave(); // [FIX 1] auto-save ทุกครั้งที่ UI อัปเดต
+  scheduleSave();
 }
 
 // ===== DAILY LOGIN =====
@@ -2005,7 +2066,7 @@ async function doStreakContinue(){
   }
 }
 
-// ===== [FIX 2] AUTO SPIN — หยุดอัตโนมัติเมื่อครบรอบ =====
+// ===== AUTO SPIN =====
 let autoCount=0;
 let autoSpinsDone=0;
 let autoRunning=false;
@@ -2054,9 +2115,7 @@ async function toggleAuto(){
   document.getElementById('spinBtn').disabled=true;
   updateAutoStatus();
 
-  // [FIX 2] loop ที่ break ออกทันทีเมื่อครบรอบ
   while(autoRunning && !autoStopRequested){
-    // ตรวจว่าครบรอบหรือยัง (ยกเว้น infinite)
     if(autoCount !== -1 && autoSpinsDone >= autoCount) break;
 
     if(gameState.coins<bet&&freeSpins===0&&!pendingStreakSpin){
@@ -2067,7 +2126,6 @@ async function toggleAuto(){
     autoSpinsDone++;
     updateAutoStatus();
 
-    // จัดการ streak free spins ภายใน auto
     while(pendingStreakSpin&&!autoStopRequested){
       await new Promise(r=>setTimeout(r,600));
       await executeSpin();
@@ -2075,13 +2133,11 @@ async function toggleAuto(){
       updateAutoStatus();
     }
 
-    // เช็คอีกครั้งหลัง streak
     if(autoCount !== -1 && autoSpinsDone >= autoCount) break;
 
     if(!autoStopRequested) await new Promise(r=>setTimeout(r,400));
   }
 
-  // loop จบ — ตรวจว่าครบรอบหรือ user กด stop
   const finished = !autoStopRequested && autoCount !== -1 && autoSpinsDone >= autoCount;
   stopAuto();
   if(finished) showToast('Auto Spin เสร็จ! ครบ '+autoCount+' รอบ ✓','','green');
@@ -2385,7 +2441,6 @@ function showPanel(name){
   document.getElementById(panelMap[name]).classList.add('active');
   document.getElementById(navMap[name]).classList.add('active');
   if(name==='ach'){renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();}
-  // [FIX 3] wallet panel — refresh history จาก memory ทันที ไม่ต้องรีโหลด
   if(name==='topup'){renderHistory();}
 }
 
