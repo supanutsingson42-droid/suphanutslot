@@ -1,4 +1,4 @@
-const firebaseConfig = {
+window.firebaseConfig = {
   apiKey: "AIzaSyDBbcVo3VZcCgosegExwU72h0s2RTmjBI8",
   authDomain: "lucky-spin-155a5.firebaseapp.com",
   projectId: "lucky-spin-155a5",
