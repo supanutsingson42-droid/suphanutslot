@@ -1,0 +1,2087 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucky Spin Casino</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold: #FFD700;
+  --gold2: #FFA500;
+  --dark: #0d0d1a;
+  --dark2: #16213e;
+  --dark3: #1a0a2e;
+  --card: rgba(255,255,255,0.05);
+  --border: rgba(255,215,0,0.25);
+  --bonus: #00e5ff;
+  --bonus2: #0095ff;
+}
+
+body {
+  font-family: 'Kanit', sans-serif;
+  background: var(--dark);
+  color: #fff;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== BG ANIMATED ===== */
+.bg-stars {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 20% 20%, rgba(83,74,183,0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(255,165,0,0.1) 0%, transparent 50%),
+              linear-gradient(135deg, #0d0d1a 0%, #16213e 50%, #0f3460 100%);
+}
+.bg-stars::before {
+  content:''; position:absolute; inset:0;
+  background-image: radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 40%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 20%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 80%, rgba(255,255,255,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.25) 0%, transparent 100%);
+  animation: twinkle 4s ease-in-out infinite alternate;
+}
+@keyframes twinkle { from { opacity: 0.5; } to { opacity: 1; } }
+
+/* floating coins bg */
+.coin-bg { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.coin-bg span {
+  position:absolute; bottom:-30px; font-size:20px; opacity:0;
+  animation: floatUp 6s ease-in infinite;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); opacity:0; }
+  10% { opacity:0.15; }
+  90% { opacity:0.05; }
+  100% { transform: translateY(-110vh) rotate(360deg); opacity:0; }
+}
+
+/* ===== PAGES ===== */
+.page { display: none; position: relative; z-index: 1; }
+.page.active { display: flex; }
+
+/* ===== AUTH PAGE ===== */
+#authPage {
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.auth-card {
+  background: linear-gradient(160deg, rgba(45,27,105,0.9) 0%, rgba(13,13,26,0.95) 100%);
+  border: 1.5px solid var(--border);
+  border-radius: 24px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 420px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 60px rgba(255,215,0,0.08);
+  animation: cardIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes cardIn { from { opacity:0; transform:scale(0.9) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.auth-logo .title {
+  font-family: 'Orbitron', monospace;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(255,215,0,0.4);
+  animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow { from { text-shadow: 0 0 10px rgba(255,215,0,0.3); } to { text-shadow: 0 0 30px rgba(255,215,0,0.7), 0 0 60px rgba(255,165,0,0.3); } }
+
+.auth-logo .sub {
+  font-size: 13px;
+  color: rgba(255,215,0,0.5);
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.tab-row {
+  display: flex;
+  background: rgba(0,0,0,0.3);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 28px;
+  border: 1px solid var(--border);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  font-family: 'Kanit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 9px;
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+  color: #1a0a2e;
+}
+
+.auth-form { display: none; }
+.auth-form.active { display: block; }
+
+.form-group { margin-bottom: 16px; }
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  color: rgba(255,215,0,0.7);
+  margin-bottom: 6px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'Kanit', sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.form-input:focus { border-color: rgba(255,215,0,0.6); box-shadow: 0 0 0 3px rgba(255,215,0,0.08); }
+.form-input::placeholder { color: rgba(255,255,255,0.25); }
+
+.auth-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+  border: none;
+  border-radius: 12px;
+  font-family: 'Orbitron', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a0a2e;
+  cursor: pointer;
+  letter-spacing: 2px;
+  margin-top: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(255,165,0,0.3);
+}
+.auth-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(255,165,0,0.5); }
+.auth-btn:active { transform: translateY(0); }
+
+.auth-error {
+  color: #ff6b6b;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 10px;
+  min-height: 20px;
+}
+
+/* ===== MAIN GAME PAGE ===== */
+#gamePage {
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* NAVBAR */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(13,13,26,0.97);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.nav-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 3px;
+}
+
+.nav-center {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn {
+  padding: 7px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  font-family: 'Kanit', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-btn.active, .nav-btn:hover {
+  background: rgba(255,215,0,0.1);
+  color: var(--gold);
+  border-color: rgba(255,215,0,0.5);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-coins {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,215,0,0.1);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  transition: all 0.3s;
+}
+.nav-coins.bump { animation: coinBump 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes coinBump { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+
+.nav-coins .coin-icon { font-size: 16px; }
+.nav-coins .coin-val {
+  font-family: 'Orbitron', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.logout-btn {
+  padding: 6px 14px;
+  border: 1px solid rgba(255,100,100,0.3);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255,120,120,0.8);
+  font-family: 'Kanit', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.logout-btn:hover { background: rgba(255,100,100,0.1); color: #ff6b6b; }
+
+/* CONTENT PANELS */
+.panel { display: none; padding: 24px 20px; max-width: 500px; margin: 0 auto; width: 100%; }
+.panel.active { display: block; animation: panelIn 0.3s ease; }
+@keyframes panelIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+/* ===== SLOT PANEL ===== */
+.machine-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--gold);
+  text-align: center;
+  letter-spacing: 3px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 15px rgba(255,215,0,0.4);
+}
+
+.machine-body {
+  background: linear-gradient(180deg, #2d1b69 0%, #1a0a2e 100%);
+  border: 2px solid var(--gold);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 40px rgba(255,215,0,0.15), inset 0 0 20px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+}
+.machine-body::before {
+  content: '';
+  position: absolute; inset:0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,215,0,0.01) 2px, rgba(255,215,0,0.01) 4px);
+  pointer-events: none;
+}
+
+.stats-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.stat-card {
+  flex: 1;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 10px;
+  padding: 8px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.stat-card.highlight { border-color: var(--gold); background: rgba(255,215,0,0.08); }
+
+.stat-label {
+  font-size: 11px;
+  color: rgba(255,215,0,0.6);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.stat-value {
+  font-family: 'Orbitron', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* FREE SPIN BADGE */
+.freespin-badge {
+  display: none;
+  align-items: center; justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #00e5ff22, #0095ff22);
+  border: 1px solid var(--bonus);
+  border-radius: 10px;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+  font-size: 14px; font-weight: 700;
+  color: var(--bonus);
+  animation: bonusPulse 1s ease-in-out infinite alternate;
+}
+.freespin-badge.show { display: flex; }
+@keyframes bonusPulse {
+  from { box-shadow: 0 0 5px rgba(0,229,255,0.2); }
+  to { box-shadow: 0 0 20px rgba(0,229,255,0.5); }
+}
+
+.message-area {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.slot-message {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  padding: 5px 14px;
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+.slot-message.win { color: var(--gold); background: rgba(255,215,0,0.12); animation: pulse 0.5s ease infinite alternate; }
+.slot-message.lose { color: rgba(255,255,255,0.45); }
+.slot-message.jackpot { color: var(--gold); font-size: 20px; animation: jackpot 0.3s ease infinite alternate; }
+.slot-message.bonus { color: var(--bonus); background: rgba(0,229,255,0.1); animation: bonusPop 0.4s ease; }
+
+@keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+@keyframes jackpot { from { transform: scale(1); text-shadow: 0 0 10px gold; } to { transform: scale(1.1); text-shadow: 0 0 30px gold, 0 0 60px orange; } }
+@keyframes bonusPop { 0%{transform:scale(0.8);opacity:0} 50%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+
+.reels-container {
+  display: flex;
+  gap: 8px;
+  background: #0d0d1a;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.reels-container.winning {
+  animation: reelWin 0.5s ease;
+  border-color: var(--gold);
+  box-shadow: 0 0 20px rgba(255,215,0,0.4);
+}
+.reels-container.bonus-spin {
+  border-color: var(--bonus);
+  box-shadow: 0 0 20px rgba(0,229,255,0.4);
+}
+@keyframes reelWin {
+  0%,100%{border-color:#333;} 50%{border-color:var(--gold);box-shadow:0 0 30px rgba(255,215,0,0.6);}
+}
+
+.win-line {
+  position: absolute; left: 0; right: 0;
+  top: 50%; transform: translateY(-50%);
+  height: 2px; background: rgba(255,215,0,0.25);
+  pointer-events: none; z-index: 10;
+  transition: background 0.3s;
+}
+
+.reel {
+  flex: 1; height: 120px;
+  background: #111;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #2a2a2a;
+  transition: border-color 0.3s;
+}
+.reel.lit { border-color: var(--gold); box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+
+.reel-inner {
+  position: absolute; width: 100%;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+.symbol {
+  width: 100%; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; flex-shrink: 0;
+  transition: transform 0.1s;
+}
+
+.reel-overlay-top, .reel-overlay-bottom {
+  position: absolute; left: 0; right: 0; height: 35px; z-index: 5; pointer-events: none;
+}
+.reel-overlay-top { top: 0; background: linear-gradient(to bottom, #111, transparent); }
+.reel-overlay-bottom { bottom: 0; background: linear-gradient(to top, #111, transparent); }
+
+/* PARTICLE LAYER on reel */
+.reel-particles {
+  position: absolute; inset:0; pointer-events:none; z-index:8;
+  display: none;
+}
+.reel-particles.active { display:block; }
+.reel-particles span {
+  position:absolute; font-size:14px; opacity:0;
+  animation: particleFly 0.6s ease-out forwards;
+}
+@keyframes particleFly {
+  0%{opacity:1;transform:translate(0,0) scale(1);}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0.5);}
+}
+
+.bet-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+}
+.bet-label { font-size: 13px; color: rgba(255,215,0,0.7); white-space: nowrap; }
+.bet-btn {
+  background: rgba(255,215,0,0.1);
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 6px; color: var(--gold);
+  font-family: 'Orbitron', monospace; font-size: 14px;
+  width: 32px; height: 32px;
+  cursor: pointer; transition: all 0.2s;
+  display:flex;align-items:center;justify-content:center;
+}
+.bet-btn:hover { background: rgba(255,215,0,0.25); transform:scale(1.1); }
+.bet-display {
+  flex: 1; text-align: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 18px; font-weight: 700; color: var(--gold);
+}
+
+.spin-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
+  border: none; border-radius: 12px;
+  font-family: 'Orbitron', monospace;
+  font-size: 17px; font-weight: 900; color: #1a0a2e;
+  cursor: pointer; letter-spacing: 3px;
+  box-shadow: 0 4px 20px rgba(255,165,0,0.35);
+  transition: all 0.2s;
+  position: relative; overflow: hidden;
+}
+.spin-btn::after {
+  content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);
+  animation: sheen 2.5s ease-in-out infinite;
+}
+@keyframes sheen { 0%{left:-100%} 100%{left:200%} }
+.spin-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(255,165,0,0.6); }
+.spin-btn:active:not(:disabled) { transform: translateY(0); }
+.spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.spin-btn.bonus-btn {
+  background: linear-gradient(135deg, var(--bonus) 0%, var(--bonus2) 100%);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(0,229,255,0.35);
+}
+
+.paytable { margin-top: 16px; }
+.paytable-title {
+  font-size: 12px; color: rgba(255,215,0,0.5);
+  text-align: center; margin-bottom: 8px; letter-spacing: 2px;
+}
+.paytable-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+}
+.pay-item {
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,215,0,0.15);
+  border-radius: 8px; padding: 6px 4px; text-align: center;
+  transition: all 0.2s;
+}
+.pay-item:hover { border-color: rgba(255,215,0,0.4); transform:scale(1.05); }
+.pay-sym { font-size: 18px; display: block; }
+.pay-mult { font-family: 'Orbitron', monospace; font-size: 10px; color: var(--gold); }
+
+/* ===== BONUS OVERLAY ===== */
+.bonus-overlay {
+  display:none; position:fixed; inset:0; z-index:300;
+  background: rgba(0,0,0,0.85);
+  align-items:center; justify-content:center;
+  animation: overlayIn 0.3s ease;
+}
+.bonus-overlay.show { display:flex; }
+@keyframes overlayIn { from{opacity:0} to{opacity:1} }
+.bonus-box {
+  background: linear-gradient(160deg, #003355 0%, #001122 100%);
+  border: 2px solid var(--bonus);
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  max-width: 320px; width: 90%;
+  box-shadow: 0 0 60px rgba(0,229,255,0.3);
+  animation: bonusBoxIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes bonusBoxIn { from{transform:scale(0.5) rotate(-5deg);opacity:0} to{transform:scale(1) rotate(0);opacity:1} }
+.bonus-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 28px; font-weight: 900;
+  color: var(--bonus); letter-spacing: 3px;
+  text-shadow: 0 0 20px rgba(0,229,255,0.6);
+  margin-bottom: 8px;
+}
+.bonus-sub { font-size: 16px; color: rgba(255,255,255,0.7); margin-bottom: 20px; }
+.bonus-spins-num {
+  font-family: 'Orbitron', monospace;
+  font-size: 60px; font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 30px rgba(0,229,255,0.8);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.bonus-spins-label { font-size: 14px; color: rgba(0,229,255,0.7); margin-bottom: 24px; letter-spacing: 2px; }
+.bonus-start-btn {
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--bonus), var(--bonus2));
+  border: none; border-radius: 12px;
+  font-family: 'Orbitron', monospace;
+  font-size: 16px; font-weight: 700; color: #fff;
+  cursor: pointer; letter-spacing: 2px;
+  box-shadow: 0 4px 20px rgba(0,229,255,0.4);
+  transition: all 0.2s;
+}
+.bonus-start-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0,229,255,0.6); }
+
+/* COINS EMPTY OVERLAY */
+.empty-overlay {
+  display:none; position:fixed; inset:0; z-index:300;
+  background: rgba(0,0,0,0.88);
+  align-items:center; justify-content:center;
+}
+.empty-overlay.show { display:flex; }
+.empty-box {
+  background: linear-gradient(160deg, #330505 0%, #1a0000 100%);
+  border: 2px solid rgba(255,100,100,0.4);
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  max-width: 320px; width: 90%;
+  box-shadow: 0 0 60px rgba(255,50,50,0.2);
+  animation: bonusBoxIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 20px; font-weight: 900;
+  color: #ff6b6b; letter-spacing: 2px; margin-bottom: 8px;
+}
+.empty-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 20px; line-height:1.5; }
+.empty-topup-btn {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border: none; border-radius: 12px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 16px; font-weight: 700; color: #1a0a2e;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.empty-topup-btn:hover { transform: translateY(-2px); }
+
+/* ===== JACKPOT CELEBRATION ===== */
+.jackpot-overlay {
+  display:none; position:fixed; inset:0; z-index:400;
+  pointer-events:none;
+}
+.jackpot-overlay.show { display:block; }
+.jackpot-confetti {
+  position:absolute; font-size:24px; opacity:0;
+  animation: confettiFall 2s ease-out forwards;
+}
+@keyframes confettiFall {
+  0%{opacity:1;transform:translateY(-20px) rotate(0) scale(1);}
+  100%{opacity:0;transform:translateY(80vh) rotate(720deg) scale(0.5);}
+}
+
+/* ===== TOPUP PANEL ===== */
+.topup-card {
+  background: linear-gradient(160deg, rgba(45,27,105,0.6) 0%, rgba(13,13,26,0.8) 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.topup-card h3 {
+  font-size: 14px; color: rgba(255,215,0,0.7);
+  letter-spacing: 2px; margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.amount-input-wrap {
+  display: flex; align-items: center;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 10px; overflow: hidden;
+  transition: border-color 0.3s;
+}
+.amount-input-wrap:focus-within { border-color: rgba(255,215,0,0.6); }
+
+.amount-prefix {
+  padding: 12px 14px;
+  color: rgba(255,215,0,0.6); font-size: 15px;
+  border-right: 1px solid rgba(255,215,0,0.15);
+  white-space: nowrap;
+}
+
+.amount-input {
+  flex: 1; padding: 12px 14px;
+  background: transparent; border: none;
+  color: #fff; font-family: 'Orbitron', monospace;
+  font-size: 18px; font-weight: 700; outline: none;
+}
+.amount-input::placeholder { color: rgba(255,255,255,0.2); font-size: 14px; font-family: 'Kanit'; font-weight: 400; }
+
+/* Quick amount buttons */
+.quick-amounts {
+  display: flex; gap: 6px; margin-top: 10px; flex-wrap:wrap;
+}
+.quick-amt {
+  padding: 5px 12px;
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.2);
+  border-radius: 20px; color: rgba(255,215,0,0.8);
+  font-family: 'Kanit', sans-serif; font-size: 13px;
+  cursor: pointer; transition: all 0.2s;
+}
+.quick-amt:hover { background: rgba(255,215,0,0.2); color: var(--gold); }
+
+.qr-section {
+  text-align: center; margin: 16px 0;
+}
+.qr-box {
+  display: inline-block;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 0 20px rgba(255,215,0,0.2);
+}
+.qr-box canvas { display: block; }
+.qr-label {
+  font-size: 12px; color: rgba(255,255,255,0.5);
+  margin-bottom: 4px;
+}
+.qr-amount {
+  font-family: 'Orbitron', monospace;
+  font-size: 22px; font-weight: 700; color: var(--gold);
+}
+.promptpay-info {
+  display: flex; align-items:center; justify-content:center; gap:6px;
+  font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 6px;
+}
+.promptpay-info .pp-num {
+  font-family: 'Orbitron', monospace; font-size: 12px;
+  color: var(--gold); letter-spacing: 1px;
+}
+
+.confirm-btn {
+  width: 100%; padding: 13px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border: none; border-radius: 12px;
+  font-family: 'Kanit', sans-serif;
+  font-size: 16px; font-weight: 700; color: #fff;
+  cursor: pointer; margin-top: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(34,197,94,0.3);
+}
+.confirm-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(34,197,94,0.45); }
+.confirm-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* HISTORY */
+.history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+
+.history-item {
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 10px 14px;
+  transition: all 0.2s; animation: histIn 0.3s ease;
+}
+@keyframes histIn { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
+.history-item:hover { border-color: rgba(255,215,0,0.15); background: rgba(255,215,0,0.03); }
+
+.history-left .h-type { font-size: 13px; font-weight: 600; color: #fff; }
+.history-left .h-date { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+.history-left .h-status {
+  display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; margin-top: 2px;
+}
+.h-status.pending { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.h-status.done { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+
+.history-right { font-family: 'Orbitron', monospace; font-size: 14px; font-weight: 700; }
+.history-right.plus { color: #22c55e; }
+.history-right.minus { color: #ef4444; }
+
+.empty-history {
+  text-align: center; padding: 30px;
+  color: rgba(255,255,255,0.25); font-size: 14px;
+}
+
+/* ===== WIN FLASH ===== */
+.win-flash {
+  position: fixed; inset: 0; z-index: 200;
+  pointer-events: none; opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: rgba(34,197,94,0.95); color: #fff;
+  padding: 12px 24px; border-radius: 50px;
+  font-size: 14px; font-weight: 600;
+  z-index: 999; transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.error { background: rgba(239,68,68,0.95); }
+.toast.bonus { background: linear-gradient(135deg, rgba(0,149,255,0.95), rgba(0,229,255,0.95)); }
+
+/* FLOATING WIN NUMBER */
+.float-win {
+  position: fixed; pointer-events: none; z-index: 250;
+  font-family: 'Orbitron', monospace; font-size: 28px; font-weight: 900;
+  color: var(--gold); text-shadow: 0 0 10px rgba(255,215,0,0.6);
+  animation: floatWinAnim 1.2s ease-out forwards;
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+}
+@keyframes floatWinAnim {
+  0%{opacity:0;transform:translate(-50%,-50%) scale(0.5);}
+  20%{opacity:1;transform:translate(-50%,-50%) scale(1.3);}
+  60%{opacity:1;transform:translate(-50%,-80%) scale(1);}
+  100%{opacity:0;transform:translate(-50%,-120%) scale(0.8);}
+}
+
+/* ===== ADMIN ===== */
+#adminLoginPage {
+  min-height: 100vh; align-items: center; justify-content: center; padding: 20px;
+}
+.admin-card {
+  background: linear-gradient(160deg, rgba(20,10,40,0.97) 0%, rgba(10,10,20,0.99) 100%);
+  border: 1.5px solid rgba(180,0,255,0.3);
+  border-radius: 24px; padding: 40px 36px;
+  width: 100%; max-width: 380px;
+  box-shadow: 0 0 60px rgba(150,0,255,0.1);
+}
+.admin-logo { text-align:center; margin-bottom:28px; }
+.admin-logo .title {
+  font-family:'Orbitron',monospace; font-size:22px; font-weight:900;
+  color:#cc44ff; letter-spacing:4px; text-shadow:0 0 20px rgba(180,0,255,0.5);
+}
+.admin-logo .sub { font-size:12px; color:rgba(180,0,255,0.5); letter-spacing:2px; margin-top:4px; }
+#adminPage { flex-direction:column; min-height:100vh; }
+.admin-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 20px;
+  background:rgba(10,5,20,0.97);
+  border-bottom:1px solid rgba(180,0,255,0.2);
+  position:sticky; top:0; z-index:100;
+}
+.admin-nav-logo { font-family:'Orbitron',monospace; font-size:14px; font-weight:900; color:#cc44ff; letter-spacing:3px; }
+.admin-nav-btns { display:flex; gap:8px; }
+.admin-nav-btn {
+  padding:6px 14px; border:1px solid rgba(180,0,255,0.25); border-radius:8px;
+  background:transparent; color:rgba(255,255,255,0.5);
+  font-family:'Kanit',sans-serif; font-size:13px; cursor:pointer; transition:all 0.2s;
+}
+.admin-nav-btn.active, .admin-nav-btn:hover { background:rgba(180,0,255,0.1); color:#cc44ff; border-color:rgba(180,0,255,0.5); }
+.admin-panel { display:none; padding:20px; max-width:700px; margin:0 auto; width:100%; }
+.admin-panel.active { display:block; }
+.admin-section {
+  background:linear-gradient(160deg,rgba(30,10,60,0.6) 0%,rgba(10,10,20,0.8) 100%);
+  border:1px solid rgba(180,0,255,0.2); border-radius:16px; padding:20px; margin-bottom:16px;
+}
+.admin-section h3 { font-size:13px; color:rgba(180,0,255,0.7); letter-spacing:2px; margin-bottom:16px; font-weight:600; }
+.win-rate-display { text-align:center; margin:12px 0; }
+.win-rate-num {
+  font-family:'Orbitron',monospace; font-size:48px; font-weight:900; color:#cc44ff;
+  text-shadow:0 0 20px rgba(180,0,255,0.4);
+}
+.win-rate-label { font-size:13px; color:rgba(255,255,255,0.4); margin-top:4px; }
+.rate-slider {
+  width:100%; margin:16px 0; accent-color:#cc44ff;
+  -webkit-appearance:none; appearance:none;
+  height:6px; border-radius:3px;
+  background: linear-gradient(to right, #cc44ff 0%, #cc44ff var(--val,30%), rgba(255,255,255,0.1) var(--val,30%), rgba(255,255,255,0.1) 100%);
+  outline:none; cursor:pointer;
+}
+.rate-slider::-webkit-slider-thumb {
+  -webkit-appearance:none; width:22px; height:22px; border-radius:50%;
+  background:#cc44ff; cursor:pointer; box-shadow:0 0 10px rgba(180,0,255,0.5);
+}
+.rate-presets { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+.preset-btn {
+  padding:6px 14px; border:1px solid rgba(180,0,255,0.25); border-radius:20px;
+  background:transparent; color:rgba(255,255,255,0.6);
+  font-family:'Kanit',sans-serif; font-size:13px; cursor:pointer; transition:all 0.2s;
+}
+.preset-btn:hover, .preset-btn.active-preset { background:rgba(180,0,255,0.2); color:#cc44ff; border-color:rgba(180,0,255,0.6); }
+.save-rate-btn {
+  width:100%; padding:12px; background:linear-gradient(135deg,#9333ea,#cc44ff);
+  border:none; border-radius:10px; color:#fff;
+  font-family:'Kanit',sans-serif; font-size:15px; font-weight:700;
+  cursor:pointer; transition:all 0.2s;
+}
+.save-rate-btn:hover { transform:translateY(-1px); box-shadow:0 4px 15px rgba(180,0,255,0.4); }
+.user-table { width:100%; border-collapse:collapse; font-size:13px; }
+.user-table th {
+  text-align:left; padding:8px 10px; color:rgba(180,0,255,0.6);
+  border-bottom:1px solid rgba(180,0,255,0.15); font-weight:600; font-size:12px; letter-spacing:1px;
+}
+.user-table td { padding:10px 10px; border-bottom:1px solid rgba(255,255,255,0.05); color:rgba(255,255,255,0.8); }
+.user-table tr:hover td { background:rgba(180,0,255,0.05); }
+.admin-stats-row { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.admin-stat {
+  flex:1; min-width:100px;
+  background:rgba(0,0,0,0.3); border:1px solid rgba(180,0,255,0.15);
+  border-radius:10px; padding:12px; text-align:center;
+}
+.admin-stat .lbl { font-size:11px; color:rgba(180,0,255,0.6); display:block; margin-bottom:4px; }
+.admin-stat .val { font-family:'Orbitron',monospace; font-size:18px; font-weight:700; color:#cc44ff; }
+.coins-edit { display:flex; gap:8px; align-items:center; }
+.coins-edit input {
+  flex:1; padding:8px 12px; background:rgba(0,0,0,0.4);
+  border:1px solid rgba(180,0,255,0.2); border-radius:8px;
+  color:#fff; font-family:'Kanit',sans-serif; font-size:14px; outline:none;
+}
+.coins-edit-btn {
+  padding:8px 14px; border:1px solid rgba(180,0,255,0.3); border-radius:8px;
+  background:rgba(180,0,255,0.1); color:#cc44ff;
+  font-family:'Kanit',sans-serif; font-size:13px; cursor:pointer; transition:all 0.2s; white-space:nowrap;
+}
+.coins-edit-btn:hover { background:rgba(180,0,255,0.2); }
+.rate-info { font-size:12px; color:rgba(255,255,255,0.35); text-align:center; margin-top:8px; }
+
+/* WITHDRAW SECTION */
+.withdraw-section { margin-top:0; }
+</style>
+</head>
+<body>
+
+<div class="bg-stars"></div>
+<div class="coin-bg" id="coinBg"></div>
+<div class="win-flash" id="winFlash"></div>
+<div class="toast" id="toast"></div>
+
+<!-- BONUS OVERLAY -->
+<div class="bonus-overlay" id="bonusOverlay">
+  <div class="bonus-box">
+    <div style="font-size:48px;margin-bottom:8px">🎊</div>
+    <div class="bonus-title">BONUS!</div>
+    <div class="bonus-sub">คุณได้รับ Free Spin!</div>
+    <div class="bonus-spins-num" id="bonusSpinsNum">5</div>
+    <div class="bonus-spins-label">FREE SPINS</div>
+    <button class="bonus-start-btn" onclick="startBonus()">🚀 เริ่มเลย!</button>
+  </div>
+</div>
+
+<!-- COINS EMPTY OVERLAY -->
+<div class="empty-overlay" id="emptyOverlay">
+  <div class="empty-box">
+    <div class="empty-icon">😢</div>
+    <div class="empty-title">เหรียญหมดแล้ว!</div>
+    <div class="empty-sub">คุณไม่มีเหรียญเพียงพอสำหรับการเดิมพัน<br>กรุณาเติมเงินเพื่อเล่นต่อครับ</div>
+    <button class="empty-topup-btn" onclick="closeEmptyOverlay()">💳 เติมเงินเลย</button>
+  </div>
+</div>
+
+<!-- JACKPOT OVERLAY -->
+<div class="jackpot-overlay" id="jackpotOverlay"></div>
+
+<!-- ===== AUTH PAGE ===== -->
+<div class="page active" id="authPage">
+  <div class="auth-card">
+    <div class="auth-logo" id="authLogo" style="cursor:default;user-select:none;">
+      <div class="title" id="logoTitle">🎰 LUCKY SPIN</div>
+      <div class="sub">CASINO ONLINE</div>
+    </div>
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="switchTab('login')">เข้าสู่ระบบ</button>
+      <button class="tab-btn" onclick="switchTab('signup')">สมัครสมาชิก</button>
+    </div>
+    <div class="auth-form active" id="loginForm">
+      <div class="form-group">
+        <label class="form-label">ชื่อผู้ใช้</label>
+        <input class="form-input" id="loginUser" type="text" placeholder="กรอกชื่อผู้ใช้">
+      </div>
+      <div class="form-group">
+        <label class="form-label">รหัสผ่าน</label>
+        <input class="form-input" id="loginPass" type="password" placeholder="กรอกรหัสผ่าน">
+      </div>
+      <button class="auth-btn" onclick="doLogin()">เข้าสู่ระบบ</button>
+      <div class="auth-error" id="loginError"></div>
+    </div>
+    <div class="auth-form" id="signupForm">
+      <div class="form-group">
+        <label class="form-label">ชื่อผู้ใช้</label>
+        <input class="form-input" id="regUser" type="text" placeholder="ตั้งชื่อผู้ใช้">
+      </div>
+      <div class="form-group">
+        <label class="form-label">อีเมล</label>
+        <input class="form-input" id="regEmail" type="email" placeholder="อีเมลของคุณ">
+      </div>
+      <div class="form-group">
+        <label class="form-label">รหัสผ่าน</label>
+        <input class="form-input" id="regPass" type="password" placeholder="ตั้งรหัสผ่าน (อย่างน้อย 6 ตัว)">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ยืนยันรหัสผ่าน</label>
+        <input class="form-input" id="regPass2" type="password" placeholder="กรอกรหัสผ่านอีกครั้ง">
+      </div>
+      <button class="auth-btn" onclick="doSignup()">สมัครสมาชิก</button>
+      <div class="auth-error" id="signupError"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN LOGIN ===== -->
+<div class="page" id="adminLoginPage">
+  <div class="admin-card">
+    <div class="admin-logo">
+      <div class="title">⚙️ ADMIN</div>
+      <div class="sub">CONTROL PANEL</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label" style="color:rgba(180,0,255,0.7)">Admin Password</label>
+      <input class="form-input" id="adminPassInput" type="password" placeholder="รหัสผ่าน Admin" style="border-color:rgba(180,0,255,0.2)">
+    </div>
+    <button class="auth-btn" style="background:linear-gradient(135deg,#9333ea,#cc44ff)" onclick="doAdminLogin()">เข้าสู่ระบบ Admin</button>
+    <div class="auth-error" id="adminLoginError"></div>
+    <div style="text-align:center;margin-top:16px">
+      <button onclick="showPage('auth')" style="background:none;border:none;color:rgba(255,255,255,0.3);font-family:'Kanit',sans-serif;font-size:13px;cursor:pointer;">← กลับหน้าหลัก</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div class="page" id="adminPage">
+  <div class="admin-nav">
+    <div class="admin-nav-logo">⚙️ ADMIN</div>
+    <div class="admin-nav-btns">
+      <button class="admin-nav-btn active" id="anBtnWin" onclick="showAdminPanel('win')">🎯 Win Rate</button>
+      <button class="admin-nav-btn" id="anBtnUsers" onclick="showAdminPanel('users')">👥 ผู้ใช้</button>
+    </div>
+    <button class="logout-btn" style="border-color:rgba(180,0,255,0.3);color:rgba(180,0,255,0.7)" onclick="adminLogout()">ออก</button>
+  </div>
+  <div class="admin-panel active" id="apWin">
+    <div class="admin-section">
+      <h3>🎯 ควบคุมอัตราการชนะ</h3>
+      <div class="win-rate-display">
+        <div class="win-rate-num" id="winRateNum">30</div>
+        <div class="win-rate-label">% โอกาสชนะต่อรอบ</div>
+      </div>
+      <input type="range" class="rate-slider" id="winRateSlider" min="1" max="90" value="30" oninput="updateRateDisplay(this.value)">
+      <div class="rate-presets">
+        <button class="preset-btn" onclick="setRate(10)">10% ยาก</button>
+        <button class="preset-btn active-preset" onclick="setRate(30)">30% ปกติ</button>
+        <button class="preset-btn" onclick="setRate(50)">50% ง่าย</button>
+        <button class="preset-btn" onclick="setRate(70)">70% โหด</button>
+      </div>
+      <button class="save-rate-btn" onclick="saveWinRate()">💾 บันทึกการตั้งค่า</button>
+      <div class="rate-info" id="rateInfo">อัตราปัจจุบัน: 30% | ทุก 100 รอบ จะชนะประมาณ 30 รอบ</div>
+    </div>
+    <div class="admin-section">
+      <h3>📊 สถิติภาพรวม</h3>
+      <div class="admin-stats-row" id="overallStats"></div>
+    </div>
+  </div>
+  <div class="admin-panel" id="apUsers">
+    <div class="admin-section">
+      <h3>👥 รายชื่อผู้ใช้ทั้งหมด</h3>
+      <div style="overflow-x:auto">
+        <table class="user-table" id="userTable">
+          <thead>
+            <tr>
+              <th>ชื่อผู้ใช้</th>
+              <th>เหรียญ</th>
+              <th>รอบที่เล่น</th>
+              <th>ชนะรวม</th>
+              <th>จัดการเหรียญ</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GAME PAGE ===== -->
+<div class="page" id="gamePage" style="flex-direction:column;">
+  <div class="navbar">
+    <div class="nav-logo">🎰 LUCKY</div>
+    <div class="nav-center">
+      <button class="nav-btn active" id="navSlot" onclick="showPanel('slot')">🎰 เกม</button>
+      <button class="nav-btn" id="navTopup" onclick="showPanel('topup')">💰 เติม/ถอน</button>
+    </div>
+    <div class="nav-right">
+      <div class="nav-coins" id="navCoinsWrap">
+        <span class="coin-icon">🪙</span>
+        <span class="coin-val" id="navCoins">0</span>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">ออก</button>
+    </div>
+  </div>
+
+  <!-- SLOT PANEL -->
+  <div class="panel active" id="panelSlot">
+    <div class="machine-title">🎰 LUCKY SPIN</div>
+    <div class="machine-body">
+      <div class="stats-row">
+        <div class="stat-card" id="statCoin">
+          <span class="stat-label">เหรียญ</span>
+          <span class="stat-value" id="coinDisplay">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">ชนะรวม</span>
+          <span class="stat-value" id="wonDisplay">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">รอบ</span>
+          <span class="stat-value" id="spinDisplay">0</span>
+        </div>
+      </div>
+
+      <!-- FREE SPIN BADGE -->
+      <div class="freespin-badge" id="freeSpinBadge">
+        <span>⚡</span>
+        <span>FREE SPIN เหลือ: <strong id="freeSpinCount">0</strong> รอบ</span>
+      </div>
+
+      <div class="message-area">
+        <div class="slot-message" id="slotMsg">กดหมุนเพื่อเริ่ม! 🎰</div>
+      </div>
+
+      <div class="reels-container" id="reelsContainer">
+        <div class="win-line" id="winLine"></div>
+        <div class="reel" id="reel0"><div class="reel-inner" id="inner0"></div><div class="reel-overlay-top"></div><div class="reel-overlay-bottom"></div><div class="reel-particles" id="particles0"></div></div>
+        <div class="reel" id="reel1"><div class="reel-inner" id="inner1"></div><div class="reel-overlay-top"></div><div class="reel-overlay-bottom"></div><div class="reel-particles" id="particles1"></div></div>
+        <div class="reel" id="reel2"><div class="reel-inner" id="inner2"></div><div class="reel-overlay-top"></div><div class="reel-overlay-bottom"></div><div class="reel-particles" id="particles2"></div></div>
+      </div>
+
+      <div class="bet-row">
+        <span class="bet-label">เดิมพัน:</span>
+        <button class="bet-btn" id="betDown">−</button>
+        <span class="bet-display" id="betDisplay">10</span>
+        <button class="bet-btn" id="betUp">+</button>
+      </div>
+
+      <button class="spin-btn" id="spinBtn">▶ SPIN</button>
+    </div>
+
+    <div class="paytable">
+      <div class="paytable-title">ตารางรางวัล (3 เหมือน) | 🎁 = BONUS ROUND</div>
+      <div class="paytable-grid" id="paytable"></div>
+    </div>
+  </div>
+
+  <!-- TOPUP PANEL -->
+  <div class="panel" id="panelTopup">
+
+    <div class="topup-card">
+      <h3>💳 เติมเหรียญ (฿10 = 100 เหรียญ)</h3>
+      <div class="form-group">
+        <label class="form-label">จำนวนเงิน (บาท)</label>
+        <div class="amount-input-wrap">
+          <span class="amount-prefix">฿</span>
+          <input class="amount-input" id="topupAmount" type="number" min="1" placeholder="กรอกจำนวนเงิน" oninput="updateQR()">
+        </div>
+        <div class="quick-amounts">
+          <button class="quick-amt" onclick="setTopupAmt(50)">฿50</button>
+          <button class="quick-amt" onclick="setTopupAmt(100)">฿100</button>
+          <button class="quick-amt" onclick="setTopupAmt(200)">฿200</button>
+          <button class="quick-amt" onclick="setTopupAmt(500)">฿500</button>
+        </div>
+      </div>
+      <div class="qr-section" id="qrSection" style="display:none;">
+        <div class="qr-label">สแกน PromptPay เพื่อชำระเงิน</div>
+        <div class="qr-box">
+          <canvas id="qrCanvas" width="180" height="180"></canvas>
+        </div>
+        <div class="qr-amount" id="qrAmountText">฿0</div>
+        <div class="promptpay-info">
+          <span>PromptPay:</span>
+          <span class="pp-num">1478-4000-29318</span>
+        </div>
+      </div>
+      <button class="confirm-btn" id="confirmTopup" onclick="doTopup()" disabled>
+        ✓ ยืนยันการเติมเงิน
+      </button>
+    </div>
+
+    <div class="topup-card withdraw-section">
+      <h3>💸 ถอนเหรียญ (100 เหรียญ = ฿10)</h3>
+      <div class="form-group">
+        <label class="form-label">จำนวนเหรียญที่ต้องการถอน</label>
+        <div class="amount-input-wrap">
+          <span class="amount-prefix">🪙</span>
+          <input class="amount-input" id="withdrawCoins" type="number" min="100" placeholder="ขั้นต่ำ 100 เหรียญ" oninput="updateWithdraw()" style="font-size:16px">
+        </div>
+      </div>
+      <div id="withdrawInfo" style="display:none;text-align:center;margin:12px 0;">
+        <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:4px;">คุณจะได้รับเงิน</div>
+        <div style="font-family:'Orbitron',monospace;font-size:24px;font-weight:700;color:#22c55e;" id="withdrawBaht">฿0</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-top:4px;">100 เหรียญ = ฿10</div>
+      </div>
+      <div class="form-group" id="withdrawBankGroup" style="display:none;">
+        <label class="form-label">เลขบัญชีธนาคาร / พร้อมเพย์</label>
+        <input class="form-input" id="withdrawAccount" type="text" placeholder="กรอกเลขบัญชีของคุณ">
+      </div>
+      <button class="confirm-btn" id="confirmWithdraw" onclick="doWithdraw()" disabled style="background:linear-gradient(135deg,#16a34a,#15803d);">
+        💸 ยืนยันการถอนเงิน
+      </button>
+    </div>
+
+    <div class="topup-card">
+      <h3>📋 ประวัติธุรกรรม</h3>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <button class="preset-btn active-preset" id="histAll" onclick="filterHistory('all')" style="font-size:12px;padding:4px 12px;border-radius:6px">ทั้งหมด</button>
+        <button class="preset-btn" id="histTopup" onclick="filterHistory('topup')" style="font-size:12px;padding:4px 12px;border-radius:6px">💳 เติมเงิน</button>
+        <button class="preset-btn" id="histWithdraw" onclick="filterHistory('withdraw')" style="font-size:12px;padding:4px 12px;border-radius:6px">💸 ถอนเงิน</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="empty-history">ยังไม่มีประวัติธุรกรรม</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QR.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+<script>
+// ===== AUDIO ENGINE =====
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  return audioCtx;
+}
+
+function playTone(freq, dur, type='sine', vol=0.3) {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.5, ctx.currentTime + dur);
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + dur);
+  } catch(e){}
+}
+
+function playReelSpin() {
+  try {
+    const ctx = getAudioCtx();
+    const buf = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.15;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const gain = ctx.createGain();
+    src.connect(gain); gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.08);
+    src.start(); src.stop(ctx.currentTime+0.08);
+  } catch(e){}
+}
+
+function playWinSound() {
+  [523, 659, 784, 1047].forEach((f, i) => {
+    setTimeout(() => playTone(f, 0.2, 'triangle', 0.4), i * 80);
+  });
+}
+
+function playJackpotSound() {
+  [262,330,392,523,659,784,1047,1319].forEach((f,i) => {
+    setTimeout(() => playTone(f, 0.3, 'triangle', 0.5), i*70);
+  });
+}
+
+function playBonusSound() {
+  [440,554,659,880].forEach((f,i) => {
+    setTimeout(() => playTone(f, 0.25, 'sine', 0.4), i*100);
+  });
+}
+
+function playLoseSound() {
+  playTone(220, 0.3, 'sawtooth', 0.15);
+}
+
+function playClickSound() {
+  playTone(600, 0.05, 'square', 0.1);
+}
+
+function playReelStop() {
+  playTone(300, 0.12, 'triangle', 0.25);
+}
+
+// ===== COIN BG =====
+function initCoinBg() {
+  const bg = document.getElementById('coinBg');
+  const coins = ['🪙','💰','⭐','💎'];
+  for(let i=0;i<12;i++) {
+    const s = document.createElement('span');
+    s.textContent = coins[Math.floor(Math.random()*coins.length)];
+    s.style.left = (Math.random()*100) + '%';
+    s.style.animationDelay = (Math.random()*6) + 's';
+    s.style.animationDuration = (4+Math.random()*6) + 's';
+    bg.appendChild(s);
+  }
+}
+initCoinBg();
+
+window.addEventListener('load', function() {
+
+// ===== FIREBASE =====
+const firebaseConfig = {
+  apiKey: "AIzaSyDBbcVo3VZcCgosegExwU72h0s2RTmjBI8",
+  authDomain: "lucky-spin-155a5.firebaseapp.com",
+  projectId: "lucky-spin-155a5",
+  storageBucket: "lucky-spin-155a5.firebasestorage.app",
+  messagingSenderId: "416059719807",
+  appId: "1:416059719807:web:923f80e9a060295c94bf4a"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ===== STATE =====
+let currentUser = null;
+let currentUserData = null;
+let gameState = { coins: 0, won: 0, spins: 0 };
+let bet = 10;
+let spinning = false;
+let reelPools = [[], [], []];
+let freeSpins = 0;
+let inBonusRound = false;
+
+const PROMPTPAY_NUMBER = '1478400029318';
+
+const SYMBOLS = [
+  { sym: '🍒', name: 'cherry', mult: 3 },
+  { sym: '🍋', name: 'lemon', mult: 4 },
+  { sym: '🍇', name: 'grape', mult: 5 },
+  { sym: '🔔', name: 'bell', mult: 8 },
+  { sym: '⭐', name: 'star', mult: 10 },
+  { sym: '💎', name: 'diamond', mult: 15 },
+  { sym: '7️⃣', name: 'seven', mult: 25 },
+  { sym: '🎁', name: 'bonus', mult: 0 }, // BONUS SYMBOL
+];
+const WEIGHTS = [28, 22, 18, 11, 7, 4, 2, 8]; // bonus has weight 8
+
+// ===== DB HELPERS =====
+async function saveUserData(username, data) {
+  await db.collection('users').doc(username).set(data);
+}
+async function getUserData(username) {
+  const snap = await db.collection('users').doc(username).get();
+  return snap.exists ? snap.data() : null;
+}
+async function getAllUsers() {
+  const snap = await db.collection('users').get();
+  const result = {};
+  snap.forEach(d => result[d.id] = d.data());
+  return result;
+}
+async function getWinRateSetting() {
+  const snap = await db.collection('settings').doc('winrate').get();
+  return snap.exists ? (snap.data().rate || 30) : 30;
+}
+async function saveWinRateToDB(rate) {
+  await db.collection('settings').doc('winrate').set({ rate });
+}
+
+// ===== AUTH =====
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active',(i===0)===(tab==='login')));
+  document.getElementById('loginForm').classList.toggle('active', tab==='login');
+  document.getElementById('signupForm').classList.toggle('active', tab==='signup');
+  document.getElementById('loginError').textContent='';
+  document.getElementById('signupError').textContent='';
+}
+
+async function doLogin() {
+  playClickSound();
+  const u=document.getElementById('loginUser').value.trim();
+  const p=document.getElementById('loginPass').value;
+  const errEl=document.getElementById('loginError');
+  if(!u||!p){errEl.textContent='กรุณากรอกข้อมูลให้ครบ';return;}
+  errEl.textContent='กำลังเข้าสู่ระบบ...';
+  try {
+    const userData=await getUserData(u);
+    if(!userData){errEl.textContent='ไม่พบชื่อผู้ใช้นี้';return;}
+    if(userData.password!==p){errEl.textContent='รหัสผ่านไม่ถูกต้อง';return;}
+    errEl.textContent='';
+    currentUserData=userData;
+    loginSuccess(u);
+  } catch(e){errEl.textContent='เกิดข้อผิดพลาด กรุณาลองใหม่';console.error(e);}
+}
+
+async function doSignup() {
+  playClickSound();
+  const u=document.getElementById('regUser').value.trim();
+  const e=document.getElementById('regEmail').value.trim();
+  const p=document.getElementById('regPass').value;
+  const p2=document.getElementById('regPass2').value;
+  const err=document.getElementById('signupError');
+  if(!u||!e||!p||!p2){err.textContent='กรุณากรอกข้อมูลให้ครบ';return;}
+  if(p.length<6){err.textContent='รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';return;}
+  if(p!==p2){err.textContent='รหัสผ่านไม่ตรงกัน';return;}
+  err.textContent='กำลังสมัครสมาชิก...';
+  try {
+    const existing=await getUserData(u);
+    if(existing){err.textContent='ชื่อผู้ใช้นี้ถูกใช้แล้ว';return;}
+    const newUser={password:p,email:e,coins:100,won:0,spins:0,history:[],createdAt:new Date().toISOString()};
+    await saveUserData(u,newUser);
+    currentUserData=newUser;
+    err.textContent='';
+    showToast('สมัครสมาชิกสำเร็จ! รับเหรียญฟรี 100 🎁');
+    loginSuccess(u);
+  } catch(e2){err.textContent='เกิดข้อผิดพลาด กรุณาลองใหม่';console.error(e2);}
+}
+
+function loginSuccess(u) {
+  currentUser=u;
+  gameState.coins=currentUserData.coins||0;
+  gameState.won=currentUserData.won||0;
+  gameState.spins=currentUserData.spins||0;
+  sessionStorage.setItem('lu_session',u);
+  document.getElementById('authPage').classList.remove('active');
+  document.getElementById('gamePage').classList.add('active');
+  updateUI();
+  initReels();
+  renderPaytable();
+  renderHistory();
+}
+
+async function doLogout() {
+  await saveGameState();
+  currentUser=null; currentUserData=null;
+  sessionStorage.removeItem('lu_session');
+  document.getElementById('gamePage').classList.remove('active');
+  document.getElementById('authPage').classList.add('active');
+  document.getElementById('loginUser').value='';
+  document.getElementById('loginPass').value='';
+}
+
+async function saveGameState() {
+  if(!currentUser||!currentUserData) return;
+  currentUserData.coins=gameState.coins;
+  currentUserData.won=gameState.won;
+  currentUserData.spins=gameState.spins;
+  await saveUserData(currentUser,currentUserData);
+}
+
+function updateUI() {
+  document.getElementById('coinDisplay').textContent=gameState.coins.toLocaleString();
+  document.getElementById('wonDisplay').textContent=gameState.won.toLocaleString();
+  document.getElementById('spinDisplay').textContent=gameState.spins;
+  document.getElementById('navCoins').textContent=gameState.coins.toLocaleString();
+  // bump animation
+  const wrap = document.getElementById('navCoinsWrap');
+  wrap.classList.remove('bump');
+  void wrap.offsetWidth;
+  wrap.classList.add('bump');
+}
+
+// ===== PANELS =====
+function showPanel(name) {
+  playClickSound();
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
+  document.getElementById('nav'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
+}
+
+// ===== TOPUP =====
+function setTopupAmt(amt) {
+  playClickSound();
+  document.getElementById('topupAmount').value = amt;
+  updateQR();
+}
+
+function updateQR() {
+  const amt=parseInt(document.getElementById('topupAmount').value)||0;
+  const btn=document.getElementById('confirmTopup');
+  const qrSection=document.getElementById('qrSection');
+  if(amt>=1){
+    qrSection.style.display='block';
+    document.getElementById('qrAmountText').textContent='฿'+amt.toLocaleString();
+    btn.disabled=false;
+    generateQR(amt);
+  } else {
+    qrSection.style.display='none';
+    btn.disabled=true;
+  }
+}
+
+function generateQR(amount) {
+  try {
+    const cleanPhone=PROMPTPAY_NUMBER.replace(/-/g,'');
+    const phoneFormatted='0066'+cleanPhone.slice(1);
+    const merchantInfo='0016A000000677010111'+'0113'+phoneFormatted;
+    const merchantInfoField='29'+pad(merchantInfo.length)+merchantInfo;
+    const amountStr=amount.toFixed(2);
+    const amountField='54'+pad(amountStr.length)+amountStr;
+    const raw='000201'+merchantInfoField+'5303764'+amountField+'5802TH6304';
+    const crc=crc16(raw);
+    new QRious({element:document.getElementById('qrCanvas'),value:raw+crc,size:180,background:'white',foreground:'#1a237e',level:'M'});
+  } catch(e) {
+    new QRious({element:document.getElementById('qrCanvas'),value:'PromptPay:'+PROMPTPAY_NUMBER+':'+amount,size:180,background:'white',foreground:'#333',level:'M'});
+  }
+}
+function pad(n){return n<10?'0'+n:''+n;}
+function crc16(str){let c=0xFFFF;for(let i=0;i<str.length;i++){c^=str.charCodeAt(i)<<8;for(let j=0;j<8;j++)c=(c&0x8000)?(c<<1)^0x1021:c<<1;}c&=0xFFFF;return c.toString(16).toUpperCase().padStart(4,'0');}
+
+async function doTopup() {
+  const amt=parseInt(document.getElementById('topupAmount').value)||0;
+  if(amt<1) return;
+  const coins=amt*10;
+  gameState.coins+=coins;
+  if(!currentUserData.history) currentUserData.history=[];
+  currentUserData.history.unshift({
+    type:'เติมเงิน',amount:amt,coins:coins,
+    date:new Date().toLocaleString('th-TH'),
+    status:'สำเร็จ'
+  });
+  await saveGameState();
+  updateUI();
+  renderHistory();
+  document.getElementById('topupAmount').value='';
+  document.getElementById('qrSection').style.display='none';
+  document.getElementById('confirmTopup').disabled=true;
+  playWinSound();
+  showToast('เติมเงินสำเร็จ! +'+coins.toLocaleString()+' เหรียญ 🎉');
+}
+
+let historyFilter='all';
+function filterHistory(type) {
+  playClickSound();
+  historyFilter=type;
+  document.querySelectorAll('#histAll,#histTopup,#histWithdraw').forEach(b=>b.classList.remove('active-preset'));
+  document.getElementById('hist'+type.charAt(0).toUpperCase()+type.slice(1)).classList.add('active-preset');
+  renderHistory();
+}
+
+function renderHistory() {
+  const list=document.getElementById('historyList');
+  let history=currentUserData?.history||[];
+  if(historyFilter==='topup') history=history.filter(h=>h.type==='เติมเงิน');
+  if(historyFilter==='withdraw') history=history.filter(h=>h.type==='ถอนเงิน');
+  if(history.length===0){
+    list.innerHTML='<div class="empty-history">ยังไม่มีประวัติธุรกรรม</div>';
+    return;
+  }
+  list.innerHTML=history.slice(0,30).map(h=>`
+    <div class="history-item">
+      <div class="history-left">
+        <div class="h-type">${h.type==='เติมเงิน'?'💳':'💸'} ${h.type} — ${h.type==='เติมเงิน'?'+':'-'}${h.coins.toLocaleString()} เหรียญ</div>
+        <div class="h-date">${h.date}${h.account?' → '+h.account:''}</div>
+        ${h.status?`<span class="h-status ${h.status==='สำเร็จ'||h.status==='done'?'done':'pending'}">${h.status}</span>`:''}
+      </div>
+      <div class="history-right ${h.type==='เติมเงิน'?'plus':'minus'}">${h.type==='เติมเงิน'?'+':'-'}฿${h.amount.toLocaleString()}</div>
+    </div>
+  `).join('');
+}
+
+function updateWithdraw() {
+  const coins=parseInt(document.getElementById('withdrawCoins').value)||0;
+  const baht=Math.floor(coins/100)*10;
+  const btn=document.getElementById('confirmWithdraw');
+  const info=document.getElementById('withdrawInfo');
+  const bankGroup=document.getElementById('withdrawBankGroup');
+  if(coins>=100){
+    info.style.display='block'; bankGroup.style.display='block';
+    document.getElementById('withdrawBaht').textContent='฿'+baht.toLocaleString();
+    btn.disabled=false;
+  } else {
+    info.style.display='none'; bankGroup.style.display='none';
+    btn.disabled=true;
+  }
+}
+
+async function doWithdraw() {
+  const coins=parseInt(document.getElementById('withdrawCoins').value)||0;
+  const account=document.getElementById('withdrawAccount').value.trim();
+  if(coins<100){showToast('ขั้นต่ำ 100 เหรียญครับ',true);return;}
+  if(!account){showToast('กรุณากรอกเลขบัญชีครับ',true);return;}
+  if(coins>gameState.coins){showToast('เหรียญไม่พอครับ!',true);return;}
+  const baht=Math.floor(coins/100)*10;
+  gameState.coins-=coins;
+  if(!currentUserData.history) currentUserData.history=[];
+  currentUserData.history.unshift({
+    type:'ถอนเงิน',amount:baht,coins:coins,
+    account:account,date:new Date().toLocaleString('th-TH'),
+    status:'รอดำเนินการ'
+  });
+  await saveGameState();
+  updateUI();
+  renderHistory();
+  document.getElementById('withdrawCoins').value='';
+  document.getElementById('withdrawAccount').value='';
+  document.getElementById('withdrawInfo').style.display='none';
+  document.getElementById('withdrawBankGroup').style.display='none';
+  document.getElementById('confirmWithdraw').disabled=true;
+  showToast('ส่งคำขอถอนเงิน ฿'+baht.toLocaleString()+' สำเร็จ! รอดำเนินการครับ 💸');
+}
+
+// ===== SLOT ENGINE =====
+function weightedRandom(weights) {
+  weights=weights||WEIGHTS;
+  const total=weights.reduce((a,b)=>a+b,0);
+  let r=Math.random()*total;
+  for(let i=0;i<weights.length;i++){r-=weights[i];if(r<=0)return i;}
+  return weights.length-1;
+}
+
+function buildReelWithResult(reelIdx, targetSymIdx) {
+  const inner=document.getElementById('inner'+reelIdx);
+  inner.innerHTML='';
+  const pool=[];
+  for(let i=0;i<2;i++) pool.push(SYMBOLS[weightedRandom()]);
+  pool.push(SYMBOLS[targetSymIdx]);
+  for(let i=0;i<17;i++) pool.push(SYMBOLS[weightedRandom()]);
+  pool.forEach(s=>{
+    const div=document.createElement('div');
+    div.className='symbol';
+    div.textContent=s.sym;
+    inner.appendChild(div);
+  });
+  inner.style.transition='none';
+  inner.style.transform='translateY(-40px)';
+  reelPools[reelIdx]=pool;
+  return pool;
+}
+
+function initReels() {
+  for(let i=0;i<3;i++) buildReelWithResult(i,weightedRandom());
+}
+
+async function spinReel(reelIdx, duration, finalSymIdx) {
+  return new Promise(resolve=>{
+    const inner=document.getElementById('inner'+reelIdx);
+    const totalItems=reelPools[reelIdx].length;
+    const SH=40,RH=120;
+    const targetPos=(RH/2)-(SH/2)-(finalSymIdx*SH);
+    const totalH=totalItems*SH;
+    let lastTick=0;
+    let startTime=null;
+    function animate(ts){
+      if(!startTime) startTime=ts;
+      const progress=Math.min((ts-startTime)/duration,1);
+      // tick sound every ~80ms
+      if(ts-lastTick>80){lastTick=ts;playReelSpin();}
+      if(progress<0.85){
+        const p=progress/0.85;
+        const pos=-(p*totalH*2);
+        const wrapped=((pos%totalH)+totalH)%totalH-totalH;
+        inner.style.transition='none';
+        inner.style.transform=`translateY(${wrapped}px)`;
+      } else {
+        const eased=1-Math.pow(1-(progress-0.85)/0.15,3);
+        const cur=parseFloat(inner.style.transform.replace('translateY(','').replace('px)',''))||0;
+        inner.style.transition='none';
+        inner.style.transform=`translateY(${cur+(targetPos-cur)*eased}px)`;
+      }
+      if(progress<1) requestAnimationFrame(animate);
+      else {
+        inner.style.transition='transform 0.15s cubic-bezier(0.34,1.56,0.64,1)';
+        inner.style.transform=`translateY(${targetPos}px)`;
+        playReelStop();
+        // light up reel
+        document.getElementById('reel'+reelIdx).classList.add('lit');
+        setTimeout(()=>{ document.getElementById('reel'+reelIdx).classList.remove('lit'); resolve(); },150);
+      }
+    }
+    requestAnimationFrame(animate);
+  });
+}
+
+function spawnParticles(reelIdx, emoji) {
+  const p=document.getElementById('particles'+reelIdx);
+  p.innerHTML='';
+  p.classList.add('active');
+  for(let i=0;i<8;i++){
+    const s=document.createElement('span');
+    s.textContent=emoji;
+    s.style.left=(20+Math.random()*60)+'%';
+    s.style.top=(30+Math.random()*40)+'%';
+    s.style.setProperty('--dx',(Math.random()*80-40)+'px');
+    s.style.setProperty('--dy',(Math.random()*-60-20)+'px');
+    s.style.animationDelay=(i*0.05)+'s';
+    p.appendChild(s);
+  }
+  setTimeout(()=>p.classList.remove('active'),700);
+}
+
+function showFloatWin(amount) {
+  const el=document.createElement('div');
+  el.className='float-win';
+  el.textContent='+'+amount+'🪙';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1300);
+}
+
+function triggerJackpotCelebration() {
+  const overlay=document.getElementById('jackpotOverlay');
+  overlay.innerHTML='';
+  overlay.classList.add('show');
+  const confettiEmojis=['🎉','⭐','💎','7️⃣','🎊','✨','🪙','🔥'];
+  for(let i=0;i<40;i++){
+    const el=document.createElement('div');
+    el.className='jackpot-confetti';
+    el.textContent=confettiEmojis[Math.floor(Math.random()*confettiEmojis.length)];
+    el.style.left=(Math.random()*100)+'%';
+    el.style.top='-30px';
+    el.style.fontSize=(16+Math.random()*16)+'px';
+    el.style.animationDelay=(Math.random()*0.8)+'s';
+    el.style.animationDuration=(1.5+Math.random()*1)+'s';
+    overlay.appendChild(el);
+  }
+  setTimeout(()=>{ overlay.classList.remove('show'); overlay.innerHTML=''; },3000);
+}
+
+function evaluateResult(syms) {
+  const rc=document.getElementById('reelsContainer');
+  const wl=document.getElementById('winLine');
+  const allSame=syms[0].name===syms[1].name&&syms[1].name===syms[2].name;
+  const twoSame=syms[0].name===syms[1].name||syms[1].name===syms[2].name||syms[0].name===syms[2].name;
+
+  // BONUS check
+  const bonusCount=syms.filter(s=>s.name==='bonus').length;
+  if(bonusCount>=2) {
+    const spinsGiven=bonusCount===3?10:5;
+    setTimeout(()=>triggerBonusRound(spinsGiven),300);
+    setSlotMsg('🎁 BONUS ROUND! Free Spins x'+spinsGiven,'bonus');
+    playBonusSound();
+    return;
+  }
+
+  if(allSame) {
+    const win=bet*syms[0].mult;
+    gameState.coins+=win;
+    gameState.won+=win;
+    updateUI();
+    rc.classList.add('winning');
+    wl.style.background='rgba(255,215,0,0.7)';
+    setTimeout(()=>{ rc.classList.remove('winning'); wl.style.background='rgba(255,215,0,0.25)'; },800);
+    syms.forEach((_,i)=>spawnParticles(i,syms[0].sym));
+    showFloatWin(win);
+    if(syms[0].name==='seven'){
+      setSlotMsg('🎉 JACKPOT!! +'+win+' เหรียญ!!','jackpot');
+      playJackpotSound();
+      triggerJackpotCelebration();
+    } else {
+      setSlotMsg('✨ ชนะ! +'+win+' เหรียญ (x'+syms[0].mult+')','win');
+      playWinSound();
+    }
+    flashWin(syms[0].name==='seven');
+  } else if(twoSame) {
+    gameState.coins+=bet;
+    gameState.won+=bet;
+    updateUI();
+    setSlotMsg('👍 2 เหมือน! คืนเดิมพัน','win');
+    playTone(440,0.15,'triangle',0.3);
+    showFloatWin(bet);
+  } else {
+    setSlotMsg('เกือบแล้ว... ลองอีกครั้ง','lose');
+    playLoseSound();
+  }
+  // Coins empty — show overlay instead of redirect
+  if(gameState.coins<bet && freeSpins===0) {
+    setTimeout(()=>showEmptyOverlay(),1200);
+  }
+}
+
+function showEmptyOverlay() {
+  document.getElementById('emptyOverlay').classList.add('show');
+}
+
+function closeEmptyOverlay() {
+  document.getElementById('emptyOverlay').classList.remove('show');
+  showPanel('topup');
+}
+window.closeEmptyOverlay = closeEmptyOverlay;
+
+// ===== BONUS ROUND =====
+function triggerBonusRound(spins) {
+  freeSpins=spins;
+  document.getElementById('bonusSpinsNum').textContent=spins;
+  document.getElementById('bonusOverlay').classList.add('show');
+  updateFreeSpinBadge();
+}
+
+function startBonus() {
+  document.getElementById('bonusOverlay').classList.remove('show');
+  inBonusRound=true;
+  const rc=document.getElementById('reelsContainer');
+  const btn=document.getElementById('spinBtn');
+  rc.classList.add('bonus-spin');
+  btn.classList.add('bonus-btn');
+  btn.textContent='⚡ FREE SPIN';
+  updateFreeSpinBadge();
+  setSlotMsg('⚡ FREE SPIN MODE! หมุนฟรี '+freeSpins+' รอบ','bonus');
+}
+window.startBonus = startBonus;
+
+function updateFreeSpinBadge() {
+  const badge=document.getElementById('freeSpinBadge');
+  document.getElementById('freeSpinCount').textContent=freeSpins;
+  if(freeSpins>0) badge.classList.add('show'); else badge.classList.remove('show');
+}
+
+function endBonusRound() {
+  inBonusRound=false;
+  freeSpins=0;
+  const rc=document.getElementById('reelsContainer');
+  const btn=document.getElementById('spinBtn');
+  rc.classList.remove('bonus-spin');
+  btn.classList.remove('bonus-btn');
+  btn.textContent='▶ SPIN';
+  updateFreeSpinBadge();
+  setSlotMsg('Bonus Round จบแล้ว! 🎊 กลับสู่โหมดปกติ','win');
+  showToast('Bonus Round จบแล้ว! 🎊');
+}
+
+function setSlotMsg(text,cls) {
+  const el=document.getElementById('slotMsg');
+  el.textContent=text;
+  el.className='slot-message '+(cls||'');
+}
+
+function flashWin(isJackpot) {
+  const f=document.getElementById('winFlash');
+  f.style.background=isJackpot?'rgba(255,215,0,0.2)':'rgba(255,215,0,0.1)';
+  f.style.opacity='1';
+  setTimeout(()=>f.style.opacity='0',350);
+  setTimeout(()=>{f.style.opacity='1';setTimeout(()=>f.style.opacity='0',280);},600);
+}
+
+function renderPaytable() {
+  const grid=document.getElementById('paytable');
+  grid.innerHTML='';
+  SYMBOLS.slice().reverse().forEach(s=>{
+    const div=document.createElement('div');
+    div.className='pay-item';
+    div.innerHTML=`<span class="pay-sym">${s.sym}</span><span class="pay-mult">${s.name==='bonus'?'BONUS':('x'+s.mult)}</span>`;
+    grid.appendChild(div);
+  });
+}
+
+function showToast(msg,isError,isBonus) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast'+(isError?' error':isBonus?' bonus':'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ===== ADMIN =====
+const ADMIN_PASSWORD='admin1234';
+let winRateSetting=parseInt(localStorage.getItem('lu_winrate')||'30');
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const map={auth:'authPage',admin:'adminLoginPage',adminPanel:'adminPage',game:'gamePage'};
+  document.getElementById(map[name]||name).classList.add('active');
+}
+
+let keysHeld=new Set();
+document.addEventListener('keydown',e=>{
+  keysHeld.add(e.key.toUpperCase());
+  if(keysHeld.has('A')&&keysHeld.has('D')&&keysHeld.has('M')){
+    if(document.getElementById('authPage').classList.contains('active')) showPage('admin');
+  }
+});
+document.addEventListener('keyup',e=>keysHeld.delete(e.key.toUpperCase()));
+
+let pressTimer=null;
+const logoEl=document.getElementById('authLogo');
+if(logoEl){
+  logoEl.addEventListener('mousedown',()=>{pressTimer=setTimeout(()=>{if(document.getElementById('authPage').classList.contains('active'))showPage('admin');},3000);});
+  logoEl.addEventListener('touchstart',e=>{e.preventDefault();pressTimer=setTimeout(()=>{if(document.getElementById('authPage').classList.contains('active'))showPage('admin');},3000);},{passive:false});
+  logoEl.addEventListener('mouseup',()=>clearTimeout(pressTimer));
+  logoEl.addEventListener('mouseleave',()=>clearTimeout(pressTimer));
+  logoEl.addEventListener('touchend',()=>clearTimeout(pressTimer));
+  logoEl.addEventListener('touchcancel',()=>clearTimeout(pressTimer));
+}
+
+async function doAdminLogin() {
+  const p=document.getElementById('adminPassInput').value;
+  if(p===ADMIN_PASSWORD){
+    document.getElementById('adminPassInput').value='';
+    showPage('adminPanel');
+    await renderAdminStats();
+    await renderUserTable();
+    await loadWinRateSetting();
+  } else {
+    document.getElementById('adminLoginError').textContent='รหัสผ่านไม่ถูกต้อง';
+  }
+}
+document.getElementById('adminPassInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')doAdminLogin();});
+function adminLogout(){showPage('auth');}
+
+function showAdminPanel(name){
+  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('ap'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
+  document.getElementById('anBtn'+name.charAt(0).toUpperCase()+name.slice(1)).classList.add('active');
+  if(name==='users') renderUserTable();
+  if(name==='win') renderAdminStats();
+}
+
+async function loadWinRateSetting(){
+  const dbRate=await getWinRateSetting();
+  winRateSetting=dbRate;
+  localStorage.setItem('lu_winrate',winRateSetting);
+  document.getElementById('winRateSlider').value=winRateSetting;
+  updateRateDisplay(winRateSetting);
+}
+
+function updateRateDisplay(val){
+  val=parseInt(val);
+  document.getElementById('winRateNum').textContent=val;
+  document.getElementById('rateInfo').textContent='อัตราปัจจุบัน: '+val+'% | ทุก 100 รอบ จะชนะประมาณ '+val+' รอบ';
+  const slider=document.getElementById('winRateSlider');
+  slider.style.setProperty('--val',val+'%');
+  document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active-preset'));
+  [10,30,50,70].forEach((v,i)=>{if(v===val)document.querySelectorAll('.preset-btn')[i].classList.add('active-preset');});
+}
+
+function setRate(val){document.getElementById('winRateSlider').value=val;updateRateDisplay(val);}
+
+async function saveWinRate(){
+  winRateSetting=parseInt(document.getElementById('winRateSlider').value);
+  localStorage.setItem('lu_winrate',winRateSetting);
+  await saveWinRateToDB(winRateSetting);
+  showToast('บันทึกแล้ว! อัตราชนะ: '+winRateSetting+'%');
+}
+
+async function renderAdminStats(){
+  const allUsersMap=await getAllUsers();
+  const allUsers=Object.values(allUsersMap);
+  const totalUsers=allUsers.length;
+  const totalSpins=allUsers.reduce((a,u)=>a+(u.spins||0),0);
+  const totalWon=allUsers.reduce((a,u)=>a+(u.won||0),0);
+  const totalTopup=allUsers.reduce((a,u)=>(u.history||[]).filter(h=>h.type==='เติมเงิน').reduce((s,h)=>s+h.amount,0)+a,0);
+  const totalWithdraw=allUsers.reduce((a,u)=>(u.history||[]).filter(h=>h.type==='ถอนเงิน').reduce((s,h)=>s+h.amount,0)+a,0);
+  document.getElementById('overallStats').innerHTML=[
+    ['ผู้ใช้ทั้งหมด',totalUsers],
+    ['รอบที่เล่น',totalSpins.toLocaleString()],
+    ['เหรียญที่แจก',totalWon.toLocaleString()],
+    ['เติมเงินรวม','฿'+totalTopup.toLocaleString()],
+    ['ถอนเงินรวม','฿'+totalWithdraw.toLocaleString()],
+  ].map(([l,v])=>`<div class="admin-stat"><span class="lbl">${l}</span><span class="val">${v}</span></div>`).join('');
+}
+
+async function renderUserTable(){
+  const tbody=document.getElementById('userTableBody');
+  tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:20px">กำลังโหลด...</td></tr>';
+  const allUsersMap=await getAllUsers();
+  const allUsers=Object.entries(allUsersMap);
+  if(allUsers.length===0){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:20px">ยังไม่มีผู้ใช้</td></tr>';return;}
+  tbody.innerHTML=allUsers.map(([uname,u])=>`
+    <tr>
+      <td><span style="font-weight:600">${uname}</span><br><span style="font-size:11px;color:rgba(255,255,255,0.35)">${u.email||''}</span></td>
+      <td><span style="font-family:'Orbitron',monospace;color:#FFD700">${(u.coins||0).toLocaleString()}</span></td>
+      <td>${(u.spins||0).toLocaleString()}</td>
+      <td>${(u.won||0).toLocaleString()}</td>
+      <td>
+        <div class="coins-edit">
+          <input type="number" id="ci_${uname}" placeholder="จำนวนเหรียญ" style="width:110px">
+          <button class="coins-edit-btn" onclick="addCoins('${uname}')">+ เติม</button>
+          <button class="coins-edit-btn" onclick="setCoins('${uname}')" style="border-color:rgba(255,165,0,0.3);color:#FFA500">= ตั้ง</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function addCoins(uname){
+  const val=parseInt(document.getElementById('ci_'+uname).value)||0;
+  if(val===0) return;
+  const snap=await getUserData(uname);
+  if(!snap) return;
+  snap.coins=(snap.coins||0)+val;
+  await saveUserData(uname,snap);
+  if(currentUser===uname){gameState.coins=snap.coins;currentUserData=snap;updateUI();}
+  await renderUserTable();
+  showToast('เติมเหรียญให้ '+uname+' +'+val+' สำเร็จ');
+}
+
+async function setCoins(uname){
+  const val=parseInt(document.getElementById('ci_'+uname).value);
+  if(isNaN(val)) return;
+  const snap2=await getUserData(uname);
+  if(!snap2) return;
+  snap2.coins=val;
+  await saveUserData(uname,snap2);
+  if(currentUser===uname){gameState.coins=val;currentUserData=snap2;updateUI();}
+  await renderUserTable();
+  showToast('ตั้งเหรียญ '+uname+' = '+val+' สำเร็จ');
+}
+
+// ===== MAIN SPIN =====
+async function doSpin() {
+  if(spinning) return;
+  // unlock audio on first interaction
+  try { getAudioCtx().resume(); } catch(e){}
+
+  if(freeSpins===0 && gameState.coins<bet){
+    showEmptyOverlay();
+    return;
+  }
+
+  spinning=true;
+  const isFree=freeSpins>0;
+  if(!isFree) gameState.coins-=bet;
+  else {
+    freeSpins--;
+    updateFreeSpinBadge();
+    if(freeSpins===0) setTimeout(()=>endBonusRound(),2000);
+  }
+  gameState.spins++;
+  updateUI();
+  document.getElementById('spinBtn').disabled=true;
+  setSlotMsg(isFree?'⚡ FREE SPIN!':'กำลังหมุน...','');
+
+  const rate=(await getWinRateSetting())/100;
+  const rand=Math.random();
+  let results;
+
+  // free spins get higher win rate
+  const effectiveRate=isFree?Math.min(rate*1.5,0.9):rate;
+
+  if(rand<effectiveRate) {
+    // win — but sometimes give bonus instead
+    const bonusChance=0.12;
+    if(Math.random()<bonusChance) {
+      // force bonus symbols (2 bonus = 5 free spins)
+      const nonBonus=SYMBOLS.findIndex(s=>s.name!=='bonus');
+      results=[7,7,SYMBOLS.findIndex(s=>s.name!=='bonus'&&s.name!=='seven')]; // 2 bonus + 1 other
+      results=[7,7,weightedRandom(WEIGHTS.map((w,i)=>SYMBOLS[i].name==='bonus'||SYMBOLS[i].name==='seven'?0:w))];
+    } else {
+      const winSym=weightedRandom(WEIGHTS.map((w,i)=>SYMBOLS[i].name==='bonus'?0:w));
+      results=[winSym,winSym,winSym];
+    }
+  } else {
+    let attempts=0;
+    do {
+      results=[
+        weightedRandom(WEIGHTS.map((w,i)=>SYMBOLS[i].name==='bonus'?0:w)),
+        weightedRandom(WEIGHTS.map((w,i)=>SYMBOLS[i].name==='bonus'?0:w)),
+        weightedRandom(WEIGHTS.map((w,i)=>SYMBOLS[i].name==='bonus'?0:w)),
+      ];
+      attempts++;
+    } while(attempts<20&&(results[0]===results[1]||results[1]===results[2]||results[0]===results[2]));
+  }
+
+  reelPools=[buildReelWithResult(0,results[0]),buildReelWithResult(1,results[1]),buildReelWithResult(2,results[2])];
+  const promises=results.map((_,i)=>new Promise(res=>setTimeout(()=>spinReel(i,700+i*300,2).then(res),i*100)));
+  await Promise.all(promises);
+  evaluateResult(results.map(i=>SYMBOLS[i]));
+  await saveGameState();
+  spinning=false;
+  document.getElementById('spinBtn').disabled=false;
+}
+
+// ===== AUTO LOGIN =====
+(async function autoLogin(){
+  const saved=sessionStorage.getItem('lu_session');
+  if(!saved) return;
+  try {
+    const userData=await getUserData(saved);
+    if(!userData){sessionStorage.removeItem('lu_session');return;}
+    currentUserData=userData;
+    loginSuccess(saved);
+  } catch(e){sessionStorage.removeItem('lu_session');}
+})();
+
+// ===== EXPOSE TO WINDOW =====
+window.doLogin=doLogin;
+window.doSignup=doSignup;
+window.doLogout=doLogout;
+window.switchTab=switchTab;
+window.showPanel=showPanel;
+window.showPage=showPage;
+window.updateQR=updateQR;
+window.doTopup=doTopup;
+window.setTopupAmt=setTopupAmt;
+window.doAdminLogin=doAdminLogin;
+window.adminLogout=adminLogout;
+window.showAdminPanel=showAdminPanel;
+window.saveWinRate=saveWinRate;
+window.setRate=setRate;
+window.updateRateDisplay=updateRateDisplay;
+window.addCoins=addCoins;
+window.setCoins=setCoins;
+window.updateWithdraw=updateWithdraw;
+window.doWithdraw=doWithdraw;
+window.filterHistory=filterHistory;
+
+// BET CONTROLS
+const BET_OPTS=[5,10,25,50,100];
+document.getElementById('betUp').addEventListener('click',()=>{
+  playClickSound();
+  const idx=BET_OPTS.indexOf(bet);
+  if(idx<BET_OPTS.length-1){bet=BET_OPTS[idx+1];document.getElementById('betDisplay').textContent=bet;}
+});
+document.getElementById('betDown').addEventListener('click',()=>{
+  playClickSound();
+  const idx=BET_OPTS.indexOf(bet);
+  if(idx>0){bet=BET_OPTS[idx-1];document.getElementById('betDisplay').textContent=bet;}
+});
+document.getElementById('spinBtn').addEventListener('click',doSpin);
+document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('regPass2').addEventListener('keydown',e=>{if(e.key==='Enter')doSignup();});
+
+}); // end window.load
+</script>
+</body>
+</html>
