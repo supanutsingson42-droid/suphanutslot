@@ -959,7 +959,7 @@ body{
       <h3>ALL USERS</h3>
       <div style="overflow-x:auto">
         <table class="user-table">
-          <thead><tr><th>User</th><th>Coins</th><th>Spins</th><th>Won</th><th>Manage</th></tr></thead>
+          <thead><tr><th>User</th><th>Coins</th><th>Spins</th><th>Win Rate</th><th>Manage Coins</th></tr></thead>
           <tbody id="userTableBody"></tbody>
         </table>
       </div>
@@ -1035,9 +1035,16 @@ body{
       <div class="bet-section">
         <span class="bet-lbl">BET</span>
         <button class="bet-ctrl" id="betDown">−</button>
-        <span class="bet-val" id="betDisplay">10</span>
+        <input type="number" id="betInput" min="1" value="10"
+          style="flex:1;background:transparent;border:none;outline:none;
+            text-align:center;font-family:'Cinzel',serif;font-size:20px;
+            font-weight:700;color:var(--gold);width:0;min-width:0;
+            -moz-appearance:textfield;"
+          oninput="onBetInput(this.value)"
+          onblur="onBetBlur(this.value)">
         <button class="bet-ctrl" id="betUp">+</button>
       </div>
+      <div style="font-size:10px;color:rgba(255,215,0,0.3);text-align:center;margin-top:-10px;margin-bottom:12px;font-family:'Cinzel',serif;letter-spacing:1px;">MIN 1 · พิมพ์ได้เลย</div>
 
       <button class="spin-btn" id="spinBtn">▶ SPIN</button>
     </div>
@@ -1762,7 +1769,9 @@ async function doSpin(){
   gameState.spins++;updateUI();
   document.getElementById('spinBtn').disabled=true;
   setMsg(isFree?'FREE SPIN ACTIVATED':'Spinning...','');
-  const rate=(await getWinRateSetting())/100;
+  const globalRate=(await getWinRateSetting())/100;
+  const userRate=currentUserData.winRate!=null?currentUserData.winRate/100:globalRate;
+  const rate=userRate;
   const effectiveRate=isFree?Math.min(rate*1.5,0.9):rate;
   let results;
   if(Math.random()<effectiveRate){
@@ -2159,19 +2168,45 @@ async function renderAdminStats(){
 async function renderUserTable(){
   const tbody=document.getElementById('userTableBody');
   tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:20px;font-family:Cinzel,serif;font-size:11px;">Loading...</td></tr>';
+  const globalRate=await getWinRateSetting();
   const all=Object.entries(await getAllUsers());
   if(!all.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:20px">No users yet</td></tr>';return;}
-  tbody.innerHTML=all.map(([uname,u])=>`<tr>
-    <td><span style="font-family:Cinzel,serif;color:rgba(255,215,0,0.8)">${uname}</span><br><span style="font-size:11px;color:rgba(255,255,255,0.25)">${u.email||''}</span></td>
-    <td style="font-family:Cinzel,serif;color:#FFD700">${(u.coins||0).toLocaleString()}</td>
-    <td>${(u.spins||0).toLocaleString()}</td>
-    <td>${(u.won||0).toLocaleString()}</td>
-    <td><div class="coins-edit-row">
-      <input type="number" id="ci_${uname}" placeholder="Amount">
-      <button class="coins-edit-btn" onclick="addCoins('${uname}')">+ Add</button>
-      <button class="coins-edit-btn" onclick="setCoins('${uname}')">= Set</button>
-    </div></td>
-  </tr>`).join('');
+  tbody.innerHTML=all.map(([uname,u])=>{
+    const userRate=u.winRate!=null?u.winRate:null;
+    const displayRate=userRate!=null?userRate:globalRate;
+    const isCustom=userRate!=null;
+    return`<tr>
+      <td>
+        <span style="font-family:Cinzel,serif;color:rgba(255,215,0,0.8)">${uname}</span><br>
+        <span style="font-size:11px;color:rgba(255,255,255,0.25)">${u.email||''}</span>
+      </td>
+      <td style="font-family:Cinzel,serif;color:#FFD700">${(u.coins||0).toLocaleString()}</td>
+      <td>${(u.spins||0).toLocaleString()}</td>
+      <td>
+        <div style="min-width:160px">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="font-family:Cinzel,serif;font-size:16px;font-weight:700;color:${isCustom?'#cc44ff':'rgba(255,255,255,0.4)'}" id="urNum_${uname}">${displayRate}%</span>
+            ${isCustom?`<span style="font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(204,68,255,0.15);color:#cc44ff;border:1px solid rgba(204,68,255,0.3);font-family:Cinzel,serif;letter-spacing:1px">CUSTOM</span>`:`<span style="font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.08);font-family:Cinzel,serif;letter-spacing:1px">GLOBAL</span>`}
+          </div>
+          <input type="range" min="1" max="90" value="${displayRate}"
+            style="width:100%;accent-color:#cc44ff;height:3px;cursor:pointer"
+            oninput="previewUserRate('${uname}',this.value)"
+            id="urSlider_${uname}">
+          <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">
+            <button class="coins-edit-btn" style="font-size:10px;padding:4px 8px" onclick="setUserRate('${uname}',document.getElementById('urSlider_${uname}').value)">✓ Save</button>
+            <button class="coins-edit-btn" style="font-size:10px;padding:4px 8px;border-color:rgba(255,100,100,0.25);color:rgba(255,120,120,0.6)" onclick="resetUserRate('${uname}')">↺ Reset</button>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="coins-edit-row">
+          <input type="number" id="ci_${uname}" placeholder="Amount">
+          <button class="coins-edit-btn" onclick="addCoins('${uname}')">+ Add</button>
+          <button class="coins-edit-btn" onclick="setCoins('${uname}')">= Set</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
 }
 async function addCoins(u){
   const v=parseInt(document.getElementById('ci_'+u).value)||0;if(!v)return;
@@ -2185,11 +2220,47 @@ async function setCoins(u){
   await saveUserData(u,d);if(currentUser===u){gameState.coins=v;currentUserData=d;updateUI();}
   await renderUserTable();showToast('Set '+u+' coins to '+v,'','green');
 }
+function previewUserRate(uname,val){
+  const numEl=document.getElementById('urNum_'+uname);
+  if(numEl)numEl.textContent=val+'%';
+}
+async function setUserRate(uname,val){
+  const rate=Math.min(90,Math.max(1,parseInt(val)||30));
+  const d=await getUserData(uname);if(!d)return;
+  d.winRate=rate;
+  await saveUserData(uname,d);
+  if(currentUser===uname)currentUserData.winRate=rate;
+  await renderUserTable();
+  showToast('Win rate for '+uname+' set to '+rate+'%','','green');
+}
+async function resetUserRate(uname){
+  const d=await getUserData(uname);if(!d)return;
+  delete d.winRate;
+  await saveUserData(uname,d);
+  if(currentUser===uname)delete currentUserData.winRate;
+  await renderUserTable();
+  showToast(uname+' reset to global rate','','green');
+}
+window.setUserRate=setUserRate;window.resetUserRate=resetUserRate;window.previewUserRate=previewUserRate;
 
 // ===== BET =====
-const BET_OPTS=[5,10,25,50,100];
-document.getElementById('betUp').addEventListener('click',()=>{playClick();const i=BET_OPTS.indexOf(bet);if(i<BET_OPTS.length-1){bet=BET_OPTS[i+1];document.getElementById('betDisplay').textContent=bet;}});
-document.getElementById('betDown').addEventListener('click',()=>{playClick();const i=BET_OPTS.indexOf(bet);if(i>0){bet=BET_OPTS[i-1];document.getElementById('betDisplay').textContent=bet;}});
+function setBetVal(v){
+  v=Math.max(1,Math.floor(Number(v)||1));
+  bet=v;
+  document.getElementById('betInput').value=v;
+}
+function onBetInput(v){
+  const n=Math.floor(Number(v));
+  if(!isNaN(n)&&n>=1)bet=n;
+}
+function onBetBlur(v){
+  setBetVal(v);
+}
+document.getElementById('betUp').addEventListener('click',()=>{playClick();setBetVal(bet+5);});
+document.getElementById('betDown').addEventListener('click',()=>{playClick();setBetVal(Math.max(1,bet-5));});
+document.getElementById('betInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.target.blur();}
+});
 document.getElementById('spinBtn').addEventListener('click',doSpin);
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('regPass2').addEventListener('keydown',e=>{if(e.key==='Enter')doSignup();});
@@ -2202,6 +2273,7 @@ window.doAdminLogin=doAdminLogin;window.adminLogout=adminLogout;window.showAdmin
 window.saveWinRate=saveWinRate;window.setRate=setRate;window.updateRateDisplay=updateRateDisplay;
 window.addCoins=addCoins;window.setCoins=setCoins;window.updateWithdraw=updateWithdraw;window.doWithdraw=doWithdraw;
 window.filterHistory=filterHistory;window.loadLeaderboard=loadLeaderboard;window.claimDaily=claimDaily;
+window.onBetInput=onBetInput;window.onBetBlur=onBetBlur;
 
 // ===== AUTO LOGIN =====
 (async()=>{
