@@ -807,7 +807,63 @@ body{
 .xp-bar-wrap{background:rgba(0,0,0,0.4);border-radius:1px;height:4px;margin-bottom:8px;overflow:hidden;}
 .xp-bar{height:100%;background:linear-gradient(90deg,#C8960C,#FFD700);border-radius:1px;transition:width 0.6s cubic-bezier(0.22,1,0.36,1);}
 
-/* RESPONSIVE */
+/* ===== STREAK BADGE ===== */
+.streak-badge{
+  display:none;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,rgba(255,100,0,0.12),rgba(255,200,0,0.08));
+  border:1px solid rgba(255,140,0,0.3);border-radius:2px;
+  padding:8px 14px;margin-bottom:12px;
+  font-family:'Cinzel',serif;font-size:13px;color:#FFA500;letter-spacing:1px;
+  animation:streakPulse 0.8s ease infinite alternate;
+}
+.streak-badge.show{display:flex;}
+@keyframes streakPulse{
+  from{box-shadow:0 0 6px rgba(255,140,0,0.15);}
+  to{box-shadow:0 0 20px rgba(255,140,0,0.45),0 0 40px rgba(255,100,0,0.15);}
+}
+
+/* ===== AUTO SPIN ===== */
+.auto-spin-row{
+  display:flex;align-items:center;gap:8px;margin-top:10px;
+}
+.auto-spin-opts{
+  display:flex;align-items:center;gap:4px;flex:1;
+  background:rgba(0,0,0,0.35);border:1px solid rgba(255,215,0,0.08);
+  border-radius:2px;padding:4px 8px;
+}
+.auto-lbl{font-family:'Cinzel',serif;font-size:10px;color:rgba(255,215,0,0.3);letter-spacing:2px;margin-right:2px;white-space:nowrap;}
+.auto-opt{
+  flex:1;padding:5px 4px;border:1px solid rgba(255,215,0,0.1);border-radius:2px;
+  background:transparent;color:rgba(255,215,0,0.4);
+  font-family:'Cinzel',serif;font-size:12px;cursor:pointer;transition:all 0.2s;
+}
+.auto-opt:hover{background:rgba(255,215,0,0.08);color:var(--gold);}
+.auto-opt.selected{background:rgba(255,215,0,0.12);color:var(--gold);border-color:rgba(255,215,0,0.3);}
+.auto-start-btn{
+  padding:8px 16px;border:none;border-radius:2px;
+  background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,165,0,0.2));
+  border:1px solid rgba(255,215,0,0.2);
+  color:var(--gold);font-family:'Cinzel',serif;font-size:12px;
+  cursor:pointer;letter-spacing:2px;transition:all 0.25s;white-space:nowrap;
+}
+.auto-start-btn:hover{background:rgba(255,215,0,0.2);border-color:rgba(255,215,0,0.4);}
+.auto-start-btn.running{
+  background:linear-gradient(135deg,rgba(239,68,68,0.15),rgba(220,38,38,0.2));
+  border-color:rgba(239,68,68,0.3);color:#ef4444;
+  animation:autoRunPulse 1s ease infinite alternate;
+}
+@keyframes autoRunPulse{from{box-shadow:none}to{box-shadow:0 0 12px rgba(239,68,68,0.25)}}
+.auto-status{
+  display:none;margin-top:8px;
+  background:rgba(0,0,0,0.3);border:1px solid rgba(255,215,0,0.06);
+  border-radius:2px;padding:8px 12px;
+}
+.auto-status.show{display:block;}
+#autoStatusTxt{font-family:'Cinzel',serif;font-size:11px;color:rgba(255,215,0,0.5);letter-spacing:1px;display:block;margin-bottom:6px;}
+.auto-progress-wrap{background:rgba(255,255,255,0.05);border-radius:1px;height:3px;overflow:hidden;}
+.auto-progress-bar{height:100%;background:linear-gradient(90deg,#C8960C,#FFD700);border-radius:1px;transition:width 0.3s ease;}
+
+/* ===== RESPONSIVE ===== */
 @media(max-width:480px){
   .auth-card{padding:32px 24px;}
   .machine-frame{padding:16px;}
@@ -1046,7 +1102,31 @@ body{
       </div>
       <div style="font-size:10px;color:rgba(255,215,0,0.3);text-align:center;margin-top:-10px;margin-bottom:12px;font-family:'Cinzel',serif;letter-spacing:1px;">MIN 1 · พิมพ์ได้เลย</div>
 
+      <!-- STREAK FREE SPIN BADGE -->
+      <div class="streak-badge" id="streakBadge">
+        <span id="streakIcon">🔥</span>
+        <span>STREAK ×<strong id="streakMult">1</strong> — หมุนฟรีต่อเนื่อง!</span>
+        <span id="streakTotal" style="margin-left:6px;opacity:0.7"></span>
+      </div>
+
       <button class="spin-btn" id="spinBtn">▶ SPIN</button>
+
+      <!-- AUTO SPIN ROW -->
+      <div class="auto-spin-row">
+        <div class="auto-spin-opts">
+          <span class="auto-lbl">AUTO</span>
+          <button class="auto-opt" id="autoOpt10" onclick="setAutoCount(10)">10</button>
+          <button class="auto-opt" id="autoOpt25" onclick="setAutoCount(25)">25</button>
+          <button class="auto-opt" id="autoOpt50" onclick="setAutoCount(50)">50</button>
+          <button class="auto-opt" id="autoOpt100" onclick="setAutoCount(100)">100</button>
+          <button class="auto-opt" id="autoOptInf" onclick="setAutoCount(-1)">∞</button>
+        </div>
+        <button class="auto-start-btn" id="autoBtn" onclick="toggleAuto()">▶▶ AUTO</button>
+      </div>
+      <div class="auto-status" id="autoStatus">
+        <span id="autoStatusTxt">เลือกจำนวนรอบ</span>
+        <div class="auto-progress-wrap"><div class="auto-progress-bar" id="autoProgressBar" style="width:0%"></div></div>
+      </div>
     </div>
 
     <div class="paytable-section">
@@ -1674,6 +1754,24 @@ function flashWin(isJack){
 
 function setMsg(txt,cls){const el=document.getElementById('slotMsg');el.textContent=txt;el.className='slot-msg '+(cls||'');}
 
+// ===== STREAK FREE SPIN STATE =====
+let streakActive=false;
+let streakMult=0;      // how many consecutive 3-of-a-kind
+let streakTotalWon=0;  // total won this streak
+let pendingStreakSpin=false; // flag: do next spin as streak free spin
+
+function showStreakBadge(mult,total){
+  const b=document.getElementById('streakBadge');
+  document.getElementById('streakMult').textContent=mult;
+  document.getElementById('streakTotal').textContent=total?'(+'+total.toLocaleString()+' รวม)':'';
+  const icons=['🔥','💥','⚡','🌟','👑','💎','🎯','🚀'];
+  document.getElementById('streakIcon').textContent=icons[Math.min(mult-1,icons.length-1)];
+  b.classList.add('show');
+}
+function hideStreakBadge(){
+  document.getElementById('streakBadge').classList.remove('show');
+}
+
 function evaluateResult(syms){
   const rc=document.getElementById('reelsWrap');
   const wl=document.getElementById('winLine');
@@ -1684,12 +1782,21 @@ function evaluateResult(syms){
     if(!gameState.achievements.includes('bonus_triggered'))gameState.achievements.push('bonus_triggered');
     setTimeout(()=>triggerBonusRound(sp),300);
     setMsg('🎁 BONUS ROUND! '+sp+' Free Spins Awarded','bonus');
-    playBonus();return;
+    playBonus();
+    // end any streak
+    streakActive=false;streakMult=0;streakTotalWon=0;pendingStreakSpin=false;
+    hideStreakBadge();
+    return false; // not a 3-of-a-kind win for streak purposes
   }
+
   const allSame=syms[0].name===syms[1].name&&syms[1].name===syms[2].name;
   const twoSame=syms[0].name===syms[1].name||syms[1].name===syms[2].name||syms[0].name===syms[2].name;
+
   if(allSame){
     const win=bet*syms[0].mult;
+    // ===== STREAK LOGIC =====
+    streakMult++;
+    streakTotalWon+=win;
     gameState.coins+=win;gameState.won+=win;
     addXP(Math.ceil(win/10));
     updateUI();
@@ -1700,27 +1807,52 @@ function evaluateResult(syms){
     if(syms[0].name==='seven'){
       if(!gameState.achievements)gameState.achievements=[];
       if(!gameState.achievements.includes('jackpot_hit'))gameState.achievements.push('jackpot_hit');
-      setMsg('✦ JACKPOT ✦ +'+win.toLocaleString()+' COINS','jackpot');
+      setMsg('✦ JACKPOT ✦ +'+win.toLocaleString()+'  ×'+streakMult+' STREAK!','jackpot');
       playJackpot();triggerJackpotFX();
     }else{
-      setMsg('WIN  +'+win.toLocaleString()+' COINS  (×'+syms[0].mult+')','win');
+      if(streakMult>1){
+        setMsg('🔥 STREAK ×'+streakMult+'!  +'+win.toLocaleString()+'  (รวม +'+streakTotalWon.toLocaleString()+')','win');
+      }else{
+        setMsg('WIN  +'+win.toLocaleString()+'  (×'+syms[0].mult+')','win');
+      }
       playWin();
     }
     flashWin(syms[0].name==='seven');
-  }else if(twoSame){
-    gameState.coins+=bet;gameState.won+=bet;
-    addXP(2);
-    updateUI();
-    setMsg('Two of a kind — Bet returned','win');
-    playTone(440,0.12,'triangle',0.25);
-    showFloatWin(bet);
+    // mark next spin as streak free spin
+    pendingStreakSpin=true;
+    streakActive=true;
+    showStreakBadge(streakMult,streakTotalWon);
+    addXP(1);checkAchievements();
+    return true; // was a win
   }else{
-    setMsg('No match — Try again','lose');
-    playTone(200,0.25,'sawtooth',0.1);
+    // === END STREAK ===
+    if(streakActive&&streakMult>0){
+      // streak ended
+      const finalTotal=streakTotalWon;
+      const finalMult=streakMult;
+      setMsg('🎊 STREAK จบที่ ×'+finalMult+'  รวมได้ +'+finalTotal.toLocaleString()+' coins!','win');
+      setTimeout(()=>{
+        if(!spinning)setMsg('กดหมุนเพื่อเล่นต่อ','');
+      },3000);
+      showToast('Streak ×'+finalMult+' จบแล้ว! รวม +'+finalTotal.toLocaleString()+' coins 🎊','','green');
+      streakActive=false;streakMult=0;streakTotalWon=0;pendingStreakSpin=false;
+      hideStreakBadge();
+    }else if(twoSame){
+      gameState.coins+=bet;gameState.won+=bet;
+      addXP(2);updateUI();
+      setMsg('Two of a kind — Bet returned','win');
+      playTone(440,0.12,'triangle',0.25);
+      showFloatWin(bet);
+    }else{
+      setMsg('No match — Try again','lose');
+      playTone(200,0.25,'sawtooth',0.1);
+    }
+    streakActive=false;streakMult=0;streakTotalWon=0;pendingStreakSpin=false;
+    hideStreakBadge();
+    addXP(1);checkAchievements();
+    if(gameState.coins<bet&&freeSpins===0)setTimeout(()=>showEmptyOverlay(),1100);
+    return false;
   }
-  addXP(1);
-  checkAchievements();
-  if(gameState.coins<bet&&freeSpins===0)setTimeout(()=>showEmptyOverlay(),1100);
 }
 
 function showEmptyOverlay(){document.getElementById('emptyOverlay').classList.add('show');}
@@ -1757,22 +1889,44 @@ function endBonus(){
   showToast('Bonus Round finished! 🎊','','green');
 }
 
-// MAIN SPIN
-async function doSpin(){
-  if(spinning)return;
+// ===== CORE SPIN LOGIC (shared by manual + auto + streak) =====
+async function executeSpin(){
+  if(spinning)return false;
   try{getAudio().resume();}catch(e){}
-  if(freeSpins===0&&gameState.coins<bet){showEmptyOverlay();return;}
+
+  const isStreakFree=pendingStreakSpin;
+  const isBonusFree=freeSpins>0;
+  const isFree=isStreakFree||isBonusFree;
+
+  if(!isFree&&gameState.coins<bet){
+    showEmptyOverlay();
+    stopAuto();
+    return false;
+  }
+
   spinning=true;
-  const isFree=freeSpins>0;
-  if(!isFree)gameState.coins-=bet;
-  else{freeSpins--;updateFSBadge();if(freeSpins===0)setTimeout(()=>endBonus(),2000);}
+  pendingStreakSpin=false; // consume
+
+  if(isBonusFree){
+    freeSpins--;updateFSBadge();
+    if(freeSpins===0)setTimeout(()=>endBonus(),2000);
+  }else if(!isStreakFree){
+    gameState.coins-=bet;
+  }
+
   gameState.spins++;updateUI();
   document.getElementById('spinBtn').disabled=true;
-  setMsg(isFree?'FREE SPIN ACTIVATED':'Spinning...','');
+
+  let spinLabel='Spinning...';
+  if(isStreakFree)spinLabel='🔥 STREAK FREE SPIN ×'+streakMult+'!';
+  else if(isBonusFree)spinLabel='⚡ FREE SPIN!';
+  setMsg(spinLabel,'');
+
   const globalRate=(await getWinRateSetting())/100;
   const userRate=currentUserData.winRate!=null?currentUserData.winRate/100:globalRate;
   const rate=userRate;
   const effectiveRate=isFree?Math.min(rate*1.5,0.9):rate;
+
   let results;
   if(Math.random()<effectiveRate){
     if(Math.random()<0.12){
@@ -1791,14 +1945,115 @@ async function doSpin(){
       ];att++;
     }while(att<20&&(results[0]===results[1]||results[1]===results[2]||results[0]===results[2]));
   }
+
   reelPools=[buildReel(0,results[0]),buildReel(1,results[1]),buildReel(2,results[2])];
   const promises=results.map((_,i)=>new Promise(r=>setTimeout(()=>spinReel(i,700+i*300,2).then(r),i*100)));
   await Promise.all(promises);
-  evaluateResult(results.map(i=>SYMBOLS[i]));
+  const wasWin=evaluateResult(results.map(i=>SYMBOLS[i]));
   await saveGameState();
   spinning=false;
   document.getElementById('spinBtn').disabled=false;
+  return wasWin;
 }
+
+// MANUAL SPIN
+async function doSpin(){
+  if(autoRunning)return; // block manual during auto
+  await executeSpin();
+  // if streak is active, show streak badge hint but don't auto-fire — user must press again
+  // (streak free spin fires automatically via executeSpin's pendingStreakSpin flag on next call)
+  if(pendingStreakSpin){
+    // auto-trigger streak free spin after short delay
+    setTimeout(()=>doStreakContinue(),900);
+  }
+}
+
+async function doStreakContinue(){
+  if(!pendingStreakSpin||autoRunning)return;
+  await executeSpin();
+  if(pendingStreakSpin){
+    setTimeout(()=>doStreakContinue(),900);
+  }
+}
+
+// ===== AUTO SPIN =====
+let autoCount=0;        // selected count (-1 = infinite)
+let autoSpinsDone=0;
+let autoRunning=false;
+let autoStopRequested=false;
+
+function setAutoCount(n){
+  playClick();
+  autoCount=n;
+  document.querySelectorAll('.auto-opt').forEach(b=>b.classList.remove('selected'));
+  const map={10:'autoOpt10',25:'autoOpt25',50:'autoOpt50',100:'autoOpt100',[-1]:'autoOptInf'};
+  if(map[n])document.getElementById(map[n]).classList.add('selected');
+  updateAutoStatus();
+}
+
+function updateAutoStatus(){
+  const s=document.getElementById('autoStatus');
+  const txt=document.getElementById('autoStatusTxt');
+  const bar=document.getElementById('autoProgressBar');
+  if(autoRunning){
+    s.classList.add('show');
+    if(autoCount===-1){
+      txt.textContent='Auto Running — '+autoSpinsDone+' spins done (กด STOP เพื่อหยุด)';
+      bar.style.width='100%';bar.style.animation='autoBarPulse 1s ease infinite alternate';
+    }else{
+      const pct=Math.min((autoSpinsDone/autoCount)*100,100);
+      txt.textContent='Auto Spin: '+autoSpinsDone+' / '+autoCount;
+      bar.style.animation='none';bar.style.width=pct+'%';
+    }
+  }else{
+    s.classList.remove('show');
+    bar.style.animation='none';bar.style.width='0%';
+  }
+}
+
+async function toggleAuto(){
+  if(autoRunning){stopAuto();return;}
+  if(autoCount===0){showToast('เลือกจำนวนรอบก่อนครับ','error');return;}
+  playClick();
+  autoRunning=true;
+  autoStopRequested=false;
+  autoSpinsDone=0;
+  streakActive=false;streakMult=0;streakTotalWon=0;pendingStreakSpin=false;
+  hideStreakBadge();
+  document.getElementById('autoBtn').textContent='■ STOP';
+  document.getElementById('autoBtn').classList.add('running');
+  document.getElementById('spinBtn').disabled=true;
+  updateAutoStatus();
+
+  while(autoRunning&&!autoStopRequested){
+    if(autoCount!==-1&&autoSpinsDone>=autoCount){stopAuto();break;}
+    if(gameState.coins<bet&&freeSpins===0&&!pendingStreakSpin){
+      stopAuto();showEmptyOverlay();break;
+    }
+    await executeSpin();
+    autoSpinsDone++;
+    updateAutoStatus();
+    // if streak free spin is pending, let it fire — but count it
+    while(pendingStreakSpin&&!autoStopRequested){
+      await new Promise(r=>setTimeout(r,600));
+      await executeSpin();
+      autoSpinsDone++;
+      updateAutoStatus();
+    }
+    if(!autoStopRequested)await new Promise(r=>setTimeout(r,400));
+  }
+  stopAuto();
+}
+
+function stopAuto(){
+  autoRunning=false;autoStopRequested=true;
+  const btn=document.getElementById('autoBtn');
+  btn.textContent='▶▶ AUTO';btn.classList.remove('running');
+  document.getElementById('spinBtn').disabled=false;
+  updateAutoStatus();
+}
+
+window.toggleAuto=toggleAuto;window.setAutoCount=setAutoCount;
 
 function renderPaytable(){
   const grid=document.getElementById('paytable');
