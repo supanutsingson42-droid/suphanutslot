@@ -983,11 +983,14 @@ function buildReelDOM(){
 }
 
 // ===== REEL ANIMATION =====
+// noStarWeights ใช้ทั่วไป — star ห้ามออกจาก random pool
+const noStarWeights=WEIGHTS.map((w,i)=>SYMS[i].n==='star'?0:w);
+
 function buildPool(col,targetRow){
   const pool=[];
-  for(let i=0;i<6;i++)pool.push(wr(WEIGHTS));
+  for(let i=0;i<6;i++)pool.push(wr(noStarWeights));
   for(let r=0;r<ROWS;r++)pool.push(targetRow[r]);
-  for(let i=0;i<10;i++)pool.push(wr(WEIGHTS));
+  for(let i=0;i<10;i++)pool.push(wr(noStarWeights));
   return pool;
 }
 
@@ -1109,7 +1112,6 @@ async function executeSpin(){
   const fsRate=fsRatePct/100;
 
   // Generate grid — ห้าม star ออกจาก random ปกติ
-  const noStarWeights=WEIGHTS.map((w,i)=>SYMS[i].n==='star'?0:w);
   const newGrid=[];
   for(let c=0;c<COLS;c++){const col=[];for(let r=0;r<ROWS;r++)col.push(wr(noStarWeights));newGrid.push(col);}
 
