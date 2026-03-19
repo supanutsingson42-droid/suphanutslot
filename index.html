@@ -523,18 +523,18 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
       <div class="rate-info-txt" id="rateInfo">Rate: 30% — Approx. 30 wins per 100 spins</div>
     </div>
     <div class="admin-sec">
-      <h3>FREE SPIN RATE CONTROL</h3>
-      <div style="font-family:'Cinzel Decorative',serif;font-size:42px;font-weight:900;color:#f5a623;text-align:center;text-shadow:0 0 16px rgba(245,166,35,0.3);" id="fsRateNum">3</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.25);text-align:center;margin-top:3px;letter-spacing:2px;font-family:'Cinzel',serif;">% CHANCE PER SPIN (ยิ่งน้อยยิ่งยาก)</div>
-      <input type="range" class="rate-slider" id="fsRateSlider" min="1" max="30" value="3" oninput="updateFsRateDisplay(this.value)" style="accent-color:#f5a623;">
+      <h3>FREE SPIN — STAR WEIGHT (REALTIME)</h3>
+      <div style="font-family:'Cinzel Decorative',serif;font-size:42px;font-weight:900;color:#f5a623;text-align:center;text-shadow:0 0 16px rgba(245,166,35,0.3);" id="fsRateNum">2</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.25);text-align:center;margin-top:3px;letter-spacing:2px;font-family:'Cinzel',serif;">STAR WEIGHT — ยิ่งน้อยยิ่งหายาก · เปลี่ยนทันที</div>
+      <input type="range" class="rate-slider" id="fsRateSlider" min="1" max="20" value="2" oninput="updateFsRateDisplay(this.value)" style="accent-color:#f5a623;">
       <div class="preset-btns">
-        <button class="preset-btn" onclick="setFsRate(1)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">1% Ultra Rare</button>
-        <button class="preset-btn active-p" onclick="setFsRate(3)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">3% Default</button>
-        <button class="preset-btn" onclick="setFsRate(8)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">8% Easy</button>
-        <button class="preset-btn" onclick="setFsRate(15)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">15% Generous</button>
+        <button class="preset-btn" onclick="setFsRate(1)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">1 Ultra Rare</button>
+        <button class="preset-btn active-p" onclick="setFsRate(2)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">2 Default</button>
+        <button class="preset-btn" onclick="setFsRate(6)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">6 Normal</button>
+        <button class="preset-btn" onclick="setFsRate(15)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">15 Easy</button>
       </div>
-      <button class="save-rate-btn" onclick="saveFsRate()" style="background:linear-gradient(135deg,#7a4500,#f5a623)">SAVE FREE SPIN RATE</button>
-      <div class="rate-info-txt" id="fsRateInfo">Rate: 3% — ประมาณ 3 ครั้งต่อ 100 รอบ</div>
+      <button class="save-rate-btn" onclick="saveFsRate()" style="background:linear-gradient(135deg,#7a4500,#f5a623)">SAVE &amp; APPLY REALTIME</button>
+      <div class="rate-info-txt" id="fsRateInfo">Star Weight: 2 — หายาก (Rare)</div>
     </div>
     <div class="admin-sec"><h3>OVERVIEW STATS</h3><div class="admin-stats-row" id="overallStats"></div></div>
   </div>
@@ -854,18 +854,23 @@ let reelInnerEls=[];
 
 // ===== SYMBOLS (Aztec theme + Wild) =====
 const SYMS=[
-  {e:'🌞',n:'sun',   m3:50,m4:100,m5:250,m6:500, w:[2]},
-  {e:'💎',n:'gem',   m3:30,m4:60, m5:150,m6:300, w:[3]},
-  {e:'🐍',n:'snake', m3:20,m4:40, m5:100,m6:200, w:[4]},
-  {e:'🦅',n:'eagle', m3:15,m4:30, m5:75, m6:150, w:[6]},
-  {e:'🏺',n:'pot',   m3:10,m4:20, m5:50, m6:100, w:[8]},
-  {e:'🌵',n:'cactus',m3:8, m4:15, m5:35, m6:70,  w:[10]},
-  {e:'💀',n:'skull', m3:5, m4:10, m5:25, m6:50,  w:[14]},
-  {e:'🌶',n:'pepper',m3:3, m4:6,  m5:15, m6:30,  w:[18]},
-  {e:'🌟',n:'wild',  m3:0, m4:0,  m5:0,  m6:0,   w:[5]},  // WILD
-  {e:'⭐',n:'star',  m3:0, m4:0,  m5:0,  m6:0,   w:[6]},  // FREE SPIN
+  {e:'🌞',n:'sun',   m3:50,m4:100,m5:250,m6:500},
+  {e:'💎',n:'gem',   m3:30,m4:60, m5:150,m6:300},
+  {e:'🐍',n:'snake', m3:20,m4:40, m5:100,m6:200},
+  {e:'🦅',n:'eagle', m3:15,m4:30, m5:75, m6:150},
+  {e:'🏺',n:'pot',   m3:10,m4:20, m5:50, m6:100},
+  {e:'🌵',n:'cactus',m3:8, m4:15, m5:35, m6:70 },
+  {e:'💀',n:'skull', m3:5, m4:10, m5:25, m6:50 },
+  {e:'🌶',n:'pepper',m3:3, m4:6,  m5:15, m6:30 },
+  {e:'🌟',n:'wild',  m3:0, m4:0,  m5:0,  m6:0  }, // index 8
+  {e:'⭐',n:'star',  m3:0, m4:0,  m5:0,  m6:0  }, // index 9 — weight realtime
 ];
-const WEIGHTS=SYMS.map(s=>s.w[0]);
+// BASE weights ไม่มี star — star weight โหลดจาก Firestore realtime
+const BASE_WEIGHTS=[2,3,4,6,8,10,14,18,5,0];
+let currentStarWeight=2; // ค่าเริ่มต้น จะถูก override จาก Firestore
+function getWeights(){return BASE_WEIGHTS.map((w,i)=>SYMS[i].n==='star'?currentStarWeight:w);}
+// noStarWeights สำหรับ animation pool padding (ไม่ให้ star โผล่ใน padding)
+function getNoStarWeights(){return BASE_WEIGHTS.map((w,i)=>SYMS[i].n==='star'?0:w);}
 
 function wr(ws){let t=ws.reduce((a,b)=>a+b,0),r=Math.random()*t;for(let i=0;i<ws.length;i++){r-=ws[i];if(r<=0)return i;}return ws.length-1;}
 function totalBet(){return betPerLine*lines;}
@@ -915,8 +920,34 @@ async function getUserData(u){const s=await db.collection('users').doc(u).get();
 async function getAllUsers(){const s=await db.collection('users').get();const r={};s.forEach(d=>r[d.id]=d.data());return r;}
 async function getWinRateSetting(){const s=await db.collection('settings').doc('winrate').get();return s.exists?(s.data().rate||30):30;}
 async function saveWinRateToDB(r){await db.collection('settings').doc('winrate').set({rate:r});}
-async function getFsRateSetting(){const s=await db.collection('settings').doc('fsrate').get();return s.exists?(s.data().rate||3):3;}
-async function saveFsRateToDB(r){await db.collection('settings').doc('fsrate').set({rate:r});}
+async function saveFsRateToDB(r){await db.collection('settings').doc('fsrate').set({starWeight:r});}
+
+// ===== REALTIME SETTINGS LISTENER =====
+let _settingsListener=null;
+function startSettingsListener(){
+  if(_settingsListener){_settingsListener();_settingsListener=null;}
+  _settingsListener=db.collection('settings').doc('fsrate').onSnapshot(snap=>{
+    if(!snap.exists)return;
+    const w=snap.data().starWeight;
+    if(w!==undefined&&w!==currentStarWeight){
+      currentStarWeight=w;
+      // อัปเดต display ใน admin ถ้าเปิดอยู่
+      const num=document.getElementById('fsRateNum');
+      const slider=document.getElementById('fsRateSlider');
+      const info=document.getElementById('fsRateInfo');
+      if(num)num.textContent=w;
+      if(slider)slider.value=w;
+      if(info)info.textContent='Star Weight: '+w+' — '+getFsRateDesc(w);
+    }
+  });
+}
+function getFsRateDesc(w){
+  if(w<=1)return'หายากมาก (Ultra Rare)';
+  if(w<=3)return'หายาก (Rare)';
+  if(w<=6)return'ปกติ (Normal)';
+  if(w<=10)return'ออกบ่อย (Easy)';
+  return'ออกบ่อยมาก (Generous)';
+}
 function showSyncFlash(){const el=document.getElementById('syncIndicator');el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2500);}
 
 // ===== AUTH =====
@@ -938,10 +969,15 @@ function loginSuccess(u){
     currentUserData=d;updateUI();updateLevelUI();showSyncFlash();
   });
   document.getElementById('authPage').classList.remove('active');document.getElementById('gamePage').classList.add('active');
+  startSettingsListener();
   buildReelDOM();updateUI();renderPaytable();renderHistory();renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();
 }
 
-async function doLogout(){if(_userListener){_userListener();_userListener=null;}clearTimeout(_saveTimer);await saveGameState();currentUser=null;currentUserData=null;sessionStorage.removeItem('ls_session');document.getElementById('gamePage').classList.remove('active');document.getElementById('authPage').classList.add('active');document.getElementById('loginUser').value='';document.getElementById('loginPass').value='';}
+async function doLogout(){
+  if(_userListener){_userListener();_userListener=null;}
+  if(_settingsListener){_settingsListener();_settingsListener=null;}
+  clearTimeout(_saveTimer);await saveGameState();currentUser=null;currentUserData=null;sessionStorage.removeItem('ls_session');document.getElementById('gamePage').classList.remove('active');document.getElementById('authPage').classList.add('active');document.getElementById('loginUser').value='';document.getElementById('loginPass').value='';
+}
 async function saveGameState(){if(!currentUser||!currentUserData)return;currentUserData.coins=gameState.coins;currentUserData.won=gameState.won;currentUserData.spins=gameState.spins;currentUserData.xp=gameState.xp||0;currentUserData.achievements=gameState.achievements||[];await saveUserData(currentUser,currentUserData);}
 
 function updateUI(){
@@ -983,14 +1019,12 @@ function buildReelDOM(){
 }
 
 // ===== REEL ANIMATION =====
-// noStarWeights ใช้ทั่วไป — star ห้ามออกจาก random pool
-const noStarWeights=WEIGHTS.map((w,i)=>SYMS[i].n==='star'?0:w);
-
 function buildPool(col,targetRow){
   const pool=[];
-  for(let i=0;i<6;i++)pool.push(wr(noStarWeights));
+  const nsw=getNoStarWeights();
+  for(let i=0;i<6;i++)pool.push(wr(nsw));
   for(let r=0;r<ROWS;r++)pool.push(targetRow[r]);
-  for(let i=0;i<10;i++)pool.push(wr(noStarWeights));
+  for(let i=0;i<10;i++)pool.push(wr(nsw));
   return pool;
 }
 
@@ -1107,36 +1141,26 @@ async function executeSpin(){
   const userRate=currentUserData.winRate!=null?currentUserData.winRate/100:globalRate;
   const effectiveRate=isFree?Math.min(userRate*1.5,0.9):userRate;
 
-  // Free spin rate แยกต่างหาก
-  const fsRatePct=await getFsRateSetting();
-  const fsRate=fsRatePct/100;
-
-  // Generate grid — ห้าม star ออกจาก random ปกติ
+  // Generate grid — star ออกตาม weight จริง (realtime จาก admin)
+  const dynW=getWeights();
+  const noStarW=getNoStarWeights();
   const newGrid=[];
-  for(let c=0;c<COLS;c++){const col=[];for(let r=0;r<ROWS;r++)col.push(wr(noStarWeights));newGrid.push(col);}
+  for(let c=0;c<COLS;c++){const col=[];for(let r=0;r<ROWS;r++)col.push(wr(dynW));newGrid.push(col);}
 
-  // Force win (ไม่รวม star/wild)
+  // Force win (ไม่รวม star/wild) — star ออกเองตาม weight
   if(Math.random()<effectiveRate){
     const eligibleIdx=SYMS.map((s,i)=>s.n!=='star'&&s.n!=='wild'?i:-1).filter(i=>i>=0);
     const sym=eligibleIdx[Math.floor(Math.random()*eligibleIdx.length)];
     const cnt=3+Math.floor(Math.random()*(COLS-2));
     const maxRow=Math.min(ROWS,Math.ceil(lines/5));
     const row=Math.floor(Math.random()*maxRow);
-    for(let c=0;c<cnt;c++)newGrid[c][row]=sym;
-    if(Math.random()<0.2){const wc=Math.floor(Math.random()*cnt);newGrid[wc][row]=8;} // wild 20%
-  }
-
-  // Force free spin — แยก roll ชัดเจน ต้องผ่าน fsRate ก่อน
-  // ถ้าผ่าน จะวาง star 3-5 ดวงแบบกระจาย (ไม่กระจุก)
-  if(Math.random()<fsRate){
-    const starCnt=3+Math.floor(Math.random()*3); // 3-5 ดาวเสมอ
-    const positions=[];
-    // สุ่ม positions ที่ไม่ซ้ำกัน
-    while(positions.length<starCnt){
-      const c=Math.floor(Math.random()*COLS);
-      const r=Math.floor(Math.random()*ROWS);
-      const key=c+','+r;
-      if(!positions.find(p=>p===key)){positions.push(key);newGrid[c][r]=9;}
+    for(let c=0;c<cnt;c++){
+      // ถ้า cell นั้นเป็น star อยู่แล้ว ให้เก็บไว้ (ไม่ overwrite)
+      if(SYMS[newGrid[c][row]].n!=='star') newGrid[c][row]=sym;
+    }
+    if(Math.random()<0.2){
+      const wc=Math.floor(Math.random()*cnt);
+      if(SYMS[newGrid[wc][row]].n!=='star') newGrid[wc][row]=8;
     }
   }
 
@@ -1304,15 +1328,24 @@ document.getElementById('adminPassInput')?.addEventListener('keydown',e=>{if(e.k
 function adminLogout(){showPage('auth');}
 function showAdminPanel(name){document.querySelectorAll('.admin-panel-pg').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('active'));const n=name.charAt(0).toUpperCase()+name.slice(1);document.getElementById('ap'+n).classList.add('active');document.getElementById('anBtn'+n).classList.add('active');if(name==='users')renderUserTable();if(name==='win')renderAdminStats();}
 async function loadAdminWinRate(){
-  const r=await getWinRateSetting();document.getElementById('winRateSlider').value=r;updateRateDisplay(r);
-  const fr=await getFsRateSetting();document.getElementById('fsRateSlider').value=fr;updateFsRateDisplay(fr);
+  const r=await getWinRateSetting();
+  document.getElementById('winRateSlider').value=r;updateRateDisplay(r);
+  // โหลด star weight ปัจจุบัน (อาจถูก listener update แล้ว)
+  const snap=await db.collection('settings').doc('fsrate').get();
+  const sw=snap.exists?(snap.data().starWeight||2):2;
+  currentStarWeight=sw;
+  document.getElementById('fsRateSlider').value=sw;updateFsRateDisplay(sw);
 }
 function updateRateDisplay(v){v=parseInt(v);document.getElementById('winRateNum').textContent=v;document.getElementById('rateInfo').textContent='Rate: '+v+'% — Approx. '+v+' wins per 100 spins';document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active-p'));[10,30,50,70].forEach((val,i)=>{if(val===v)document.querySelectorAll('.preset-btn')[i].classList.add('active-p');});}
 function setRate(v){document.getElementById('winRateSlider').value=v;updateRateDisplay(v);}
 async function saveWinRate(){const r=parseInt(document.getElementById('winRateSlider').value);await saveWinRateToDB(r);showToast('Win rate saved: '+r+'%','','green');}
-function updateFsRateDisplay(v){v=parseInt(v);document.getElementById('fsRateNum').textContent=v;document.getElementById('fsRateInfo').textContent='Rate: '+v+'% — ประมาณ '+v+' ครั้งต่อ 100 รอบ';}
+function updateFsRateDisplay(v){v=parseInt(v);document.getElementById('fsRateNum').textContent=v;document.getElementById('fsRateInfo').textContent='Star Weight: '+v+' — '+getFsRateDesc(v);}
 function setFsRate(v){document.getElementById('fsRateSlider').value=v;updateFsRateDisplay(v);}
-async function saveFsRate(){const r=parseInt(document.getElementById('fsRateSlider').value);await saveFsRateToDB(r);showToast('Free Spin rate saved: '+r+'%','','green');}
+async function saveFsRate(){
+  const w=parseInt(document.getElementById('fsRateSlider').value);
+  await saveFsRateToDB(w); // บันทึก → listener จะ update ทุก client realtime
+  showToast('Star weight saved: '+w+' ('+getFsRateDesc(w)+')','','green');
+}
 window.updateFsRateDisplay=updateFsRateDisplay;window.setFsRate=setFsRate;window.saveFsRate=saveFsRate;
 async function renderAdminStats(){const all=Object.values(await getAllUsers()),tu=all.length,ts=all.reduce((a,u)=>a+(u.spins||0),0),tw=all.reduce((a,u)=>a+(u.won||0),0),tp=all.reduce((a,u)=>(u.history||[]).filter(h=>h.type==='เติมเงิน').reduce((s,h)=>s+h.amount,0)+a,0),twd=all.reduce((a,u)=>(u.history||[]).filter(h=>h.type==='ถอนเงิน').reduce((s,h)=>s+h.amount,0)+a,0);document.getElementById('overallStats').innerHTML=[['Users',tu],['Spins',ts.toLocaleString()],['Won',tw.toLocaleString()],['Top Up','฿'+tp.toLocaleString()],['Withdrawn','฿'+twd.toLocaleString()]].map(([l,v])=>`<div class="admin-stat"><span class="lbl">${l}</span><span class="val">${v}</span></div>`).join('');}
 async function renderUserTable(){const tbody=document.getElementById('userTableBody');tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:18px;font-family:Cinzel,serif;font-size:10px;">Loading...</td></tr>';const globalRate=await getWinRateSetting(),all=Object.entries(await getAllUsers());if(!all.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:18px">No users yet</td></tr>';return;}tbody.innerHTML=all.map(([uname,u])=>{const ur=u.winRate!=null?u.winRate:null,dr=ur!=null?ur:globalRate,ic=ur!=null;return`<tr><td><span style="font-family:Cinzel,serif;color:rgba(245,166,35,0.85)">${uname}</span><br><span style="font-size:10px;color:rgba(255,255,255,0.25)">${u.email||''}</span></td><td style="font-family:Cinzel,serif;color:#f5a623">${(u.coins||0).toLocaleString()}</td><td>${(u.spins||0).toLocaleString()}</td><td><div style="min-width:150px"><div style="display:flex;align-items:center;gap:5px;margin-bottom:3px"><span style="font-family:Cinzel,serif;font-size:15px;font-weight:700;color:${ic?'#cc44ff':'rgba(255,255,255,0.4)'}" id="urNum_${uname}">${dr}%</span>${ic?`<span style="font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(204,68,255,0.15);color:#cc44ff;border:1px solid rgba(204,68,255,0.3);font-family:Cinzel,serif">CUSTOM</span>`:`<span style="font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.08);font-family:Cinzel,serif">GLOBAL</span>`}</div><input type="range" min="1" max="90" value="${dr}" style="width:100%;accent-color:#cc44ff;height:3px;cursor:pointer" oninput="previewUserRate('${uname}',this.value)" id="urSlider_${uname}"><div style="display:flex;gap:4px;margin-top:3px;flex-wrap:wrap"><button class="coins-edit-btn" style="font-size:9px;padding:3px 7px" onclick="setUserRate('${uname}',document.getElementById('urSlider_${uname}').value)">✓ Save</button><button class="coins-edit-btn" style="font-size:9px;padding:3px 7px;border-color:rgba(255,100,100,0.25);color:rgba(255,120,120,0.6)" onclick="resetUserRate('${uname}')">↺ Reset</button></div></div></td><td><div class="coins-edit-row"><input type="number" id="ci_${uname}" placeholder="Amount"><button class="coins-edit-btn" onclick="addCoins('${uname}')">+ Add</button><button class="coins-edit-btn" onclick="setCoins('${uname}')">= Set</button></div></td></tr>`;}).join('');}
