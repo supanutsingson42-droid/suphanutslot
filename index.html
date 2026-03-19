@@ -522,6 +522,20 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
       <button class="save-rate-btn" onclick="saveWinRate()">SAVE SETTINGS</button>
       <div class="rate-info-txt" id="rateInfo">Rate: 30% — Approx. 30 wins per 100 spins</div>
     </div>
+    <div class="admin-sec">
+      <h3>FREE SPIN RATE CONTROL</h3>
+      <div style="font-family:'Cinzel Decorative',serif;font-size:42px;font-weight:900;color:#f5a623;text-align:center;text-shadow:0 0 16px rgba(245,166,35,0.3);" id="fsRateNum">3</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.25);text-align:center;margin-top:3px;letter-spacing:2px;font-family:'Cinzel',serif;">% CHANCE PER SPIN (ยิ่งน้อยยิ่งยาก)</div>
+      <input type="range" class="rate-slider" id="fsRateSlider" min="1" max="30" value="3" oninput="updateFsRateDisplay(this.value)" style="accent-color:#f5a623;">
+      <div class="preset-btns">
+        <button class="preset-btn" onclick="setFsRate(1)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">1% Ultra Rare</button>
+        <button class="preset-btn active-p" onclick="setFsRate(3)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">3% Default</button>
+        <button class="preset-btn" onclick="setFsRate(8)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">8% Easy</button>
+        <button class="preset-btn" onclick="setFsRate(15)" style="border-color:rgba(245,166,35,0.2);color:rgba(245,166,35,0.5)">15% Generous</button>
+      </div>
+      <button class="save-rate-btn" onclick="saveFsRate()" style="background:linear-gradient(135deg,#7a4500,#f5a623)">SAVE FREE SPIN RATE</button>
+      <div class="rate-info-txt" id="fsRateInfo">Rate: 3% — ประมาณ 3 ครั้งต่อ 100 รอบ</div>
+    </div>
     <div class="admin-sec"><h3>OVERVIEW STATS</h3><div class="admin-stats-row" id="overallStats"></div></div>
   </div>
   <div class="admin-panel-pg" id="apUsers">
@@ -608,7 +622,12 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
       <div class="bet-section">
         <span class="bet-lbl">BET/LINE</span>
         <button class="bet-ctrl" id="betDown">−</button>
-        <div class="bet-val" id="betValDisplay">2</div>
+        <input type="number" id="betValDisplay" min="1" max="10000" value="2"
+          style="flex:1;background:rgba(0,0,0,0.4);border:1px solid rgba(200,118,10,0.3);border-radius:3px;
+            outline:none;text-align:center;font-family:'Cinzel',serif;font-size:18px;font-weight:700;
+            color:var(--gold);width:0;min-width:0;padding:4px 2px;-moz-appearance:textfield;"
+          oninput="onBetInput(this.value)" onblur="onBetBlur(this.value)"
+          onkeydown="if(event.key==='Enter')this.blur()">
         <button class="bet-ctrl" id="betUp">+</button>
       </div>
       <div class="bet-total" id="betTotalDisplay">Total Bet: 20 coins</div>
@@ -896,6 +915,8 @@ async function getUserData(u){const s=await db.collection('users').doc(u).get();
 async function getAllUsers(){const s=await db.collection('users').get();const r={};s.forEach(d=>r[d.id]=d.data());return r;}
 async function getWinRateSetting(){const s=await db.collection('settings').doc('winrate').get();return s.exists?(s.data().rate||30):30;}
 async function saveWinRateToDB(r){await db.collection('settings').doc('winrate').set({rate:r});}
+async function getFsRateSetting(){const s=await db.collection('settings').doc('fsrate').get();return s.exists?(s.data().rate||3):3;}
+async function saveFsRateToDB(r){await db.collection('settings').doc('fsrate').set({rate:r});}
 function showSyncFlash(){const el=document.getElementById('syncIndicator');el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2500);}
 
 // ===== AUTH =====
@@ -929,7 +950,7 @@ function updateUI(){
   document.getElementById('lastWinDisplay').textContent=lastWin.toLocaleString();
   document.getElementById('spinDisplay').textContent=gameState.spins;
   document.getElementById('navCoins').textContent=gameState.coins.toLocaleString();
-  document.getElementById('betValDisplay').textContent=betPerLine;
+  const bi=document.getElementById('betValDisplay');if(document.activeElement!==bi)bi.value=betPerLine;
   document.getElementById('betTotalDisplay').textContent='Total Bet: '+totalBet().toLocaleString()+' coins';
   const w=document.getElementById('navWallet');w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump');
   const fb=document.getElementById('freeSpinBadge');document.getElementById('freeSpinCount').textContent=freeSpins;freeSpins>0?fb.classList.add('show'):fb.classList.remove('show');
@@ -1083,11 +1104,15 @@ async function executeSpin(){
   const userRate=currentUserData.winRate!=null?currentUserData.winRate/100:globalRate;
   const effectiveRate=isFree?Math.min(userRate*1.5,0.9):userRate;
 
+  // Free spin rate (แยกต่างหาก, ยากกว่า win rate)
+  const fsRatePct=await getFsRateSetting();
+  const fsRate=fsRatePct/100;
+
   // Generate grid
   const newGrid=[];
   for(let c=0;c<COLS;c++){const col=[];for(let r=0;r<ROWS;r++)col.push(wr(WEIGHTS));newGrid.push(col);}
 
-  // Force win
+  // Force win (ไม่รวม star)
   if(Math.random()<effectiveRate){
     const eligibleIdx=SYMS.map((s,i)=>s.n!=='star'&&s.n!=='wild'?i:-1).filter(i=>i>=0);
     const sym=eligibleIdx[wr(eligibleIdx.map(()=>1))];
@@ -1095,22 +1120,41 @@ async function executeSpin(){
     const maxRow=Math.min(ROWS,Math.ceil(lines/5));
     const row=Math.floor(Math.random()*maxRow);
     for(let c=0;c<cnt;c++)newGrid[c][row]=sym;
-    // Random wild injection
-    if(Math.random()<0.25){const wc=Math.floor(Math.random()*cnt);newGrid[wc][row]=8;}// index 8 = wild
+    if(Math.random()<0.25){const wc=Math.floor(Math.random()*cnt);newGrid[wc][row]=8;}
+  }
+
+  // Force free spin (แยกโอกาส, ยากมาก)
+  if(Math.random()<fsRate){
+    const starCnt=2+Math.floor(Math.random()*3); // 2-4 ดาว
+    let placed=0;
+    for(let c=0;c<COLS&&placed<starCnt;c++){
+      const r=Math.floor(Math.random()*ROWS);
+      newGrid[c][r]=9; // index 9 = star
+      placed++;
+    }
   }
 
   const pools=newGrid.map((col,c)=>buildPool(c,col));
   const promises=pools.map((_,c)=>new Promise(r=>setTimeout(()=>animCol(c,pools[c],700+c*160).then(r),c*80)));
   await Promise.all(promises);
 
-  // Evaluate
+  // Evaluate stars first (ทบกันได้เสมอ)
   const stars=countStars(newGrid);
-  if(stars>=3){
-    const fs=stars>=5?15:stars===4?10:5;
-    freeSpins+=fs;
+  if(stars>=2){
+    const added=stars>=5?15:stars===4?10:stars===3?5:3;
+    const wasInBonus=freeSpins>0;
+    freeSpins+=added; // ทบกันเสมอ
     if(!gameState.achievements.includes('bonus_triggered'))gameState.achievements.push('bonus_triggered');
-    setTimeout(()=>triggerBonusRound(fs),300);
-    setMsg('⭐ FREE SPIN ×'+fs+'!','bonus');playBonus();
+    if(wasInBonus){
+      // กำลัง free spin อยู่ — ทบเพิ่มทันที ไม่ต้อง popup
+      setMsg('⭐ +'+added+' FREE SPINS! รวม '+freeSpins+' รอบ','bonus');
+      playBonus();updateFSBadge();
+      showToast('+'+added+' Free Spins ทบ! รวม '+freeSpins+' รอบ ⭐','','bonus');
+    }else{
+      // ยังไม่ได้ free spin — เปิด popup
+      setTimeout(()=>triggerBonusRound(added),300);
+      setMsg('⭐ FREE SPIN ×'+added+'!','bonus');playBonus();
+    }
     streakActive=false;streakMult=0;streakTotalWon=0;pendingStreakSpin=false;hideStreakBadge();
   } else {
     const{win,winners}=calcWins(newGrid);
@@ -1120,7 +1164,6 @@ async function executeSpin(){
       lightWinners(winners);floatWin(win);flashWin();
       streakMult++;streakTotalWon+=win;pendingStreakSpin=true;streakActive=true;
       showStreakBadge(streakMult,streakTotalWon);
-
       if(hasJackpot(newGrid)){
         if(!gameState.achievements.includes('jackpot_hit'))gameState.achievements.push('jackpot_hit');
         setMsg('☀ JACKPOT! +'+win.toLocaleString(),'jackpot');playJackpot();triggerJackpotFX();
@@ -1192,8 +1235,11 @@ document.getElementById('linesRow').addEventListener('click',e=>{
 });
 
 // ===== BET =====
-document.getElementById('betUp').addEventListener('click',()=>{if(!spinning){betPerLine=Math.min(100,betPerLine+1);updateUI();}});
-document.getElementById('betDown').addEventListener('click',()=>{if(!spinning){betPerLine=Math.max(1,betPerLine-1);updateUI();}});
+// ===== BET INPUT =====
+function onBetInput(v){const n=Math.floor(Number(v));if(!isNaN(n)&&n>=1)betPerLine=n;document.getElementById('betTotalDisplay').textContent='Total Bet: '+totalBet().toLocaleString()+' coins';}
+function onBetBlur(v){const n=Math.max(1,Math.floor(Number(v)||1));betPerLine=n;document.getElementById('betValDisplay').value=n;document.getElementById('betTotalDisplay').textContent='Total Bet: '+totalBet().toLocaleString()+' coins';}
+document.getElementById('betUp').addEventListener('click',()=>{if(!spinning){betPerLine=Math.min(10000,betPerLine+1);document.getElementById('betValDisplay').value=betPerLine;document.getElementById('betTotalDisplay').textContent='Total Bet: '+totalBet().toLocaleString()+' coins';}});
+document.getElementById('betDown').addEventListener('click',()=>{if(!spinning){betPerLine=Math.max(1,betPerLine-1);document.getElementById('betValDisplay').value=betPerLine;document.getElementById('betTotalDisplay').textContent='Total Bet: '+totalBet().toLocaleString()+' coins';}});
 document.getElementById('spinBtn').addEventListener('click',doSpin);
 
 // ===== DAILY =====
@@ -1251,10 +1297,17 @@ async function doAdminLogin(){if(document.getElementById('adminPassInput').value
 document.getElementById('adminPassInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')doAdminLogin();});
 function adminLogout(){showPage('auth');}
 function showAdminPanel(name){document.querySelectorAll('.admin-panel-pg').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('active'));const n=name.charAt(0).toUpperCase()+name.slice(1);document.getElementById('ap'+n).classList.add('active');document.getElementById('anBtn'+n).classList.add('active');if(name==='users')renderUserTable();if(name==='win')renderAdminStats();}
-async function loadAdminWinRate(){const r=await getWinRateSetting();document.getElementById('winRateSlider').value=r;updateRateDisplay(r);}
+async function loadAdminWinRate(){
+  const r=await getWinRateSetting();document.getElementById('winRateSlider').value=r;updateRateDisplay(r);
+  const fr=await getFsRateSetting();document.getElementById('fsRateSlider').value=fr;updateFsRateDisplay(fr);
+}
 function updateRateDisplay(v){v=parseInt(v);document.getElementById('winRateNum').textContent=v;document.getElementById('rateInfo').textContent='Rate: '+v+'% — Approx. '+v+' wins per 100 spins';document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active-p'));[10,30,50,70].forEach((val,i)=>{if(val===v)document.querySelectorAll('.preset-btn')[i].classList.add('active-p');});}
 function setRate(v){document.getElementById('winRateSlider').value=v;updateRateDisplay(v);}
 async function saveWinRate(){const r=parseInt(document.getElementById('winRateSlider').value);await saveWinRateToDB(r);showToast('Win rate saved: '+r+'%','','green');}
+function updateFsRateDisplay(v){v=parseInt(v);document.getElementById('fsRateNum').textContent=v;document.getElementById('fsRateInfo').textContent='Rate: '+v+'% — ประมาณ '+v+' ครั้งต่อ 100 รอบ';}
+function setFsRate(v){document.getElementById('fsRateSlider').value=v;updateFsRateDisplay(v);}
+async function saveFsRate(){const r=parseInt(document.getElementById('fsRateSlider').value);await saveFsRateToDB(r);showToast('Free Spin rate saved: '+r+'%','','green');}
+window.updateFsRateDisplay=updateFsRateDisplay;window.setFsRate=setFsRate;window.saveFsRate=saveFsRate;
 async function renderAdminStats(){const all=Object.values(await getAllUsers()),tu=all.length,ts=all.reduce((a,u)=>a+(u.spins||0),0),tw=all.reduce((a,u)=>a+(u.won||0),0),tp=all.reduce((a,u)=>(u.history||[]).filter(h=>h.type==='เติมเงิน').reduce((s,h)=>s+h.amount,0)+a,0),twd=all.reduce((a,u)=>(u.history||[]).filter(h=>h.type==='ถอนเงิน').reduce((s,h)=>s+h.amount,0)+a,0);document.getElementById('overallStats').innerHTML=[['Users',tu],['Spins',ts.toLocaleString()],['Won',tw.toLocaleString()],['Top Up','฿'+tp.toLocaleString()],['Withdrawn','฿'+twd.toLocaleString()]].map(([l,v])=>`<div class="admin-stat"><span class="lbl">${l}</span><span class="val">${v}</span></div>`).join('');}
 async function renderUserTable(){const tbody=document.getElementById('userTableBody');tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:18px;font-family:Cinzel,serif;font-size:10px;">Loading...</td></tr>';const globalRate=await getWinRateSetting(),all=Object.entries(await getAllUsers());if(!all.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:18px">No users yet</td></tr>';return;}tbody.innerHTML=all.map(([uname,u])=>{const ur=u.winRate!=null?u.winRate:null,dr=ur!=null?ur:globalRate,ic=ur!=null;return`<tr><td><span style="font-family:Cinzel,serif;color:rgba(245,166,35,0.85)">${uname}</span><br><span style="font-size:10px;color:rgba(255,255,255,0.25)">${u.email||''}</span></td><td style="font-family:Cinzel,serif;color:#f5a623">${(u.coins||0).toLocaleString()}</td><td>${(u.spins||0).toLocaleString()}</td><td><div style="min-width:150px"><div style="display:flex;align-items:center;gap:5px;margin-bottom:3px"><span style="font-family:Cinzel,serif;font-size:15px;font-weight:700;color:${ic?'#cc44ff':'rgba(255,255,255,0.4)'}" id="urNum_${uname}">${dr}%</span>${ic?`<span style="font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(204,68,255,0.15);color:#cc44ff;border:1px solid rgba(204,68,255,0.3);font-family:Cinzel,serif">CUSTOM</span>`:`<span style="font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.08);font-family:Cinzel,serif">GLOBAL</span>`}</div><input type="range" min="1" max="90" value="${dr}" style="width:100%;accent-color:#cc44ff;height:3px;cursor:pointer" oninput="previewUserRate('${uname}',this.value)" id="urSlider_${uname}"><div style="display:flex;gap:4px;margin-top:3px;flex-wrap:wrap"><button class="coins-edit-btn" style="font-size:9px;padding:3px 7px" onclick="setUserRate('${uname}',document.getElementById('urSlider_${uname}').value)">✓ Save</button><button class="coins-edit-btn" style="font-size:9px;padding:3px 7px;border-color:rgba(255,100,100,0.25);color:rgba(255,120,120,0.6)" onclick="resetUserRate('${uname}')">↺ Reset</button></div></div></td><td><div class="coins-edit-row"><input type="number" id="ci_${uname}" placeholder="Amount"><button class="coins-edit-btn" onclick="addCoins('${uname}')">+ Add</button><button class="coins-edit-btn" onclick="setCoins('${uname}')">= Set</button></div></td></tr>`;}).join('');}
 async function addCoins(u){const v=parseInt(document.getElementById('ci_'+u).value)||0;if(!v)return;const d=await getUserData(u);if(!d)return;d.coins=(d.coins||0)+v;await saveUserData(u,d);if(currentUser===u){gameState.coins=d.coins;currentUserData=d;updateUI();}await renderUserTable();showToast('Added '+v+' coins to '+u,'','green');}
@@ -1264,7 +1317,7 @@ async function setUserRate(uname,val){const rate=Math.min(90,Math.max(1,parseInt
 async function resetUserRate(uname){const d=await getUserData(uname);if(!d)return;delete d.winRate;await saveUserData(uname,d);if(currentUser===uname)delete currentUserData.winRate;await renderUserTable();showToast(uname+' reset to global rate','','green');}
 
 // ===== EXPOSE =====
-window.doLogin=doLogin;window.doSignup=doSignup;window.doLogout=doLogout;window.switchTab=switchTab;window.showPanel=showPanel;window.showPage=showPage;window.updateQR=updateQR;window.doTopup=doTopup;window.setTopupAmt=setTopupAmt;window.updateWithdraw=updateWithdraw;window.doWithdraw=doWithdraw;window.filterHistory=filterHistory;window.loadLeaderboard=loadLeaderboard;window.claimDaily=claimDaily;window.doAdminLogin=doAdminLogin;window.adminLogout=adminLogout;window.showAdminPanel=showAdminPanel;window.saveWinRate=saveWinRate;window.setRate=setRate;window.updateRateDisplay=updateRateDisplay;window.addCoins=addCoins;window.setCoins=setCoins;window.previewUserRate=previewUserRate;window.setUserRate=setUserRate;window.resetUserRate=resetUserRate;window.toggleAuto=toggleAuto;window.setAutoCount=setAutoCount;
+window.doLogin=doLogin;window.doSignup=doSignup;window.doLogout=doLogout;window.switchTab=switchTab;window.showPanel=showPanel;window.showPage=showPage;window.updateQR=updateQR;window.doTopup=doTopup;window.setTopupAmt=setTopupAmt;window.updateWithdraw=updateWithdraw;window.doWithdraw=doWithdraw;window.filterHistory=filterHistory;window.loadLeaderboard=loadLeaderboard;window.claimDaily=claimDaily;window.doAdminLogin=doAdminLogin;window.adminLogout=adminLogout;window.showAdminPanel=showAdminPanel;window.saveWinRate=saveWinRate;window.setRate=setRate;window.updateRateDisplay=updateRateDisplay;window.addCoins=addCoins;window.setCoins=setCoins;window.previewUserRate=previewUserRate;window.setUserRate=setUserRate;window.resetUserRate=resetUserRate;window.toggleAuto=toggleAuto;window.setAutoCount=setAutoCount;window.onBetInput=onBetInput;window.onBetBlur=onBetBlur;
 
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('regPass2').addEventListener('keydown',e=>{if(e.key==='Enter')doSignup();});
