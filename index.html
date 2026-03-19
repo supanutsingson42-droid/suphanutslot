@@ -1104,33 +1104,37 @@ async function executeSpin(){
   const userRate=currentUserData.winRate!=null?currentUserData.winRate/100:globalRate;
   const effectiveRate=isFree?Math.min(userRate*1.5,0.9):userRate;
 
-  // Free spin rate (แยกต่างหาก, ยากกว่า win rate)
+  // Free spin rate แยกต่างหาก
   const fsRatePct=await getFsRateSetting();
   const fsRate=fsRatePct/100;
 
-  // Generate grid
+  // Generate grid — ห้าม star ออกจาก random ปกติ
+  const noStarWeights=WEIGHTS.map((w,i)=>SYMS[i].n==='star'?0:w);
   const newGrid=[];
-  for(let c=0;c<COLS;c++){const col=[];for(let r=0;r<ROWS;r++)col.push(wr(WEIGHTS));newGrid.push(col);}
+  for(let c=0;c<COLS;c++){const col=[];for(let r=0;r<ROWS;r++)col.push(wr(noStarWeights));newGrid.push(col);}
 
-  // Force win (ไม่รวม star)
+  // Force win (ไม่รวม star/wild)
   if(Math.random()<effectiveRate){
     const eligibleIdx=SYMS.map((s,i)=>s.n!=='star'&&s.n!=='wild'?i:-1).filter(i=>i>=0);
-    const sym=eligibleIdx[wr(eligibleIdx.map(()=>1))];
+    const sym=eligibleIdx[Math.floor(Math.random()*eligibleIdx.length)];
     const cnt=3+Math.floor(Math.random()*(COLS-2));
     const maxRow=Math.min(ROWS,Math.ceil(lines/5));
     const row=Math.floor(Math.random()*maxRow);
     for(let c=0;c<cnt;c++)newGrid[c][row]=sym;
-    if(Math.random()<0.25){const wc=Math.floor(Math.random()*cnt);newGrid[wc][row]=8;}
+    if(Math.random()<0.2){const wc=Math.floor(Math.random()*cnt);newGrid[wc][row]=8;} // wild 20%
   }
 
-  // Force free spin (แยกโอกาส, ยากมาก)
+  // Force free spin — แยก roll ชัดเจน ต้องผ่าน fsRate ก่อน
+  // ถ้าผ่าน จะวาง star 3-5 ดวงแบบกระจาย (ไม่กระจุก)
   if(Math.random()<fsRate){
-    const starCnt=2+Math.floor(Math.random()*3); // 2-4 ดาว
-    let placed=0;
-    for(let c=0;c<COLS&&placed<starCnt;c++){
+    const starCnt=3+Math.floor(Math.random()*3); // 3-5 ดาวเสมอ
+    const positions=[];
+    // สุ่ม positions ที่ไม่ซ้ำกัน
+    while(positions.length<starCnt){
+      const c=Math.floor(Math.random()*COLS);
       const r=Math.floor(Math.random()*ROWS);
-      newGrid[c][r]=9; // index 9 = star
-      placed++;
+      const key=c+','+r;
+      if(!positions.find(p=>p===key)){positions.push(key);newGrid[c][r]=9;}
     }
   }
 
@@ -1138,10 +1142,10 @@ async function executeSpin(){
   const promises=pools.map((_,c)=>new Promise(r=>setTimeout(()=>animCol(c,pools[c],700+c*160).then(r),c*80)));
   await Promise.all(promises);
 
-  // Evaluate stars first (ทบกันได้เสมอ)
+  // Evaluate stars (ต้อง 3+ ดาวเท่านั้น)
   const stars=countStars(newGrid);
-  if(stars>=2){
-    const added=stars>=5?15:stars===4?10:stars===3?5:3;
+  if(stars>=3){
+    const added=stars>=5?15:stars===4?10:3;
     const wasInBonus=freeSpins>0;
     freeSpins+=added; // ทบกันเสมอ
     if(!gameState.achievements.includes('bonus_triggered'))gameState.achievements.push('bonus_triggered');
