@@ -662,20 +662,28 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
   <!-- GAMES PANEL -->
   <div class="panel" id="panelGames">
     <div class="sec-header">MINI GAMES</div>
-    <div class="mini-grid">
+    <div class="mini-grid" style="grid-template-columns:repeat(3,1fr)">
       <div class="mini-card" style="--accent-line:rgba(200,118,10,0.3)" onclick="showMiniGame('wheel')">
         <span class="mini-icon">🎡</span>
-        <div class="mini-name">WHEEL OF FORTUNE</div>
-        <div class="mini-desc">Spin the Aztec wheel</div>
-        <span class="mini-badge">50 coins</span>
+        <div class="mini-name">WHEEL</div>
+        <div class="mini-desc">Spin the wheel</div>
+        <span class="mini-badge">50c</span>
       </div>
       <div class="mini-card" style="--accent-line:rgba(34,197,94,0.3)" onclick="showMiniGame('scratch')">
         <span class="mini-icon">🎴</span>
-        <div class="mini-name">SCRATCH CARD</div>
-        <div class="mini-desc">Reveal your fortune</div>
-        <span class="mini-badge">30 coins</span>
+        <div class="mini-name">SCRATCH</div>
+        <div class="mini-desc">Reveal fortune</div>
+        <span class="mini-badge">30c</span>
+      </div>
+      <div class="mini-card" style="--accent-line:rgba(100,200,255,0.3)" onclick="showMiniGame('army')">
+        <span class="mini-icon">⚔️</span>
+        <div class="mini-name">ARMY RUSH</div>
+        <div class="mini-desc">Grow your forces!</div>
+        <span class="mini-badge">FREE</span>
       </div>
     </div>
+
+    <!-- WHEEL GAME -->
     <div id="wheelGame" style="display:none">
       <div class="sec-line"><span>WHEEL OF FORTUNE</span></div>
       <div class="lux-card">
@@ -688,6 +696,8 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
         <div class="wheel-cost">Cost: 50 coins per spin</div>
       </div>
     </div>
+
+    <!-- SCRATCH GAME -->
     <div id="scratchGame" style="display:none">
       <div class="sec-line"><span>SCRATCH CARD</span></div>
       <div class="lux-card">
@@ -698,6 +708,53 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
         <button class="scratch-btn" id="scratchBtn" onclick="newScratchCard()">NEW CARD — 30 COINS</button>
         <div style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center;margin-top:7px;font-family:'Cinzel',serif;letter-spacing:1px;">Match 3 symbols to win</div>
       </div>
+    </div>
+
+    <!-- ARMY RUSH GAME -->
+    <div id="armyGame" style="display:none">
+      <div class="sec-line"><span>⚔️ ARMY RUSH</span></div>
+      <div id="armyContainer" style="
+        background:linear-gradient(180deg,#0a1628,#0d1f3c,#0a1628);
+        border:1px solid rgba(100,200,255,0.2);border-radius:6px;
+        padding:12px;position:relative;overflow:hidden;">
+
+        <!-- HUD -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div style="font-family:'Cinzel',serif;font-size:11px;color:rgba(100,200,255,0.7);letter-spacing:2px;">
+            LEVEL <span id="armyLevel">1</span>
+          </div>
+          <div style="font-family:'Cinzel Decorative',serif;font-size:18px;color:#64c8ff;text-shadow:0 0 10px rgba(100,200,255,0.4);">
+            👥 <span id="armyCount">10</span>
+          </div>
+          <div style="font-family:'Cinzel',serif;font-size:11px;color:rgba(200,118,10,0.7);letter-spacing:2px;">
+            🪙 <span id="armyCoins">0</span>
+          </div>
+        </div>
+
+        <!-- PROGRESS BAR -->
+        <div style="background:rgba(0,0,0,0.4);border-radius:2px;height:4px;margin-bottom:10px;overflow:hidden;">
+          <div id="armyProgress" style="height:100%;background:linear-gradient(90deg,#1d4ed8,#64c8ff);border-radius:2px;transition:width 0.3s;width:0%"></div>
+        </div>
+
+        <!-- GAME CANVAS -->
+        <canvas id="armyCanvas" style="display:block;width:100%;border-radius:4px;cursor:pointer;touch-action:none;"></canvas>
+
+        <!-- ITEM SHOP -->
+        <div id="armyItemShop" style="display:none;margin-top:10px;">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:rgba(100,200,255,0.5);letter-spacing:2px;margin-bottom:8px;text-align:center;">⚡ POWER-UPS</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;" id="armyShopGrid"></div>
+        </div>
+
+        <!-- RESULT OVERLAY -->
+        <div id="armyResult" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.85);border-radius:6px;display:none;align-items:center;justify-content:center;flex-direction:column;">
+          <div id="armyResultIcon" style="font-size:52px;margin-bottom:10px;">🏆</div>
+          <div id="armyResultTitle" style="font-family:'Cinzel Decorative',serif;font-size:20px;color:#64c8ff;letter-spacing:4px;margin-bottom:6px;">VICTORY!</div>
+          <div id="armyResultSub" style="font-family:'Cinzel',serif;font-size:13px;color:rgba(255,255,255,0.5);letter-spacing:2px;margin-bottom:20px;"></div>
+          <div id="armyResultReward" style="font-family:'Cinzel Decorative',serif;font-size:24px;color:#f5a623;margin-bottom:20px;"></div>
+          <button onclick="armyNextLevel()" id="armyNextBtn" style="padding:10px 28px;background:linear-gradient(135deg,#1d4ed8,#64c8ff);border:none;border-radius:4px;font-family:'Cinzel',serif;font-size:13px;color:#fff;cursor:pointer;letter-spacing:2px;">CONTINUE →</button>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 
@@ -1288,7 +1345,18 @@ async function loadLeaderboard(){const list=document.getElementById('lbList');li
 // ===== WHEEL =====
 const WHEEL_SEGMENTS=[{label:'50',coins:50,color:'#1a0a00'},{label:'0',coins:0,color:'#0d0500'},{label:'200',coins:200,color:'#1a0a00'},{label:'MISS',coins:0,color:'#1a0500'},{label:'100',coins:100,color:'#1a0a00'},{label:'500',coins:500,color:'#0a1000'},{label:'75',coins:75,color:'#1a0a00'},{label:'BONUS',coins:0,color:'#001a0a'}];
 let wheelAngle=0,wheelSpinning=false;
-function showMiniGame(game){playClick();document.getElementById('wheelGame').style.display='none';document.getElementById('scratchGame').style.display='none';if(game==='wheel'){document.getElementById('wheelGame').style.display='block';drawWheel();}else{document.getElementById('scratchGame').style.display='block';newScratchCard();}}
+function showMiniGame(game){
+  playClick();
+  document.getElementById('wheelGame').style.display='none';
+  document.getElementById('scratchGame').style.display='none';
+  document.getElementById('armyGame').style.display='none';
+  if(game==='wheel'){document.getElementById('wheelGame').style.display='block';drawWheel();}
+  else if(game==='scratch'){document.getElementById('scratchGame').style.display='block';newScratchCard();}
+  else if(game==='army'){
+    document.getElementById('armyGame').style.display='block';
+    setTimeout(()=>initArmyGame(),50);
+  }
+}
 window.showMiniGame=showMiniGame;
 function drawWheel(angle){angle=angle||wheelAngle;const canvas=document.getElementById('wheelCanvas');if(!canvas)return;const ctx=canvas.getContext('2d'),cx=120,cy=120,r=112,n=WHEEL_SEGMENTS.length,arc=(2*Math.PI)/n;ctx.clearRect(0,0,240,240);ctx.save();ctx.translate(cx,cy);ctx.rotate(angle);WHEEL_SEGMENTS.forEach((seg,i)=>{const start=i*arc,end=start+arc;ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r,start,end);ctx.closePath();ctx.fillStyle=seg.color;ctx.fill();ctx.strokeStyle='rgba(200,118,10,0.25)';ctx.lineWidth=1;ctx.stroke();ctx.save();ctx.rotate(start+arc/2);ctx.textAlign='right';ctx.fillStyle='rgba(245,166,35,0.85)';ctx.font="bold 11px 'Cinzel',serif";ctx.fillText(seg.label,r-10,4);ctx.restore();});ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.strokeStyle='rgba(200,118,10,0.35)';ctx.lineWidth=2;ctx.stroke();ctx.restore();}
 function spinWheel(){if(wheelSpinning)return;if(gameState.coins<50){showToast('Need 50 coins!','error');return;}playClick();gameState.coins-=50;updateUI();wheelSpinning=true;document.getElementById('wheelSpinBtn').disabled=true;const spins=8+Math.random()*8,total=spins*Math.PI*2,dur=4000,startAngle=wheelAngle,targetAngle=startAngle+total;let start=null;function animate(ts){if(!start)start=ts;const prog=Math.min((ts-start)/dur,1),eased=1-Math.pow(1-prog,4);wheelAngle=startAngle+total*eased;drawWheel(wheelAngle);if(prog<1){requestAnimationFrame(animate);}else{wheelAngle=targetAngle%(Math.PI*2);const n=WHEEL_SEGMENTS.length,arc=(2*Math.PI)/n,norm=(((-wheelAngle)%(Math.PI*2))+(Math.PI*2))%(Math.PI*2),seg=WHEEL_SEGMENTS[Math.floor(norm/arc)%n];wheelSpinning=false;document.getElementById('wheelSpinBtn').disabled=false;if(seg.coins>0){gameState.coins+=seg.coins;gameState.won+=seg.coins;if(!gameState.achievements.includes('wheel_won'))gameState.achievements.push('wheel_won');addXP(10);updateUI();playWin();showToast('+'+seg.coins+' coins! 🎡','','green');}else if(seg.label==='BONUS'){freeSpins+=3;updateFSBadge();playBonus();showToast('3 Free Spins! ⚡');}else{showToast('No win this time... 🎡','error');}saveGameState();checkAchievements();}}requestAnimationFrame(animate);}
@@ -1300,7 +1368,321 @@ function newScratchCard(){if(gameState.coins<30){showToast('Need 30 coins!','err
 window.newScratchCard=newScratchCard;
 function checkScratch(ctx,canvas,VALS){const id=ctx.getImageData(0,0,canvas.width,150);let tr=0;for(let i=3;i<id.data.length;i+=4)if(id.data[i]<128)tr++;if(tr/(canvas.width*150)>0.5&&scratchActive){scratchActive=false;if(scratchResult[0]===scratchResult[1]&&scratchResult[1]===scratchResult[2]){const val=VALS[scratchResult[0]];gameState.coins+=val;gameState.won+=val;if(!gameState.achievements.includes('scratch_won'))gameState.achievements.push('scratch_won');addXP(15);updateUI();playWin();showToast('SCRATCH WIN! +'+val+' coins! 🎴','','green');}else showToast('No match this time...','error');saveGameState();checkAchievements();}}
 
-// ===== TOPUP / WITHDRAW =====
+// ===== ARMY RUSH GAME =====
+const ARMY_LEVELS=[
+  {id:1,len:2000,reward:50, enemies:[{x:600,n:5},{x:900,n:8},{x:1300,n:12},{x:1700,n:15}], plusBoxes:[{x:300,n:5},{x:700,n:8},{x:1100,n:6},{x:1500,n:10}], items:[{x:500,type:'shield'},{x:1200,type:'speed'}]},
+  {id:2,len:2400,reward:80, enemies:[{x:500,n:8},{x:900,n:12},{x:1300,n:18},{x:1800,n:22},{x:2100,n:25}], plusBoxes:[{x:250,n:8},{x:600,n:10},{x:1000,n:7},{x:1400,n:12},{x:1900,n:8}], items:[{x:400,type:'double'},{x:1100,type:'shield'},{x:1700,type:'bomb'}]},
+  {id:3,len:2800,reward:120,enemies:[{x:400,n:12},{x:700,n:18},{x:1100,n:24},{x:1500,n:30},{x:1900,n:35},{x:2500,n:40}], plusBoxes:[{x:200,n:10},{x:500,n:12},{x:900,n:8},{x:1300,n:15},{x:1700,n:10},{x:2200,n:20}], items:[{x:350,type:'double'},{x:800,type:'bomb'},{x:1400,type:'speed'},{x:2000,type:'shield'}]},
+  {id:4,len:3200,reward:180,enemies:[{x:350,n:15},{x:650,n:22},{x:950,n:30},{x:1300,n:38},{x:1700,n:45},{x:2100,n:50},{x:2700,n:60}], plusBoxes:[{x:180,n:12},{x:450,n:15},{x:750,n:10},{x:1100,n:18},{x:1500,n:12},{x:1900,n:20},{x:2400,n:25}], items:[{x:300,type:'double'},{x:700,type:'bomb'},{x:1200,type:'shield'},{x:1800,type:'double'},{x:2500,type:'bomb'}]},
+  {id:5,len:3600,reward:250,enemies:[{x:300,n:20},{x:600,n:28},{x:900,n:38},{x:1200,n:48},{x:1600,n:58},{x:2000,n:68},{x:2400,n:80},{x:3000,n:100}], plusBoxes:[{x:150,n:15},{x:400,n:20},{x:700,n:12},{x:1000,n:25},{x:1400,n:15},{x:1800,n:30},{x:2200,n:20},{x:2700,n:35}], items:[{x:250,type:'double'},{x:600,type:'bomb'},{x:1100,type:'shield'},{x:1700,type:'double'},{x:2300,type:'bomb'},{x:2900,type:'speed'}]},
+];
+
+const ITEMS_DEF={
+  shield:{e:'🛡️',name:'Shield',desc:'ดูดซับความเสียหาย 50%'},
+  speed:{e:'⚡',name:'Speed',desc:'เคลื่อนที่เร็วขึ้น 2 เท่า'},
+  double:{e:'✖️2',name:'Double',desc:'เพิ่มพลทหาร ×2'},
+  bomb:{e:'💣',name:'Bomb',desc:'ระเบิด ลบศัตรู -20'},
+};
+
+let armyState={
+  level:1,totalCoins:0,running:false,
+  soldierCount:10,camX:0,
+  plusBoxes:[],enemies:[],items:[],
+  activePowerups:{shield:false,speed:false},
+  inventory:{shield:0,speed:0,double:0,bomb:0},
+  raf:null,lastTime:0,
+};
+let armyCanvas,armyCtx,armyCW,armyCH;
+
+function initArmyGame(){
+  armyCanvas=document.getElementById('armyCanvas');
+  if(!armyCanvas)return;
+  armyCW=armyCanvas.parentElement.clientWidth-24;
+  armyCH=Math.min(320,window.innerHeight*0.4);
+  armyCanvas.width=armyCW;armyCanvas.height=armyCH;
+  armyCanvas.style.height=armyCH+'px';
+  armyLoadLevel(armyState.level);
+  document.getElementById('armyItemShop').style.display='block';
+  renderArmyShop();
+  armyCanvas.addEventListener('click',armyUseItem);
+  armyCanvas.addEventListener('touchstart',e=>{e.preventDefault();armyUseItem();},{passive:false});
+}
+
+function armyLoadLevel(lvl){
+  const lv=ARMY_LEVELS[Math.min(lvl-1,ARMY_LEVELS.length-1)];
+  armyState.camX=0;armyState.running=false;
+  armyState.plusBoxes=lv.plusBoxes.map(b=>({...b,collected:false}));
+  armyState.enemies=lv.enemies.map(e=>({...e,hp:e.n,alive:true}));
+  armyState.items=lv.items.map(it=>({...it,collected:false}));
+  armyState.activePowerups={shield:false,speed:false};
+  document.getElementById('armyLevel').textContent=lvl;
+  document.getElementById('armyCoins').textContent=armyState.totalCoins;
+  document.getElementById('armyResult').style.display='none';
+  armyDraw();
+}
+
+function armyStart(){
+  if(armyState.running)return;
+  armyState.running=true;
+  armyState.lastTime=performance.now();
+  if(armyState.raf)cancelAnimationFrame(armyState.raf);
+  armyLoop(performance.now());
+}
+
+function armyLoop(ts){
+  const dt=Math.min((ts-armyState.lastTime)/1000,0.05);
+  armyState.lastTime=ts;
+  if(armyState.running){
+    const spd=(armyState.activePowerups.speed?220:110)*dt;
+    armyState.camX+=spd;
+    const lv=ARMY_LEVELS[Math.min(armyState.level-1,ARMY_LEVELS.length-1)];
+    const solX=armyCW*0.25;
+    const worldSolX=armyState.camX+solX;
+
+    // Collect plus boxes
+    armyState.plusBoxes.forEach(b=>{
+      if(!b.collected&&Math.abs(worldSolX-b.x)<45){
+        b.collected=true;armyState.soldierCount+=b.n;
+        armyState.soldierCount=Math.max(1,armyState.soldierCount);
+        updateArmyHUD();
+      }
+    });
+
+    // Collect items
+    armyState.items.forEach(it=>{
+      if(!it.collected&&Math.abs(worldSolX-it.x)<45){
+        it.collected=true;
+        armyState.inventory[it.type]=(armyState.inventory[it.type]||0)+1;
+        renderArmyShop();
+        showToast(ITEMS_DEF[it.type].e+' '+ITEMS_DEF[it.type].name+' เก็บได้!','','bonus');
+      }
+    });
+
+    // Fight enemies
+    armyState.enemies.forEach(en=>{
+      if(!en.alive)return;
+      if(Math.abs(worldSolX-en.x)<50){
+        armyState.running=false;
+        const shield=armyState.activePowerups.shield;
+        const dmg=shield?Math.ceil(en.hp/2):en.hp;
+        armyState.soldierCount-=dmg;
+        en.alive=false;
+        if(armyState.soldierCount<=0){
+          armyState.soldierCount=0;armyDraw();armyShowResult(false);return;
+        }
+        armyState.activePowerups.shield=false;
+        updateArmyHUD();
+        setTimeout(()=>{armyState.running=true;armyLoop(performance.now());},600);
+      }
+    });
+
+    // Check finish
+    if(armyState.camX>=lv.len){
+      armyState.running=false;armyDraw();armyShowResult(true);return;
+    }
+
+    // Progress bar
+    const pct=Math.min((armyState.camX/lv.len)*100,100);
+    document.getElementById('armyProgress').style.width=pct+'%';
+    updateArmyHUD();
+  }
+  armyDraw();
+  if(armyState.running)armyState.raf=requestAnimationFrame(armyLoop);
+}
+
+function armyDraw(){
+  if(!armyCtx)armyCtx=armyCanvas.getContext('2d');
+  const ctx=armyCtx,W=armyCW,H=armyCH;
+  const cam=armyState.camX;
+  const lv=ARMY_LEVELS[Math.min(armyState.level-1,ARMY_LEVELS.length-1)];
+
+  // BG sky
+  const sky=ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,'#0a1628');sky.addColorStop(1,'#0d2040');
+  ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+
+  // Road
+  ctx.fillStyle='#1a2a1a';ctx.fillRect(0,H*0.55,W,H*0.45);
+  ctx.fillStyle='#243824';ctx.fillRect(0,H*0.55,W,6);
+  // Road lines
+  for(let i=0;i<20;i++){
+    const lx=((i*200-cam)%W+W)%W;
+    ctx.fillStyle='rgba(255,255,255,0.12)';ctx.fillRect(lx,H*0.75,60,4);
+  }
+  // Horizon water/sky
+  ctx.fillStyle='rgba(100,200,255,0.06)';ctx.fillRect(0,0,W,H*0.55);
+
+  const groundY=H*0.62;
+  const solX=W*0.25;
+
+  // Draw plus boxes
+  armyState.plusBoxes.forEach(b=>{
+    const sx=b.x-cam;
+    if(sx<-60||sx>W+60||b.collected)return;
+    ctx.fillStyle='#1d4ed8';
+    roundRect(ctx,sx-22,groundY-44,44,44,6);ctx.fill();
+    ctx.strokeStyle='rgba(100,200,255,0.5)';ctx.lineWidth=2;
+    roundRect(ctx,sx-22,groundY-44,44,44,6);ctx.stroke();
+    ctx.fillStyle='#fff';ctx.font='bold 14px Kanit';ctx.textAlign='center';
+    ctx.fillText('+'+b.n,sx,groundY-18);
+  });
+
+  // Draw items
+  armyState.items.forEach(it=>{
+    const sx=it.x-cam;
+    if(sx<-60||sx>W+60||it.collected)return;
+    ctx.fillStyle='rgba(245,166,35,0.15)';
+    roundRect(ctx,sx-20,groundY-46,40,40,20);ctx.fill();
+    ctx.strokeStyle='rgba(245,166,35,0.5)';ctx.lineWidth=2;
+    roundRect(ctx,sx-20,groundY-46,40,40,20);ctx.stroke();
+    ctx.font='22px serif';ctx.textAlign='center';
+    ctx.fillText(ITEMS_DEF[it.type].e,sx,groundY-20);
+  });
+
+  // Draw enemies
+  armyState.enemies.forEach(en=>{
+    const sx=en.x-cam;
+    if(sx<-80||sx>W+80||!en.alive)return;
+    // Enemy body (red soldiers cluster)
+    const cnt=Math.min(en.hp,15);
+    const cols=Math.min(cnt,5);const rows=Math.ceil(cnt/cols);
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        if(r*cols+c>=cnt)break;
+        const ex=sx-cols*7+c*14,ey=groundY-12-r*16;
+        ctx.fillStyle='#dc2626';
+        ctx.beginPath();ctx.arc(ex,ey-10,6,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#991b1b';ctx.fillRect(ex-4,ey-4,8,12);
+      }
+    }
+    // HP badge
+    ctx.fillStyle='rgba(220,38,38,0.9)';
+    roundRect(ctx,sx-18,groundY-rows*16-28,36,18,9);ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='bold 11px Kanit';ctx.textAlign='center';
+    ctx.fillText(en.hp,sx,groundY-rows*16-15);
+  });
+
+  // Draw player soldiers cluster
+  const cnt=Math.min(armyState.soldierCount,30);
+  if(cnt>0){
+    const cols=Math.min(cnt,6);const rows=Math.ceil(cnt/cols);
+    const shieldOn=armyState.activePowerups.shield;
+    if(shieldOn){
+      ctx.fillStyle='rgba(100,200,255,0.12)';
+      ctx.beginPath();ctx.arc(solX,groundY-rows*9-10,cols*9+12,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='rgba(100,200,255,0.5)';ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(solX,groundY-rows*9-10,cols*9+12,0,Math.PI*2);ctx.stroke();
+    }
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        if(r*cols+c>=cnt)break;
+        const bx=solX-cols*7+c*14,by=groundY-12-r*16;
+        ctx.fillStyle='#2563eb';
+        ctx.beginPath();ctx.arc(bx,by-10,6,0,Math.PI*2);ctx.fill();
+        ctx.fillStyle='#1d4ed8';ctx.fillRect(bx-4,by-4,8,12);
+      }
+    }
+  }
+
+  // Soldier count badge
+  ctx.fillStyle='rgba(37,99,235,0.9)';
+  roundRect(ctx,solX-20,groundY-cnt>0?(Math.ceil(Math.min(cnt,30)/6))*16+34:34,40,20,10);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='bold 12px Kanit';ctx.textAlign='center';
+  ctx.fillText(armyState.soldierCount,solX,groundY-(Math.ceil(Math.min(cnt,30)/6))*16-18);
+
+  // Finish line
+  const finX=lv.len-cam;
+  if(finX>0&&finX<W+80){
+    ctx.strokeStyle='rgba(255,215,0,0.8)';ctx.lineWidth=3;ctx.setLineDash([8,6]);
+    ctx.beginPath();ctx.moveTo(finX,0);ctx.lineTo(finX,H);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.font='bold 13px Cinzel';ctx.fillStyle='rgba(255,215,0,0.8)';ctx.textAlign='center';
+    ctx.fillText('FINISH',finX,20);
+  }
+
+  // Tap to start overlay
+  if(!armyState.running&&armyState.soldierCount>0&&document.getElementById('armyResult').style.display==='none'){
+    ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(0,H-40,W,40);
+    ctx.fillStyle='rgba(100,200,255,0.9)';ctx.font='bold 14px Cinzel';ctx.textAlign='center';
+    ctx.fillText('▶ TAP TO MARCH',W/2,H-16);
+  }
+}
+
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();}
+
+function armyUseItem(){
+  if(!armyState.running){armyStart();return;}
+}
+
+function updateArmyHUD(){
+  document.getElementById('armyCount').textContent=armyState.soldierCount;
+  document.getElementById('armyCoins').textContent=armyState.totalCoins;
+}
+
+function armyShowResult(win){
+  const lv=ARMY_LEVELS[Math.min(armyState.level-1,ARMY_LEVELS.length-1)];
+  const res=document.getElementById('armyResult');
+  res.style.display='flex';
+  if(win){
+    const reward=lv.reward;
+    armyState.totalCoins+=reward;
+    gameState.coins+=reward;gameState.won+=reward;
+    saveGameState();updateUI();
+    document.getElementById('armyResultIcon').textContent='🏆';
+    document.getElementById('armyResultTitle').textContent='VICTORY!';
+    document.getElementById('armyResultTitle').style.color='#f5a623';
+    document.getElementById('armyResultSub').textContent='Level '+armyState.level+' Complete';
+    document.getElementById('armyResultReward').textContent='+'+reward+' 🪙 COINS';
+    document.getElementById('armyNextBtn').textContent=armyState.level>=ARMY_LEVELS.length?'REPLAY 🔄':'NEXT LEVEL →';
+  }else{
+    document.getElementById('armyResultIcon').textContent='💀';
+    document.getElementById('armyResultTitle').textContent='DEFEATED';
+    document.getElementById('armyResultTitle').style.color='#ef4444';
+    document.getElementById('armyResultSub').textContent='Your army was wiped out...';
+    document.getElementById('armyResultReward').textContent='No reward';
+    document.getElementById('armyNextBtn').textContent='RETRY ↺';
+  }
+  updateArmyHUD();
+}
+
+function armyNextLevel(){
+  const lv=ARMY_LEVELS[Math.min(armyState.level-1,ARMY_LEVELS.length-1)];
+  const wasWin=document.getElementById('armyResultTitle').textContent==='VICTORY!';
+  if(wasWin){
+    if(armyState.level<ARMY_LEVELS.length)armyState.level++;
+    else armyState.level=1;
+  }
+  armyState.soldierCount=10+armyState.level*2;
+  armyLoadLevel(armyState.level);
+}
+window.armyNextLevel=armyNextLevel;
+
+function renderArmyShop(){
+  const grid=document.getElementById('armyShopGrid');if(!grid)return;
+  grid.innerHTML=Object.entries(ITEMS_DEF).map(([k,v])=>`
+    <div onclick="armyActivateItem('${k}')" style="
+      background:rgba(0,0,0,0.4);border:1px solid rgba(100,200,255,${armyState.inventory[k]>0?'0.35':'0.1'});
+      border-radius:4px;padding:8px 4px;text-align:center;cursor:pointer;
+      opacity:${armyState.inventory[k]>0?1:0.35};transition:all 0.2s;position:relative;">
+      <div style="font-size:20px">${v.e}</div>
+      <div style="font-family:'Cinzel',serif;font-size:8px;color:rgba(100,200,255,0.7);letter-spacing:1px;margin-top:2px">${v.name}</div>
+      <div style="position:absolute;top:4px;right:5px;background:rgba(37,99,235,0.8);color:#fff;font-size:9px;font-weight:bold;border-radius:8px;padding:1px 5px;min-width:16px">${armyState.inventory[k]||0}</div>
+    </div>`).join('');
+}
+
+function armyActivateItem(type){
+  if(!armyState.inventory[type]||armyState.inventory[type]<=0){showToast('ไม่มี '+ITEMS_DEF[type].name,'error');return;}
+  armyState.inventory[type]--;
+  if(type==='shield'){armyState.activePowerups.shield=true;showToast('🛡️ Shield ON!','','bonus');}
+  else if(type==='speed'){armyState.activePowerups.speed=true;setTimeout(()=>{armyState.activePowerups.speed=false;},5000);showToast('⚡ Speed Boost 5s!','','bonus');}
+  else if(type==='double'){armyState.soldierCount=Math.floor(armyState.soldierCount*2);updateArmyHUD();showToast('✖️2 Soldiers doubled!','','green');}
+  else if(type==='bomb'){
+    armyState.enemies.forEach(en=>{if(en.alive){en.hp=Math.max(0,en.hp-20);if(en.hp<=0)en.alive=false;}});
+    showToast('💣 Bomb! -20 to all enemies!','','green');
+  }
+  renderArmyShop();armyDraw();
+}
+window.armyActivateItem=armyActivateItem;
 function setTopupAmt(amt){playClick();document.getElementById('topupAmount').value=amt;updateQR();}
 function updateQR(){const amt=parseInt(document.getElementById('topupAmount').value)||0,btn=document.getElementById('confirmTopup'),qs=document.getElementById('qrSection');if(amt>=1){qs.style.display='block';document.getElementById('qrAmountText').textContent='฿'+amt.toLocaleString();btn.disabled=false;generateQR(amt);}else{qs.style.display='none';btn.disabled=true;}}
 function generateQR(amt){try{const ph='0066'+PROMPTPAY.slice(1),mi='0016A000000677010111'+'0113'+ph,mf='29'+pad(mi.length)+mi,af='54'+pad(amt.toFixed(2).length)+amt.toFixed(2),raw='000201'+mf+'5303764'+af+'5802TH6304';new QRious({element:document.getElementById('qrCanvas'),value:raw+crc16(raw),size:180,background:'white',foreground:'#1a237e',level:'M'});}catch(e){new QRious({element:document.getElementById('qrCanvas'),value:'PromptPay:'+PROMPTPAY+':'+amt,size:180,background:'white',foreground:'#333',level:'M'});}}
