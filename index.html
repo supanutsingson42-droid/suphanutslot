@@ -564,7 +564,7 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
       <button class="nav-tab active" id="navSlot" onclick="showPanel('slot')">🎰 Slots</button>
       <button class="nav-tab" id="navGames" onclick="showPanel('games')">🎮 Games</button>
       <button class="nav-tab" id="navAch" onclick="showPanel('ach')">🏆 Awards</button>
-      <button class="nav-tab" id="navLb" onclick="showPanel('lb');loadLeaderboard()">👑 Ranks</button>
+      <button class="nav-tab" id="navLb" onclick="showPanel('lb')">👑 Ranks</button>
       <button class="nav-tab" id="navTopup" onclick="showPanel('topup')">💳 Wallet</button>
     </div>
     <div class="nav-right">
@@ -1308,7 +1308,7 @@ function aMainLoop(ts){aRaf=requestAnimationFrame(aMainLoop);aUpdate(ts);aDraw()
 })();
 
 // ===== PANELS =====
-function showPanel(name){playClick();document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));const pm={slot:'panelSlot',games:'panelGames',ach:'panelAch',lb:'panelLb',topup:'panelTopup'},nm={slot:'navSlot',games:'navGames',ach:'navAch',lb:'navLb',topup:'navTopup'};document.getElementById(pm[name]).classList.add('active');document.getElementById(nm[name]).classList.add('active');if(name==='ach'){renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();}if(name==='topup'){updateUI();loadUserRequests();}}
+function showPanel(name){playClick();document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));const pm={slot:'panelSlot',games:'panelGames',ach:'panelAch',lb:'panelLb',topup:'panelTopup'},nm={slot:'navSlot',games:'navGames',ach:'navAch',lb:'navLb',topup:'navTopup'};document.getElementById(pm[name]).classList.add('active');document.getElementById(nm[name]).classList.add('active');if(name==='ach'){renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();}if(name==='topup'){updateUI();loadUserRequests();}if(name==='lb'){loadLeaderboard();}}
 function showToast(msg,type,theme){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type==='error'?' error':theme==='green'?' green':theme==='bonus'?' bonus':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
 
 // ===== ADMIN =====
@@ -1337,7 +1337,7 @@ function previewUserRate(uname,val){const el=document.getElementById('urNum_'+un
 async function setUserRate(uname,val){const rate=Math.min(90,Math.max(1,parseInt(val)||30));const d=await getUserData(uname);if(!d)return;d.winRate=rate;await saveUserData(uname,d);if(currentUser===uname)currentUserData.winRate=rate;await renderUserTable();showToast('Win rate for '+uname+' set to '+rate+'%','','green');}
 async function resetUserRate(uname){const d=await getUserData(uname);if(!d)return;delete d.winRate;await saveUserData(uname,d);if(currentUser===uname)delete currentUserData.winRate;await renderUserTable();showToast(uname+' reset to global rate','','green');}
 
-window.doLogin=doLogin;window.doSignup=doSignup;window.doLogout=doLogout;window.switchTab=switchTab;window.showPanel=showPanel;window.showPage=showPage;window.doAdminLogin=doAdminLogin;window.adminLogout=adminLogout;window.showAdminPanel=showAdminPanel;window.saveWinRate=saveWinRate;window.setRate=setRate;window.updateRateDisplay=updateRateDisplay;window.addCoins=addCoins;window.setCoins=setCoins;window.previewUserRate=previewUserRate;window.setUserRate=setUserRate;window.resetUserRate=resetUserRate;window.toggleAuto=toggleAuto;window.setAutoCount=setAutoCount;window.onBetInput=onBetInput;window.onBetBlur=onBetBlur;
+window.doLogin=doLogin;window.doSignup=doSignup;window.doLogout=doLogout;window.switchTab=switchTab;window.showPanel=showPanel;window.showPage=showPage;window.doAdminLogin=doAdminLogin;window.adminLogout=adminLogout;window.showAdminPanel=showAdminPanel;window.saveWinRate=saveWinRate;window.setRate=setRate;window.updateRateDisplay=updateRateDisplay;window.addCoins=addCoins;window.setCoins=setCoins;window.previewUserRate=previewUserRate;window.setUserRate=setUserRate;window.resetUserRate=resetUserRate;window.toggleAuto=toggleAuto;window.setAutoCount=setAutoCount;window.onBetInput=onBetInput;window.onBetBlur=onBetBlur;window.loadLeaderboard=loadLeaderboard;window.claimDaily=claimDaily;window.saveFsRate=saveFsRate;window.setFsRate=setFsRate;window.updateFsRateDisplay=updateFsRateDisplay;
 window.setReqAmt=setReqAmt;window.updateCoinsPreview=updateCoinsPreview;window.submitDepositRequest=submitDepositRequest;
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('regPass2').addEventListener('keydown',e=>{if(e.key==='Enter')doSignup();});
