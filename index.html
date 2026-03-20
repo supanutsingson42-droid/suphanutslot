@@ -247,6 +247,11 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
 #armyMS{font:12px monospace;color:rgba(255,255,255,0.5);margin-bottom:20px;letter-spacing:1px;text-align:center;padding:0 20px;line-height:1.9;}
 #armyMBtn{padding:11px 32px;background:#dc2626;border:none;border-radius:8px;color:#fff;font:bold 13px monospace;cursor:pointer;letter-spacing:2px;}
 
+.slip-upload-wrap{background:rgba(0,0,0,0.4);border:2px dashed rgba(200,118,10,0.2);border-radius:3px;padding:20px;text-align:center;cursor:pointer;transition:all 0.25s;min-height:90px;display:flex;align-items:center;justify-content:center;}
+.slip-upload-wrap:hover{border-color:rgba(200,118,10,0.45);background:rgba(200,118,10,0.04);}
+.slip-upload-wrap.has-image{padding:8px;border-style:solid;border-color:rgba(200,118,10,0.3);}
+.slip-placeholder{pointer-events:none;}
+
 /* ===== WALLET NEW STYLES ===== */
 .wallet-info-banner{background:linear-gradient(135deg,rgba(0,0,0,0.6),rgba(20,8,0,0.8));border:1px solid rgba(200,118,10,0.2);border-radius:4px;padding:18px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden;}
 .wallet-info-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(200,118,10,0.5),transparent);}
@@ -755,7 +760,7 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
         <div class="pp-label">โอนเงินมายัง PROMPTPAY</div>
         <div class="pp-number">1478-4000-29318</div>
         <div class="pp-name">MAXICO SPIN CASINO</div>
-        <div class="pp-rate">อัตรา: ฿10 = 100 coins</div>
+        <div class="pp-rate">อัตรา: ฿1 = 1 coin (฿100 = 100 coins)</div>
       </div>
 
       <!-- Steps -->
@@ -789,11 +794,20 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
 
       <div class="request-step" style="margin-top:4px">
         <div class="step-num">3</div>
-        <div class="step-text">แนบหมายเลขอ้างอิง / slip (ถ้ามี)</div>
+        <div class="step-text">แนบรูปสลิปการโอนเงิน</div>
       </div>
       <div class="form-group">
-        <label class="form-label">หมายเลขอ้างอิง / หมายเหตุ (ไม่บังคับ)</label>
-        <input class="form-input" id="reqNote" type="text" placeholder="เช่น เลข ref xxxx หรือชื่อผู้โอน">
+        <label class="form-label">รูปสลิป (บังคับ)</label>
+        <div class="slip-upload-wrap" id="slipUploadWrap" onclick="document.getElementById('slipInput').click()">
+          <input type="file" id="slipInput" accept="image/*" style="display:none" onchange="onSlipSelected(this)">
+          <div class="slip-placeholder" id="slipPlaceholder">
+            <span style="font-size:32px;display:block;margin-bottom:8px">📷</span>
+            <span style="font-family:'Cinzel',serif;font-size:11px;color:rgba(200,118,10,0.55);letter-spacing:2px;">แตะเพื่อเลือกรูปสลิป</span>
+            <span style="font-size:10px;color:rgba(255,255,255,0.2);margin-top:4px;display:block;">JPG, PNG, WEBP</span>
+          </div>
+          <img id="slipPreview" style="display:none;width:100%;max-height:220px;object-fit:contain;border-radius:3px;" alt="slip preview">
+        </div>
+        <button id="slipRemoveBtn" onclick="removeSlip(event)" style="display:none;margin-top:6px;width:100%;padding:6px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.18);border-radius:2px;color:rgba(239,68,68,0.6);font-family:'Kanit',sans-serif;font-size:11px;cursor:pointer;">✕ ลบรูปสลิป</button>
       </div>
 
       <button class="submit-req-btn" id="submitReqBtn" onclick="submitDepositRequest()" disabled>
@@ -903,33 +917,64 @@ async function saveWinRateToDB(r){await db.collection('settings').doc('winrate')
 async function saveFsRateToDB(r){await db.collection('settings').doc('fsrate').set({starWeight:r});}
 
 // ===== DEPOSIT REQUEST FUNCTIONS =====
+let slipBase64='';
+function onSlipSelected(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    slipBase64=e.target.result;
+    document.getElementById('slipPreview').src=slipBase64;
+    document.getElementById('slipPreview').style.display='block';
+    document.getElementById('slipPlaceholder').style.display='none';
+    document.getElementById('slipRemoveBtn').style.display='block';
+    document.getElementById('slipUploadWrap').classList.add('has-image');
+    updateCoinsPreview();
+  };reader.readAsDataURL(file);
+}
+function removeSlip(e){
+  e.stopPropagation();
+  slipBase64='';
+  document.getElementById('slipInput').value='';
+  document.getElementById('slipPreview').style.display='none';
+  document.getElementById('slipPreview').src='';
+  document.getElementById('slipPlaceholder').style.display='block';
+  document.getElementById('slipRemoveBtn').style.display='none';
+  document.getElementById('slipUploadWrap').classList.remove('has-image');
+  updateCoinsPreview();
+}
+window.onSlipSelected=onSlipSelected;window.removeSlip=removeSlip;
 function setReqAmt(amt){playClick();document.getElementById('reqAmount').value=amt;updateCoinsPreview();}
 function updateCoinsPreview(){
   const amt=parseInt(document.getElementById('reqAmount').value)||0;
   const btn=document.getElementById('submitReqBtn');
   const prev=document.getElementById('coinsPreview');
-  if(amt>=10){
-    const coins=amt*10;
+  if(amt>=10&&slipBase64){
+    const coins=amt;
     document.getElementById('coinsPreviewVal').textContent=coins.toLocaleString();
     prev.style.display='flex';btn.disabled=false;
-  }else{prev.style.display='none';btn.disabled=true;}
+  }else{prev.style.display=amt>=10?'flex':'none';
+    if(amt>=10){document.getElementById('coinsPreviewVal').textContent=amt.toLocaleString();prev.style.display='flex';}
+    else prev.style.display='none';
+    btn.disabled=true;}
 }
 async function submitDepositRequest(){
   const amt=parseInt(document.getElementById('reqAmount').value)||0;
   if(amt<10){showToast('จำนวนขั้นต่ำ ฿10','error');return;}
-  const note=document.getElementById('reqNote').value.trim();
-  const coins=amt*10;
-  const req={user:currentUser,amount:amt,coins,note:note||'',status:'pending',date:new Date().toISOString(),dateStr:new Date().toLocaleString('th-TH')};
+  if(!slipBase64){showToast('กรุณาแนบรูปสลิปก่อน','error');return;}
+  const coins=amt;
+  const req={user:currentUser,amount:amt,coins,slipImage:slipBase64,status:'pending',date:new Date().toISOString(),dateStr:new Date().toLocaleString('th-TH')};
   try{
+    document.getElementById('submitReqBtn').disabled=true;
+    document.getElementById('submitReqBtn').textContent='⏳ กำลังส่ง...';
     await db.collection('depositRequests').add(req);
     document.getElementById('reqAmount').value='';
-    document.getElementById('reqNote').value='';
+    removeSlip({stopPropagation:()=>{}});
     document.getElementById('coinsPreview').style.display='none';
-    document.getElementById('submitReqBtn').disabled=true;
+    document.getElementById('submitReqBtn').textContent='📩 ส่งคำร้องเติมเงิน';
     showToast('📩 ส่งคำร้องเรียบร้อย! Admin จะดำเนินการเร็วๆ นี้','','green');
     playWin();
     loadUserRequests();
-  }catch(e){showToast('เกิดข้อผิดพลาด กรุณาลองใหม่','error');}
+  }catch(e){document.getElementById('submitReqBtn').disabled=false;document.getElementById('submitReqBtn').textContent='📩 ส่งคำร้องเติมเงิน';showToast('เกิดข้อผิดพลาด กรุณาลองใหม่','error');}
 }
 async function loadUserRequests(){
   const list=document.getElementById('userReqList');
@@ -984,7 +1029,8 @@ function renderAdminReqs(docs){
       <div><div class="admin-req-user">👤 ${r.user}</div><div style="font-size:10px;color:rgba(255,255,255,0.25);font-family:Cinzel,serif;margin-top:2px;">${r.dateStr||r.date}</div></div>
       <div style="text-align:right"><div class="admin-req-amt">฿${r.amount.toLocaleString()}</div><div class="admin-req-coins">+${r.coins.toLocaleString()} coins</div></div>
     </div>
-    ${r.note?`<div class="admin-req-note">📝 ${r.note}</div>`:'<div class="admin-req-note" style="color:rgba(255,255,255,0.15);">ไม่มีหมายเหตุ</div>'}
+    ${r.note?`<div class="admin-req-note">📝 ${r.note}</div>`:''}
+    ${r.slipImage?`<div style="margin-bottom:8px"><div style="font-family:'Cinzel',serif;font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:2px;margin-bottom:5px;">สลิปการโอนเงิน</div><img src="${r.slipImage}" style="width:100%;max-height:200px;object-fit:contain;border-radius:3px;border:1px solid rgba(200,118,10,0.15);cursor:pointer" onclick="window.open(this.src)" alt="slip"></div>`:'<div class="admin-req-note" style="color:rgba(255,100,100,0.3);">⚠ ไม่มีรูปสลิป</div>'}
     <div style="margin-bottom:8px"><span class="req-status-badge ${r.status}">${r.status==='pending'?'⏳ รอดำเนินการ':r.status==='approved'?'✅ อนุมัติแล้ว':'❌ ปฏิเสธ'}</span></div>
     ${!done?`<div class="admin-req-btns">
       <button class="req-approve-btn" onclick="approveRequest('${id}','${r.user}',${r.coins})">✅ อนุมัติ +${r.coins} coins</button>
