@@ -226,8 +226,6 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
 .scratch-btn{width:100%;padding:11px;background:linear-gradient(135deg,#0f172a,#1e293b);border:1px solid rgba(200,118,10,0.18);border-top:none;font-family:'Cinzel',serif;font-size:11px;color:rgba(200,118,10,0.65);cursor:pointer;letter-spacing:2px;transition:all 0.2s;}
 .scratch-btn:hover:not(:disabled){color:var(--gold);background:rgba(200,118,10,0.06);}
 .scratch-btn:disabled{opacity:0.4;cursor:not-allowed;}
-
-/* ARMY RUSH STYLES */
 #armyWrap{position:relative;width:100%;max-width:420px;margin:0 auto;touch-action:none;background:#000;border-radius:8px;overflow:hidden;}
 #armyGc{display:block;width:100%;}
 #armyUI{position:absolute;top:0;left:0;right:0;pointer-events:none;padding:6px 8px;display:flex;justify-content:space-between;align-items:flex-start;gap:4px;}
@@ -249,40 +247,79 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
 #armyMS{font:12px monospace;color:rgba(255,255,255,0.5);margin-bottom:20px;letter-spacing:1px;text-align:center;padding:0 20px;line-height:1.9;}
 #armyMBtn{padding:11px 32px;background:#dc2626;border:none;border-radius:8px;color:#fff;font:bold 13px monospace;cursor:pointer;letter-spacing:2px;}
 
-.topup-input-wrap{display:flex;align-items:center;background:rgba(0,0,0,0.5);border:1px solid rgba(200,118,10,0.14);border-bottom:1px solid rgba(200,118,10,0.28);border-radius:2px;overflow:hidden;transition:all 0.3s;}
-.topup-input-wrap:focus-within{border-color:rgba(200,118,10,0.4);}
-.topup-prefix{padding:12px 14px;color:rgba(200,118,10,0.45);font-family:'Cinzel',serif;font-size:14px;border-right:1px solid rgba(200,118,10,0.1);white-space:nowrap;}
-.topup-input{flex:1;padding:12px 14px;background:transparent;border:none;color:#fff;font-family:'Cinzel',serif;font-size:17px;font-weight:700;outline:none;}
-.topup-input::placeholder{color:rgba(255,255,255,0.12);font-family:'Kanit',sans-serif;font-size:13px;font-weight:400;}
+/* ===== WALLET NEW STYLES ===== */
+.wallet-info-banner{background:linear-gradient(135deg,rgba(0,0,0,0.6),rgba(20,8,0,0.8));border:1px solid rgba(200,118,10,0.2);border-radius:4px;padding:18px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden;}
+.wallet-info-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(200,118,10,0.5),transparent);}
+.wallet-big-balance{font-family:'Cinzel Decorative',serif;font-size:36px;font-weight:900;color:var(--gold);line-height:1;}
+.wallet-balance-label{font-family:'Cinzel',serif;font-size:10px;color:rgba(200,118,10,0.4);letter-spacing:3px;margin-top:4px;}
+.wallet-balance-baht{font-family:'Cinzel',serif;font-size:13px;color:rgba(255,255,255,0.3);margin-top:3px;}
+
+.request-form-wrap{background:rgba(0,0,0,0.3);border:1px solid rgba(200,118,10,0.1);border-radius:3px;padding:16px;margin-bottom:12px;}
+.request-step{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.step-num{width:24px;height:24px;border-radius:50%;background:rgba(200,118,10,0.15);border:1px solid rgba(200,118,10,0.3);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;}
+.step-text{font-size:12px;color:rgba(255,255,255,0.5);font-family:'Cinzel',serif;letter-spacing:1px;}
+
+.promptpay-box{background:rgba(0,0,0,0.4);border:1px solid rgba(200,118,10,0.15);border-radius:3px;padding:14px;margin-bottom:14px;text-align:center;}
+.pp-label{font-family:'Cinzel',serif;font-size:9px;color:rgba(200,118,10,0.4);letter-spacing:3px;margin-bottom:6px;}
+.pp-number{font-family:'Cinzel Decorative',serif;font-size:18px;font-weight:900;color:var(--gold);letter-spacing:3px;}
+.pp-name{font-size:11px;color:rgba(255,255,255,0.3);margin-top:3px;font-family:'Cinzel',serif;}
+.pp-rate{font-size:10px;color:rgba(200,118,10,0.4);margin-top:5px;font-family:'Cinzel',serif;letter-spacing:1px;}
+
+.req-amount-input-wrap{display:flex;align-items:center;background:rgba(0,0,0,0.5);border:1px solid rgba(200,118,10,0.14);border-bottom:1px solid rgba(200,118,10,0.28);border-radius:2px;overflow:hidden;}
+.req-prefix{padding:12px 14px;color:rgba(200,118,10,0.45);font-family:'Cinzel',serif;font-size:14px;border-right:1px solid rgba(200,118,10,0.1);}
+.req-input{flex:1;padding:12px 14px;background:transparent;border:none;color:#fff;font-family:'Cinzel',serif;font-size:17px;font-weight:700;outline:none;}
+.req-input::placeholder{color:rgba(255,255,255,0.12);font-family:'Kanit',sans-serif;font-size:13px;font-weight:400;}
 .quick-row{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;}
 .quick-btn{padding:5px 13px;background:rgba(200,118,10,0.06);border:1px solid rgba(200,118,10,0.14);border-radius:20px;color:rgba(200,118,10,0.65);font-family:'Kanit',sans-serif;font-size:11px;cursor:pointer;transition:all 0.2s;}
 .quick-btn:hover{background:rgba(200,118,10,0.14);color:var(--gold);}
-.qr-section{text-align:center;margin:16px 0;}
-.qr-box{display:inline-block;background:#fff;border-radius:3px;padding:12px;box-shadow:0 0 25px rgba(200,118,10,0.1);}
-.qr-amount{font-family:'Cinzel Decorative',serif;font-size:19px;font-weight:700;color:var(--gold);margin-top:7px;}
-.pp-info{font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px;letter-spacing:1px;}
-.pp-num{font-family:'Cinzel',serif;color:rgba(200,118,10,0.55);}
-.confirm-btn{width:100%;padding:12px;border:none;border-radius:2px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:2px;transition:all 0.25s;margin-top:10px;}
-.confirm-topup{background:linear-gradient(135deg,#14532d,#16a34a);color:#fff;}
-.confirm-topup:hover:not(:disabled){transform:translateY(-1px);}
-.confirm-topup:disabled{opacity:0.3;cursor:not-allowed;}
-.confirm-withdraw{background:linear-gradient(135deg,#1e3a5f,#1d4ed8);color:#fff;}
-.confirm-withdraw:hover:not(:disabled){transform:translateY(-1px);}
-.confirm-withdraw:disabled{opacity:0.3;cursor:not-allowed;}
-.hist-filters{display:flex;gap:6px;margin-bottom:12px;}
-.hist-filter{padding:5px 12px;border:1px solid rgba(200,118,10,0.12);border-radius:20px;background:transparent;color:rgba(255,255,255,0.3);font-family:'Kanit',sans-serif;font-size:11px;cursor:pointer;transition:all 0.2s;}
-.hist-filter.active{background:rgba(200,118,10,0.1);color:var(--gold);border-color:rgba(200,118,10,0.25);}
-.hist-item{display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.04);border-radius:2px;padding:11px 13px;margin-bottom:6px;}
-.hist-type{font-family:'Cinzel',serif;font-size:11px;color:rgba(255,255,255,0.7);}
-.hist-date{font-size:10px;color:rgba(255,255,255,0.25);margin-top:2px;}
-.hist-status{display:inline-block;font-size:9px;padding:2px 7px;border-radius:10px;margin-top:3px;font-family:'Cinzel',serif;letter-spacing:1px;}
-.hist-status.done{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.2);}
-.hist-status.pending{background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.2);}
-.hist-amt{font-family:'Cinzel',serif;font-size:13px;font-weight:700;}
-.hist-amt.plus{color:#22c55e;}.hist-amt.minus{color:#ef4444;}
-.withdraw-info-box{text-align:center;margin:12px 0;}
-.withdraw-baht{font-family:'Cinzel Decorative',serif;font-size:24px;font-weight:700;color:#22c55e;}
-.withdraw-rate{font-size:10px;color:rgba(255,255,255,0.25);margin-top:3px;letter-spacing:1px;font-family:'Cinzel',serif;}
+
+.coins-preview{background:rgba(200,118,10,0.06);border:1px solid rgba(200,118,10,0.12);border-radius:2px;padding:10px 14px;margin-top:10px;display:flex;justify-content:space-between;align-items:center;}
+.coins-preview-lbl{font-family:'Cinzel',serif;font-size:10px;color:rgba(200,118,10,0.45);letter-spacing:2px;}
+.coins-preview-val{font-family:'Cinzel Decorative',serif;font-size:18px;font-weight:900;color:var(--gold);}
+
+.submit-req-btn{width:100%;padding:13px;margin-top:12px;background:linear-gradient(135deg,#14532d,#16a34a,#22c55e,#16a34a,#14532d);background-size:200%;border:none;border-radius:2px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer;letter-spacing:2px;transition:all 0.25s;box-shadow:0 4px 18px rgba(34,197,94,0.15);animation:btnShimmer 3s ease infinite;}
+.submit-req-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 24px rgba(34,197,94,0.3);}
+.submit-req-btn:disabled{opacity:0.3;cursor:not-allowed;}
+
+.req-item{display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.04);border-radius:3px;padding:12px 14px;margin-bottom:7px;position:relative;overflow:hidden;}
+.req-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
+.req-item.pending::before{background:rgba(251,191,36,0.6);}
+.req-item.approved::before{background:rgba(34,197,94,0.7);}
+.req-item.rejected::before{background:rgba(239,68,68,0.7);}
+.req-info{}
+.req-type{font-family:'Cinzel',serif;font-size:12px;color:rgba(255,255,255,0.8);margin-bottom:2px;}
+.req-date{font-size:10px;color:rgba(255,255,255,0.25);}
+.req-note{font-size:10px;color:rgba(255,255,255,0.2);margin-top:2px;font-family:'Cinzel',serif;}
+.req-right{text-align:right;}
+.req-amount{font-family:'Cinzel Decorative',serif;font-size:16px;font-weight:900;color:var(--gold);}
+.req-coins{font-family:'Cinzel',serif;font-size:11px;color:rgba(200,118,10,0.55);margin-top:1px;}
+.req-status-badge{display:inline-block;font-size:9px;padding:2px 8px;border-radius:10px;margin-top:4px;font-family:'Cinzel',serif;letter-spacing:1px;}
+.req-status-badge.pending{background:rgba(251,191,36,0.1);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);}
+.req-status-badge.approved{background:rgba(34,197,94,0.1);color:#22c55e;border:1px solid rgba(34,197,94,0.25);}
+.req-status-badge.rejected{background:rgba(239,68,68,0.1);color:#ef4444;border:1px solid rgba(239,68,68,0.2);}
+
+/* ===== ADMIN REQUEST STYLES ===== */
+.admin-req-item{background:rgba(0,0,0,0.35);border:1px solid rgba(160,0,255,0.1);border-radius:3px;padding:14px;margin-bottom:8px;position:relative;overflow:hidden;}
+.admin-req-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(251,191,36,0.5);}
+.admin-req-item.done::before{background:rgba(34,197,94,0.5);}
+.admin-req-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.admin-req-user{font-family:'Cinzel',serif;font-size:13px;color:#cc44ff;}
+.admin-req-amt{font-family:'Cinzel Decorative',serif;font-size:18px;color:#f5a623;}
+.admin-req-coins{font-family:'Cinzel',serif;font-size:10px;color:rgba(245,166,35,0.5);}
+.admin-req-meta{font-size:10px;color:rgba(255,255,255,0.25);margin-bottom:8px;}
+.admin-req-note{font-size:11px;color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:2px;padding:6px 9px;margin-bottom:10px;font-family:'Cinzel',serif;}
+.admin-req-btns{display:flex;gap:6px;}
+.req-approve-btn{flex:1;padding:8px;background:linear-gradient(135deg,#14532d,#16a34a);border:none;border-radius:2px;color:#fff;font-family:'Cinzel',serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:2px;transition:all 0.2s;}
+.req-approve-btn:hover{transform:translateY(-1px);}
+.req-reject-btn{flex:1;padding:8px;background:linear-gradient(135deg,#450a0a,#7f1d1d);border:none;border-radius:2px;color:#fff;font-family:'Cinzel',serif;font-size:11px;cursor:pointer;letter-spacing:2px;transition:all 0.2s;}
+.req-reject-btn:hover{transform:translateY(-1px);}
+.req-done-badge{padding:6px 16px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:2px;color:rgba(34,197,94,0.6);font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;text-align:center;}
+.pending-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#fbbf24;margin-right:5px;animation:dotPing 1s ease infinite;}
+@keyframes dotPing{0%,100%{opacity:1}50%{opacity:0.3}}
+.admin-req-filter{display:flex;gap:5px;margin-bottom:12px;}
+.admin-req-filter button{padding:5px 12px;border:1px solid rgba(160,0,255,0.15);border-radius:20px;background:transparent;color:rgba(255,255,255,0.3);font-family:'Kanit',sans-serif;font-size:11px;cursor:pointer;transition:all 0.2s;}
+.admin-req-filter button.active{background:rgba(160,0,255,0.1);color:#cc44ff;border-color:rgba(160,0,255,0.3);}
+
 .overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.88);align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .overlay.show{display:flex;animation:overlayIn 0.3s ease;}
 @keyframes overlayIn{from{opacity:0}to{opacity:1}}
@@ -326,10 +363,10 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
 .admin-logo-title{font-family:'Cinzel Decorative',serif;font-size:17px;color:#cc44ff;letter-spacing:5px;text-align:center;margin-bottom:5px;}
 .admin-logo-sub{font-size:10px;color:rgba(160,0,255,0.35);letter-spacing:3px;text-align:center;margin-bottom:28px;font-family:'Cinzel',serif;}
 #adminPage{flex-direction:column;min-height:100vh;}
-.admin-nav{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:52px;background:rgba(8,3,15,0.98);border-bottom:1px solid rgba(160,0,255,0.1);position:sticky;top:0;z-index:100;}
+.admin-nav{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:52px;background:rgba(8,3,15,0.98);border-bottom:1px solid rgba(160,0,255,0.1);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:4px;}
 .admin-nav-logo{font-family:'Cinzel Decorative',serif;font-size:12px;color:#cc44ff;letter-spacing:4px;}
-.admin-nav-btns{display:flex;gap:6px;}
-.admin-nav-btn{padding:5px 12px;border:1px solid rgba(160,0,255,0.15);border-radius:2px;background:transparent;color:rgba(255,255,255,0.35);font-family:'Kanit',sans-serif;font-size:11px;cursor:pointer;transition:all 0.2s;}
+.admin-nav-btns{display:flex;gap:4px;flex-wrap:wrap;}
+.admin-nav-btn{padding:5px 10px;border:1px solid rgba(160,0,255,0.15);border-radius:2px;background:transparent;color:rgba(255,255,255,0.35);font-family:'Kanit',sans-serif;font-size:11px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
 .admin-nav-btn.active,.admin-nav-btn:hover{background:rgba(160,0,255,0.08);color:#cc44ff;border-color:rgba(160,0,255,0.3);}
 .admin-panel-pg{display:none;padding:18px;max-width:680px;margin:0 auto;width:100%;}
 .admin-panel-pg.active{display:block;}
@@ -366,6 +403,7 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
   .mini-grid{grid-template-columns:1fr;}
   .daily-grid{grid-template-columns:repeat(4,1fr);}
   .reels-wrap{gap:2px;padding:3px;}
+  .admin-nav{height:auto;padding:8px 12px;}
 }
 </style>
 </head>
@@ -397,8 +435,8 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
   <div class="overlay-box empty-overlay-box">
     <div class="empty-icon-big">💎</div>
     <div class="empty-title">INSUFFICIENT FUNDS</div>
-    <div class="empty-sub">ยอดเงินไม่เพียงพอ<br>กรุณาเติมเงินเพื่อเล่นต่อ</div>
-    <button class="overlay-cta empty-cta" onclick="closeEmptyOverlay()">เติมเงิน</button>
+    <div class="empty-sub">ยอดเงินไม่เพียงพอ<br>กรุณาส่งคำร้องเติมเงินให้ Admin</div>
+    <button class="overlay-cta empty-cta" onclick="closeEmptyOverlay()">ส่งคำร้อง</button>
   </div>
 </div>
 
@@ -451,6 +489,9 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
     <div class="admin-nav-btns">
       <button class="admin-nav-btn active" id="anBtnWin" onclick="showAdminPanel('win')">Win Rate</button>
       <button class="admin-nav-btn" id="anBtnUsers" onclick="showAdminPanel('users')">Users</button>
+      <button class="admin-nav-btn" id="anBtnReqs" onclick="showAdminPanel('reqs')">
+        <span class="pending-dot" id="pendingDot" style="display:none"></span>Deposits
+      </button>
     </div>
     <button class="logout-btn" onclick="adminLogout()">Exit</button>
   </div>
@@ -494,6 +535,18 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
           <tbody id="userTableBody"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+  <!-- NEW: DEPOSIT REQUESTS PANEL -->
+  <div class="admin-panel-pg" id="apReqs">
+    <div class="admin-sec">
+      <h3>DEPOSIT REQUESTS</h3>
+      <div class="admin-req-filter">
+        <button class="active" id="arfAll" onclick="adminFilterReqs('all')">ทั้งหมด</button>
+        <button id="arfPending" onclick="adminFilterReqs('pending')"><span class="pending-dot" id="pendingDot2" style="display:none"></span>รอดำเนินการ</button>
+        <button id="arfDone" onclick="adminFilterReqs('done')">เสร็จแล้ว</button>
+      </div>
+      <div id="adminReqList"><div style="text-align:center;padding:28px;color:rgba(255,255,255,0.2);font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;">LOADING...</div></div>
     </div>
   </div>
 </div>
@@ -599,8 +652,6 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
         <div class="mini-desc">12 Waves!</div><span class="mini-badge">FREE</span>
       </div>
     </div>
-
-    <!-- WHEEL -->
     <div id="wheelGame" style="display:none">
       <div class="sec-line"><span>WHEEL OF FORTUNE</span></div>
       <div class="lux-card">
@@ -613,8 +664,6 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
         <div class="wheel-cost">Cost: 50 coins per spin</div>
       </div>
     </div>
-
-    <!-- SCRATCH -->
     <div id="scratchGame" style="display:none">
       <div class="sec-line"><span>SCRATCH CARD</span></div>
       <div class="lux-card">
@@ -626,8 +675,6 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
         <div style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center;margin-top:7px;font-family:'Cinzel',serif;letter-spacing:1px;">Match 3 symbols to win</div>
       </div>
     </div>
-
-    <!-- ARMY RUSH (new fixed version) -->
     <div id="armyGame" style="display:none">
       <div class="sec-line"><span>⚔️ ARMY RUSH — 12 WAVES</span></div>
       <div id="armyWrap">
@@ -688,67 +735,83 @@ body{font-family:'Kanit',sans-serif;background:var(--deep);color:#fff;min-height
     </div>
   </div>
 
-  <!-- TOPUP PANEL -->
+  <!-- ===== WALLET PANEL (NEW) ===== -->
   <div class="panel" id="panelTopup">
     <div class="sec-header">WALLET</div>
-    <div class="lux-card">
-      <div class="lux-card-title">TOP UP — ฿10 = 100 COINS</div>
-      <div class="form-group">
-        <label class="form-label">Amount (THB)</label>
-        <div class="topup-input-wrap">
-          <span class="topup-prefix">฿</span>
-          <input class="topup-input" id="topupAmount" type="number" min="1" placeholder="Enter amount" oninput="updateQR()">
-        </div>
-        <div class="quick-row">
-          <button class="quick-btn" onclick="setTopupAmt(50)">฿50</button>
-          <button class="quick-btn" onclick="setTopupAmt(100)">฿100</button>
-          <button class="quick-btn" onclick="setTopupAmt(200)">฿200</button>
-          <button class="quick-btn" onclick="setTopupAmt(500)">฿500</button>
-        </div>
-      </div>
-      <div class="qr-section" id="qrSection" style="display:none">
-        <div style="font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;margin-bottom:7px;font-family:'Cinzel',serif;">SCAN PROMPTPAY</div>
-        <div class="qr-box"><canvas id="qrCanvas" width="180" height="180"></canvas></div>
-        <div class="qr-amount" id="qrAmountText">฿0</div>
-        <div class="pp-info">PromptPay: <span class="pp-num">1478-4000-29318</span></div>
-      </div>
-      <button class="confirm-btn confirm-topup" id="confirmTopup" onclick="doTopup()" disabled>CONFIRM TOP UP</button>
+
+    <!-- Balance display -->
+    <div class="wallet-info-banner">
+      <div class="wallet-balance-label">YOUR BALANCE</div>
+      <div class="wallet-big-balance" id="walletBigBal">0</div>
+      <div style="font-size:9px;color:rgba(200,118,10,0.35);letter-spacing:3px;margin-top:3px;font-family:'Cinzel',serif;">COINS</div>
     </div>
+
+    <!-- Deposit Request Form -->
     <div class="lux-card">
-      <div class="lux-card-title">WITHDRAW — 100 COINS = ฿10</div>
+      <div class="lux-card-title">📩 ส่งคำร้องเติมเงิน</div>
+
+      <!-- PromptPay info -->
+      <div class="promptpay-box">
+        <div class="pp-label">โอนเงินมายัง PROMPTPAY</div>
+        <div class="pp-number">1478-4000-29318</div>
+        <div class="pp-name">MAXICO SPIN CASINO</div>
+        <div class="pp-rate">อัตรา: ฿10 = 100 coins</div>
+      </div>
+
+      <!-- Steps -->
+      <div class="request-form-wrap">
+        <div class="request-step">
+          <div class="step-num">1</div>
+          <div class="step-text">โอนเงินผ่าน PromptPay ตามเลขด้านบน</div>
+        </div>
+        <div class="request-step">
+          <div class="step-num">2</div>
+          <div class="step-text">กรอกจำนวนเงินที่โอนมา</div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">จำนวนเงิน (THB)</label>
+          <div class="req-amount-input-wrap">
+            <span class="req-prefix">฿</span>
+            <input class="req-input" id="reqAmount" type="number" min="10" placeholder="ระบุจำนวนเงิน" oninput="updateCoinsPreview()">
+          </div>
+          <div class="quick-row">
+            <button class="quick-btn" onclick="setReqAmt(50)">฿50</button>
+            <button class="quick-btn" onclick="setReqAmt(100)">฿100</button>
+            <button class="quick-btn" onclick="setReqAmt(200)">฿200</button>
+            <button class="quick-btn" onclick="setReqAmt(500)">฿500</button>
+          </div>
+          <div class="coins-preview" id="coinsPreview" style="display:none">
+            <span class="coins-preview-lbl">จะได้รับ</span>
+            <span class="coins-preview-val"><span id="coinsPreviewVal">0</span> coins</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="request-step" style="margin-top:4px">
+        <div class="step-num">3</div>
+        <div class="step-text">แนบหมายเลขอ้างอิง / slip (ถ้ามี)</div>
+      </div>
       <div class="form-group">
-        <label class="form-label">Coins to Withdraw</label>
-        <div class="topup-input-wrap">
-          <span class="topup-prefix">🪙</span>
-          <input class="topup-input" id="withdrawCoins" type="number" min="100" placeholder="Min. 100 coins" oninput="updateWithdraw()" style="font-size:15px">
-        </div>
+        <label class="form-label">หมายเลขอ้างอิง / หมายเหตุ (ไม่บังคับ)</label>
+        <input class="form-input" id="reqNote" type="text" placeholder="เช่น เลข ref xxxx หรือชื่อผู้โอน">
       </div>
-      <div id="withdrawInfo" style="display:none">
-        <div class="withdraw-info-box">
-          <div style="font-size:9px;color:rgba(255,255,255,0.25);letter-spacing:2px;margin-bottom:5px;font-family:'Cinzel',serif;">YOU RECEIVE</div>
-          <div class="withdraw-baht" id="withdrawBaht">฿0</div>
-          <div class="withdraw-rate">100 coins = ฿10</div>
-        </div>
-      </div>
-      <div class="form-group" id="withdrawBankGroup" style="display:none">
-        <label class="form-label">Bank Account / PromptPay</label>
-        <input class="form-input" id="withdrawAccount" type="text" placeholder="Account number">
-      </div>
-      <button class="confirm-btn confirm-withdraw" id="confirmWithdraw" onclick="doWithdraw()" disabled>WITHDRAW FUNDS</button>
+
+      <button class="submit-req-btn" id="submitReqBtn" onclick="submitDepositRequest()" disabled>
+        📩 ส่งคำร้องเติมเงิน
+      </button>
+      <div style="font-size:10px;color:rgba(255,255,255,0.2);text-align:center;margin-top:9px;font-family:'Cinzel',serif;letter-spacing:1px;line-height:1.7;">Admin จะตรวจสอบและเติม coins ให้ภายใน 24 ชั่วโมง</div>
     </div>
+
+    <!-- Request History -->
     <div class="lux-card">
-      <div class="lux-card-title">TRANSACTION HISTORY</div>
-      <div class="hist-filters">
-        <button class="hist-filter active" id="histAll" onclick="filterHistory('all')">All</button>
-        <button class="hist-filter" id="histTopup" onclick="filterHistory('topup')">Top Up</button>
-        <button class="hist-filter" id="histWithdraw" onclick="filterHistory('withdraw')">Withdraw</button>
+      <div class="lux-card-title">ประวัติคำร้อง</div>
+      <div id="userReqList">
+        <div style="text-align:center;padding:22px;color:rgba(255,255,255,0.15);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;">ยังไม่มีคำร้อง</div>
       </div>
-      <div id="historyList"><div style="text-align:center;padding:22px;color:rgba(255,255,255,0.15);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;">NO TRANSACTIONS YET</div></div>
     </div>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <script src="config.js"></script>
@@ -781,10 +844,10 @@ let betPerLine=2,lines=10,spinning=false;
 let freeSpins=0,inBonus=false;
 let streakActive=false,streakMult=0,streakTotalWon=0,pendingStreakSpin=false;
 let autoCount=0,autoSpinsDone=0,autoRunning=false,autoStopRequested=false;
-let historyFilter='all',lastWin=0;
+let lastWin=0;
 const COLS=6,ROWS=5,CELL_H=46;
-const PROMPTPAY='1478400029318';
 let reelInnerEls=[];
+let adminReqFilter='all';
 
 const SYMS=[
   {e:'🌞',n:'sun',   m3:50,m4:100,m5:250,m6:500},
@@ -839,6 +902,119 @@ async function getWinRateSetting(){const s=await db.collection('settings').doc('
 async function saveWinRateToDB(r){await db.collection('settings').doc('winrate').set({rate:r});}
 async function saveFsRateToDB(r){await db.collection('settings').doc('fsrate').set({starWeight:r});}
 
+// ===== DEPOSIT REQUEST FUNCTIONS =====
+function setReqAmt(amt){playClick();document.getElementById('reqAmount').value=amt;updateCoinsPreview();}
+function updateCoinsPreview(){
+  const amt=parseInt(document.getElementById('reqAmount').value)||0;
+  const btn=document.getElementById('submitReqBtn');
+  const prev=document.getElementById('coinsPreview');
+  if(amt>=10){
+    const coins=amt*10;
+    document.getElementById('coinsPreviewVal').textContent=coins.toLocaleString();
+    prev.style.display='flex';btn.disabled=false;
+  }else{prev.style.display='none';btn.disabled=true;}
+}
+async function submitDepositRequest(){
+  const amt=parseInt(document.getElementById('reqAmount').value)||0;
+  if(amt<10){showToast('จำนวนขั้นต่ำ ฿10','error');return;}
+  const note=document.getElementById('reqNote').value.trim();
+  const coins=amt*10;
+  const req={user:currentUser,amount:amt,coins,note:note||'',status:'pending',date:new Date().toISOString(),dateStr:new Date().toLocaleString('th-TH')};
+  try{
+    await db.collection('depositRequests').add(req);
+    document.getElementById('reqAmount').value='';
+    document.getElementById('reqNote').value='';
+    document.getElementById('coinsPreview').style.display='none';
+    document.getElementById('submitReqBtn').disabled=true;
+    showToast('📩 ส่งคำร้องเรียบร้อย! Admin จะดำเนินการเร็วๆ นี้','','green');
+    playWin();
+    loadUserRequests();
+  }catch(e){showToast('เกิดข้อผิดพลาด กรุณาลองใหม่','error');}
+}
+async function loadUserRequests(){
+  const list=document.getElementById('userReqList');
+  try{
+    const snap=await db.collection('depositRequests').where('user','==',currentUser).orderBy('date','desc').limit(20).get();
+    if(snap.empty){list.innerHTML='<div style="text-align:center;padding:22px;color:rgba(255,255,255,0.15);font-family:Cinzel,serif;font-size:10px;letter-spacing:2px;">ยังไม่มีคำร้อง</div>';return;}
+    list.innerHTML=snap.docs.map(d=>{const r=d.data();return`<div class="req-item ${r.status}">
+      <div class="req-info">
+        <div class="req-type">เติมเงิน ฿${r.amount.toLocaleString()}</div>
+        <div class="req-date">${r.dateStr||r.date}</div>
+        ${r.note?`<div class="req-note">📝 ${r.note}</div>`:''}
+        <span class="req-status-badge ${r.status}">${r.status==='pending'?'⏳ รอดำเนินการ':r.status==='approved'?'✅ อนุมัติแล้ว':'❌ ปฏิเสธ'}</span>
+      </div>
+      <div class="req-right">
+        <div class="req-amount">฿${r.amount.toLocaleString()}</div>
+        <div class="req-coins">+${r.coins.toLocaleString()} coins</div>
+      </div>
+    </div>`;}).join('');
+  }catch(e){list.innerHTML='<div style="text-align:center;padding:16px;color:rgba(255,100,100,0.4);font-family:Cinzel,serif;font-size:10px;">Error loading requests</div>';}
+}
+
+// ===== ADMIN REQUEST MANAGEMENT =====
+let _reqsListener=null;
+function startAdminReqsListener(){
+  if(_reqsListener){_reqsListener();_reqsListener=null;}
+  _reqsListener=db.collection('depositRequests').orderBy('date','desc').onSnapshot(snap=>{
+    const pending=snap.docs.filter(d=>d.data().status==='pending').length;
+    const dot1=document.getElementById('pendingDot'),dot2=document.getElementById('pendingDot2');
+    if(dot1)dot1.style.display=pending>0?'inline-block':'none';
+    if(dot2)dot2.style.display=pending>0?'inline-block':'none';
+    renderAdminReqs(snap.docs);
+  });
+}
+function adminFilterReqs(f){adminReqFilter=f;document.querySelectorAll('.admin-req-filter button').forEach(b=>b.classList.remove('active'));const map={all:'arfAll',pending:'arfPending',done:'arfDone'};document.getElementById(map[f]).classList.add('active');renderAdminReqsFromDB();}
+async function renderAdminReqsFromDB(){
+  const list=document.getElementById('adminReqList');
+  list.innerHTML='<div style="text-align:center;padding:18px;color:rgba(255,255,255,0.2);font-family:Cinzel,serif;font-size:11px;">LOADING...</div>';
+  try{
+    let q=db.collection('depositRequests').orderBy('date','desc');
+    const snap=await q.get();
+    renderAdminReqs(snap.docs);
+  }catch(e){document.getElementById('adminReqList').innerHTML='<div style="color:rgba(255,100,100,0.4);text-align:center;padding:18px;font-family:Cinzel,serif;font-size:11px;">Error loading</div>';}
+}
+function renderAdminReqs(docs){
+  const list=document.getElementById('adminReqList');if(!list)return;
+  let filtered=docs;
+  if(adminReqFilter==='pending')filtered=docs.filter(d=>d.data().status==='pending');
+  if(adminReqFilter==='done')filtered=docs.filter(d=>d.data().status!=='pending');
+  if(filtered.length===0){list.innerHTML='<div style="text-align:center;padding:22px;color:rgba(255,255,255,0.15);font-family:Cinzel,serif;font-size:11px;letter-spacing:2px;">ไม่มีคำร้อง</div>';return;}
+  list.innerHTML=filtered.map(doc=>{const r=doc.data(),id=doc.id,done=r.status!=='pending';return`<div class="admin-req-item ${done?'done':''}">
+    <div class="admin-req-top">
+      <div><div class="admin-req-user">👤 ${r.user}</div><div style="font-size:10px;color:rgba(255,255,255,0.25);font-family:Cinzel,serif;margin-top:2px;">${r.dateStr||r.date}</div></div>
+      <div style="text-align:right"><div class="admin-req-amt">฿${r.amount.toLocaleString()}</div><div class="admin-req-coins">+${r.coins.toLocaleString()} coins</div></div>
+    </div>
+    ${r.note?`<div class="admin-req-note">📝 ${r.note}</div>`:'<div class="admin-req-note" style="color:rgba(255,255,255,0.15);">ไม่มีหมายเหตุ</div>'}
+    <div style="margin-bottom:8px"><span class="req-status-badge ${r.status}">${r.status==='pending'?'⏳ รอดำเนินการ':r.status==='approved'?'✅ อนุมัติแล้ว':'❌ ปฏิเสธ'}</span></div>
+    ${!done?`<div class="admin-req-btns">
+      <button class="req-approve-btn" onclick="approveRequest('${id}','${r.user}',${r.coins})">✅ อนุมัติ +${r.coins} coins</button>
+      <button class="req-reject-btn" onclick="rejectRequest('${id}')">❌ ปฏิเสธ</button>
+    </div>`:`<div class="req-done-badge">${r.status==='approved'?'✅ อนุมัติแล้ว — +'+r.coins+' coins':'❌ ปฏิเสธแล้ว'}</div>`}
+  </div>`;}).join('');
+}
+async function approveRequest(reqId,userName,coins){
+  if(!confirm(`อนุมัติ +${coins} coins ให้ ${userName}?`))return;
+  try{
+    const userDoc=await getUserData(userName);
+    if(!userDoc){showToast('ไม่พบ user: '+userName,'error');return;}
+    userDoc.coins=(userDoc.coins||0)+coins;
+    await saveUserData(userName,userDoc);
+    await db.collection('depositRequests').doc(reqId).update({status:'approved',approvedAt:new Date().toISOString(),approvedBy:'admin'});
+    if(currentUser===userName){gameState.coins=userDoc.coins;currentUserData=userDoc;updateUI();}
+    showToast('✅ อนุมัติแล้ว! +'+coins+' coins ให้ '+userName,'','green');
+  }catch(e){showToast('Error: '+e.message,'error');}
+}
+async function rejectRequest(reqId){
+  if(!confirm('ปฏิเสธคำร้องนี้?'))return;
+  try{
+    await db.collection('depositRequests').doc(reqId).update({status:'rejected',rejectedAt:new Date().toISOString()});
+    showToast('❌ ปฏิเสธคำร้องแล้ว','error');
+  }catch(e){showToast('Error: '+e.message,'error');}
+}
+window.approveRequest=approveRequest;
+window.rejectRequest=rejectRequest;
+window.adminFilterReqs=adminFilterReqs;
+
 let _settingsListener=null;
 function startSettingsListener(){
   if(_settingsListener){_settingsListener();_settingsListener=null;}
@@ -852,7 +1028,7 @@ function showSyncFlash(){const el=document.getElementById('syncIndicator');el.cl
 
 function switchTab(t){document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',(i===0)===(t==='login')));document.getElementById('loginForm').classList.toggle('active',t==='login');document.getElementById('signupForm').classList.toggle('active',t==='signup');document.getElementById('loginError').textContent='';document.getElementById('signupError').textContent='';}
 async function doLogin(){playClick();const u=document.getElementById('loginUser').value.trim(),p=document.getElementById('loginPass').value,err=document.getElementById('loginError');if(!u||!p){err.textContent='Please fill all fields';return;}err.textContent='Authenticating...';try{const d=await getUserData(u);if(!d){err.textContent='Username not found';return;}if(d.password!==p){err.textContent='Incorrect password';return;}err.textContent='';currentUserData=d;loginSuccess(u);}catch(e){err.textContent='Connection error, please retry';}}
-async function doSignup(){playClick();const u=document.getElementById('regUser').value.trim(),e=document.getElementById('regEmail').value.trim(),p=document.getElementById('regPass').value,p2=document.getElementById('regPass2').value,err=document.getElementById('signupError');if(!u||!e||!p||!p2){err.textContent='Please fill all fields';return;}if(p.length<6){err.textContent='Password must be at least 6 characters';return;}if(p!==p2){err.textContent='Passwords do not match';return;}err.textContent='Creating account...';try{const ex=await getUserData(u);if(ex){err.textContent='Username already taken';return;}const nd={password:p,email:e,coins:500,won:0,spins:0,xp:0,history:[],achievements:[],streak:0,lastLogin:'',dailyClaimed:[],createdAt:new Date().toISOString()};await saveUserData(u,nd);currentUserData=nd;err.textContent='';showToast('Welcome! 500 bonus coins awarded 🎁','','green');loginSuccess(u);}catch(e2){err.textContent='Error, please retry';}}
+async function doSignup(){playClick();const u=document.getElementById('regUser').value.trim(),e=document.getElementById('regEmail').value.trim(),p=document.getElementById('regPass').value,p2=document.getElementById('regPass2').value,err=document.getElementById('signupError');if(!u||!e||!p||!p2){err.textContent='Please fill all fields';return;}if(p.length<6){err.textContent='Password must be at least 6 characters';return;}if(p!==p2){err.textContent='Passwords do not match';return;}err.textContent='Creating account...';try{const ex=await getUserData(u);if(ex){err.textContent='Username already taken';return;}const nd={password:p,email:e,coins:500,won:0,spins:0,xp:0,achievements:[],streak:0,lastLogin:'',dailyClaimed:[],createdAt:new Date().toISOString()};await saveUserData(u,nd);currentUserData=nd;err.textContent='';showToast('Welcome! 500 bonus coins awarded 🎁','','green');loginSuccess(u);}catch(e2){err.textContent='Error, please retry';}}
 
 function loginSuccess(u){
   currentUser=u;gameState.coins=currentUserData.coins||0;gameState.won=currentUserData.won||0;gameState.spins=currentUserData.spins||0;gameState.xp=currentUserData.xp||0;gameState.achievements=currentUserData.achievements||[];
@@ -866,13 +1042,16 @@ function loginSuccess(u){
     currentUserData=d;updateUI();updateLevelUI();showSyncFlash();
   });
   document.getElementById('authPage').classList.remove('active');document.getElementById('gamePage').classList.add('active');
-  startSettingsListener();buildReelDOM();updateUI();renderPaytable();renderHistory();renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();
+  startSettingsListener();buildReelDOM();updateUI();renderPaytable();renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();
 }
 async function doLogout(){if(_userListener){_userListener();_userListener=null;}if(_settingsListener){_settingsListener();_settingsListener=null;}clearTimeout(_saveTimer);await saveGameState();currentUser=null;currentUserData=null;sessionStorage.removeItem('ls_session');document.getElementById('gamePage').classList.remove('active');document.getElementById('authPage').classList.add('active');document.getElementById('loginUser').value='';document.getElementById('loginPass').value='';}
 async function saveGameState(){if(!currentUser||!currentUserData)return;currentUserData.coins=gameState.coins;currentUserData.won=gameState.won;currentUserData.spins=gameState.spins;currentUserData.xp=gameState.xp||0;currentUserData.achievements=gameState.achievements||[];await saveUserData(currentUser,currentUserData);}
 
 function updateUI(){
-  document.getElementById('coinDisplay').textContent=gameState.coins.toLocaleString();document.getElementById('wonDisplay').textContent=gameState.won.toLocaleString();document.getElementById('lastWinDisplay').textContent=lastWin.toLocaleString();document.getElementById('spinDisplay').textContent=gameState.spins;document.getElementById('navCoins').textContent=gameState.coins.toLocaleString();
+  const c=gameState.coins;
+  document.getElementById('coinDisplay').textContent=c.toLocaleString();document.getElementById('wonDisplay').textContent=gameState.won.toLocaleString();document.getElementById('lastWinDisplay').textContent=lastWin.toLocaleString();document.getElementById('spinDisplay').textContent=gameState.spins;document.getElementById('navCoins').textContent=c.toLocaleString();
+  // Wallet balance
+  const wb=document.getElementById('walletBigBal');if(wb)wb.textContent=c.toLocaleString();
   const bi=document.getElementById('betValDisplay');if(document.activeElement!==bi)bi.value=betPerLine;
   document.getElementById('betTotalDisplay').textContent='Total Bet: '+totalBet().toLocaleString()+' coins';
   const w=document.getElementById('navWallet');w.classList.remove('bump');void w.offsetWidth;w.classList.add('bump');
@@ -1012,9 +1191,8 @@ function newScratchCard(){if(gameState.coins<30){showToast('Need 30 coins!','err
 window.newScratchCard=newScratchCard;
 function chkScratch(ctx,canvas,VALS){const id=ctx.getImageData(0,0,canvas.width,150);let tr=0;for(let i=3;i<id.data.length;i+=4)if(id.data[i]<128)tr++;if(tr/(canvas.width*150)>0.5&&scratchActive){scratchActive=false;if(scratchResult[0]===scratchResult[1]&&scratchResult[1]===scratchResult[2]){const val=VALS[scratchResult[0]];gameState.coins+=val;gameState.won+=val;if(!gameState.achievements.includes('scratch_won'))gameState.achievements.push('scratch_won');addXP(15);updateUI();playWin();showToast('SCRATCH WIN! +'+val+' coins! 🎴','','green');}else showToast('No match this time...','error');saveGameState();checkAchievements();}}
 
-// ===== ARMY RUSH (Fixed — 12 waves, no lighter blend, proper game over) =====
+// ===== ARMY RUSH =====
 (function(){
-// JOYSTICK
 const jz=document.getElementById('armyJZ'),jk=document.getElementById('armyJK');
 let jId=null,jDx=0,jDy=0;const JR=48;
 function jC(){const r=jz.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2};}
@@ -1027,16 +1205,12 @@ const aKeys={};
 document.addEventListener('keydown',e=>{aKeys[e.code]=true;});
 document.addEventListener('keyup',e=>{aKeys[e.code]=false;});
 function getMv(){let dx=jDx,dy=jDy;if(aKeys['ArrowLeft']||aKeys['KeyA'])dx-=1;if(aKeys['ArrowRight']||aKeys['KeyD'])dx+=1;if(aKeys['ArrowUp']||aKeys['KeyW'])dy-=1;if(aKeys['ArrowDown']||aKeys['KeyS'])dy+=1;const l=Math.hypot(dx,dy);if(l>1){dx/=l;dy/=l;}return{dx,dy};}
-
-// POOLS
 class Pool{constructor(mk,rst){this.mk=mk;this.rst=rst;this.active=[];this.free=[];}get(){const o=this.free.pop()||this.mk();this.active.push(o);return o;}rel(o){const i=this.active.indexOf(o);if(i>=0){this.active.splice(i,1);this.rst(o);this.free.push(o);}}relAll(){while(this.active.length){const o=this.active.pop();this.rst(o);this.free.push(o);}}}
 const BP=new Pool(()=>({x:0,y:0,vx:0,vy:0,dmg:1,life:1,trail:[],fe:false}),o=>{o.trail=[];o.life=1;});
 const PP=new Pool(()=>({x:0,y:0,vx:0,vy:0,life:0,ml:1,r:3,col:'#f60'}),o=>{o.life=0;});
 const EP=new Pool(()=>({x:0,y:0,hp:1,mhp:1,alive:false,type:'s',st:0,vx:0,sc:1,rw:10,fl:0}),o=>{o.alive=false;});
 const OP=new Pool(()=>({x:0,y:0,w:40,h:20,hp:3,mhp:3,alive:false,type:'c',col:'#8B6914'}),o=>{o.alive=false;});
 const CP=new Pool(()=>({x:0,y:0,alive:false,a:0}),o=>{o.alive=false;});
-
-// STATE
 const MAX_WAVE=12;
 let AG={run:false,score:0,coins:0,wave:1,camY:0,ax:0,ay:0,ac:10,st:0,dead:false};
 const UL={fr:1,dm:1,sp:1,ar:1};
@@ -1049,164 +1223,34 @@ function uCost(k){return UC[k][UL[k]-1]||999;}
 let aSolPos=[];
 function aCalcSol(){aSolPos=[];const n=AG.ac;const cols=Math.ceil(Math.sqrt(n*1.5));const rows=Math.ceil(n/cols);let idx=0;for(let r=0;r<rows&&idx<n;r++){const rc=Math.min(cols,n-r*cols);for(let c=0;c<rc;c++){aSolPos.push({ox:(c-(rc-1)/2)*22,oy:(r-(rows-1)/2)*18});idx++;}}}
 aCalcSol();
-
 function waveCfg(w){return{enemies:Math.floor(6+w*4.5),hp:1.5+w*2.2,speed:26+w*6,shootWave:w>=3,bossCount:w>=5?Math.floor((w-4)/2):0,eliteChance:Math.min(0.4,w*0.04),reward:8+w*6,obstacleHp:2+w,spawnInterval:Math.max(0.12,0.35-w*0.02),};}
 let wLeft=0,wSpawnT=0,wDone=false,wDoneT=0;
 function aStartWave(){const cfg=waveCfg(AG.wave);wLeft=cfg.enemies;wSpawnT=0;wDone=false;for(let b=0;b<cfg.bossCount;b++)aSpawnE(true,false);}
 function aSpawnE(boss=false,elite=false){const cfg=waveCfg(AG.wave);const sc=boss?2.4:elite?1.65:1;const e=EP.get();Object.assign(e,{x:aGcW*0.08+Math.random()*aGcW*0.84,y:AG.camY-aGcH*0.05-Math.random()*aGcH*0.35,hp:cfg.hp*(boss?12:elite?4:1),mhp:cfg.hp*(boss?12:elite?4:1),alive:true,type:boss?'boss':elite?'elite':'s',st:Math.random()*2,vx:(Math.random()-.5)*45,sc,rw:cfg.reward*(boss?15:elite?4:1),fl:0});}
 let aObT=0;
 function aSpawnOb(){const cfg=waveCfg(AG.wave);const types=['crate','barrel','wall'],t=types[Math.floor(Math.random()*types.length)],hp=Math.ceil(cfg.obstacleHp*(t==='wall'?2.5:t==='barrel'?1.5:1)),o=OP.get();Object.assign(o,{x:aGcW*0.06+Math.random()*aGcW*0.88,y:AG.camY-aGcH*0.05-Math.random()*aGcH*0.25,w:t==='wall'?65:t==='barrel'?23:38,h:t==='wall'?20:t==='barrel'?28:26,hp,mhp:hp,alive:true,type:t,col:t==='wall'?'#556b2f':t==='barrel'?'#8b0000':'#8B6914'});}
-
-function aFireB(wx,wy,fe=false){
-  const sp=gsp(),dmg=gdmg();const angles=sp===1?[0]:sp===2?[-0.18,0.18]:sp===3?[-0.22,0,0.22]:sp===4?[-0.32,-0.1,0.1,0.32]:[-0.38,-0.18,0,0.18,0.38];
-  angles.forEach(a=>{const b=BP.get();b.x=wx;b.y=wy;b.vx=Math.sin(a)*(fe?-200:200);b.vy=fe?360:-380;b.dmg=fe?1:dmg;b.life=1;b.fe=fe;b.trail=[];
-    if(PP.active.length<200){const p=PP.get();Object.assign(p,{x:wx,y:wy-AG.camY,vx:(Math.random()-.5)*30,vy:fe?20:-20,life:0.06,ml:0.06,r:fe?3:5,col:fe?'#f84':'#ff0'});}
-  });
-}
+function aFireB(wx,wy,fe=false){const sp=gsp(),dmg=gdmg();const angles=sp===1?[0]:sp===2?[-0.18,0.18]:sp===3?[-0.22,0,0.22]:sp===4?[-0.32,-0.1,0.1,0.32]:[-0.38,-0.18,0,0.18,0.38];angles.forEach(a=>{const b=BP.get();b.x=wx;b.y=wy;b.vx=Math.sin(a)*(fe?-200:200);b.vy=fe?360:-380;b.dmg=fe?1:dmg;b.life=1;b.fe=fe;b.trail=[];if(PP.active.length<200){const p=PP.get();Object.assign(p,{x:wx,y:wy-AG.camY,vx:(Math.random()-.5)*30,vy:fe?20:-20,life:0.06,ml:0.06,r:fe?3:5,col:fe?'#f84':'#ff0'});}});}
 function aArmyFire(){const n=Math.min(aSolPos.length,AG.ac);for(let i=0;i<n;i++){const s=aSolPos[i];aFireB(AG.ax+s.ox,AG.ay+s.oy);}}
 function aExplode(sx,sy,n,col){const max=Math.min(n,PP.active.length<180?n:4);for(let i=0;i<max;i++){const p=PP.get();const a=Math.random()*Math.PI*2,sp=50+Math.random()*140;Object.assign(p,{x:sx,y:sy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-60,life:0.4+Math.random()*0.25,ml:0.65,r:2+Math.random()*4,col});}}
 function aSparks(sx,sy){if(PP.active.length>180)return;for(let i=0;i<3;i++){const p=PP.get();const a=Math.random()*Math.PI*2,sp=20+Math.random()*60;Object.assign(p,{x:sx,y:sy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-20,life:0.14+Math.random()*0.08,ml:0.22,r:1.2+Math.random()*1.8,col:'#fc4'});}}
 function aDropCoins(wx,wy,n){for(let i=0;i<n;i++){const c=CP.get();c.x=wx+(Math.random()-.5)*30;c.y=wy;c.alive=true;c.a=Math.random()*6;}}
-
 let aGcW=0,aGcH=0,aLastT=0;
 const ASPD=165;
 let aRaf=null,aInited=false;
-
-function initArmyGame(){
-  const cv=document.getElementById('armyGc'),wp=document.getElementById('armyWrap');
-  if(!cv||!wp)return;
-  aGcW=wp.clientWidth;aGcH=Math.min(580,Math.max(420,aGcW*1.4));
-  cv.width=aGcW;cv.height=aGcH;cv.style.height=aGcH+'px';wp.style.height=(aGcH)+'px';
-  if(!aInited){aInited=true;if(aRaf)cancelAnimationFrame(aRaf);aRaf=requestAnimationFrame(aMainLoop);}
-}
+function initArmyGame(){const cv=document.getElementById('armyGc'),wp=document.getElementById('armyWrap');if(!cv||!wp)return;aGcW=wp.clientWidth;aGcH=Math.min(580,Math.max(420,aGcW*1.4));cv.width=aGcW;cv.height=aGcH;cv.style.height=aGcH+'px';wp.style.height=(aGcH)+'px';if(!aInited){aInited=true;if(aRaf)cancelAnimationFrame(aRaf);aRaf=requestAnimationFrame(aMainLoop);}}
 window.initArmyGame=initArmyGame;
-
-function aStartGame(){
-  Object.assign(AG,{run:true,score:0,coins:0,wave:1,camY:0,ax:aGcW/2,ay:aGcH*0.7,ac:10,st:0,dead:false});
-  Object.assign(UL,{fr:1,dm:1,sp:1,ar:1});
-  [BP,PP,EP,OP,CP].forEach(p=>p.relAll());
-  aCalcSol();aObT=2;wLeft=0;wDone=false;
-  document.getElementById('armyMsg').style.display='none';
-  document.getElementById('vS').textContent='0';document.getElementById('vC').textContent='0';
-  document.getElementById('vW').textContent='1/12';document.getElementById('vA').textContent='10';
-  aUpdUI();aStartWave();aLastT=performance.now();
-}
+function aStartGame(){Object.assign(AG,{run:true,score:0,coins:0,wave:1,camY:0,ax:aGcW/2,ay:aGcH*0.7,ac:10,st:0,dead:false});Object.assign(UL,{fr:1,dm:1,sp:1,ar:1});[BP,PP,EP,OP,CP].forEach(p=>p.relAll());aCalcSol();aObT=2;wLeft=0;wDone=false;document.getElementById('armyMsg').style.display='none';document.getElementById('vS').textContent='0';document.getElementById('vC').textContent='0';document.getElementById('vW').textContent='1/12';document.getElementById('vA').textContent='10';aUpdUI();aStartWave();aLastT=performance.now();}
 window.aStartGame=aStartGame;
-
-function aUpdate(ts){
-  if(!AG.run)return;
-  const dt=Math.min((ts-aLastT)/1000,0.05);aLastT=ts;
-  const mv=getMv();AG.ax+=mv.dx*ASPD*dt;AG.ay+=mv.dy*ASPD*dt;
-  AG.camY+=(AG.ay-aGcH*0.72-AG.camY)*6*dt;
-  AG.ax=Math.max(aGcW*0.1,Math.min(aGcW*0.9,AG.ax));
-  AG.ay=Math.max(AG.camY+aGcH*0.38,Math.min(AG.camY+aGcH*0.94,AG.ay));
-  AG.st-=dt;if(AG.st<=0){aArmyFire();AG.st=gfr();}
-  if(wLeft>0){wSpawnT-=dt;if(wSpawnT<=0){const cfg=waveCfg(AG.wave);aSpawnE(false,Math.random()<cfg.eliteChance);wLeft--;wSpawnT=cfg.spawnInterval;}}
-  aObT-=dt;if(aObT<=0){aSpawnOb();aObT=1.4+Math.random()*2.2;}
-  const cfg=waveCfg(AG.wave);let alive=0;
-  for(const e of EP.active){
-    if(!e.alive)continue;alive++;
-    const dx=AG.ax-e.x,dy=AG.ay-e.y,dist=Math.hypot(dx,dy);
-    if(dist>0.1){e.x+=dx/dist*cfg.speed*e.sc*0.5*dt;e.y+=dy/dist*cfg.speed*e.sc*0.5*dt;}
-    e.vx+=(Math.random()-.5)*40*dt;e.vx=Math.max(-55,Math.min(55,e.vx));e.x+=e.vx*dt;
-    if(e.x<12)e.vx+=35;if(e.x>aGcW-12)e.vx-=35;if(e.fl>0)e.fl-=dt*4;
-    if(cfg.shootWave&&e.type!=='s'){e.st-=dt;if(e.st<=0){aFireB(e.x,e.y,true);e.st=1.1+Math.random();}}
-    if(dist<32+e.sc*18){
-      AG.ac=Math.max(0,AG.ac-Math.ceil(e.sc*2));aCalcSol();aExplode(e.x,e.y-AG.camY,10,'#f40');e.alive=false;
-      if(AG.ac<=0){AG.ac=0;document.getElementById('vA').textContent=0;aEndGame(false);return;}
-    }
-    if(e.y-AG.camY>aGcH+80)e.alive=false;
-  }
-  for(const c of CP.active){
-    if(!c.alive)continue;c.a+=dt*4;
-    const dx=AG.ax-c.x,dy=AG.ay-c.y,dist=Math.hypot(dx,dy);
-    if(dist<90){c.x+=dx/dist*210*dt;c.y+=dy/dist*210*dt;}
-    if(dist<26){AG.coins++;c.alive=false;document.getElementById('vC').textContent=AG.coins;aUpdUI();}
-    if(c.y-AG.camY>aGcH+40)c.alive=false;
-  }
-  const toR=[];
-  for(const b of BP.active){
-    b.trail.push({x:b.x,y:b.y-AG.camY});if(b.trail.length>5)b.trail.shift();
-    b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt*1.1;
-    const bsy=b.y-AG.camY;
-    if(b.life<=0||bsy<-60||bsy>aGcH+60||b.x<-20||b.x>aGcW+20){toR.push(b);continue;}
-    let hit=false;
-    if(!b.fe){
-      for(const e of EP.active){if(!e.alive)continue;const er=13*e.sc;if(Math.abs(b.x-e.x)<er&&Math.abs(b.y-e.y)<er*1.2){e.hp-=b.dmg;e.fl=1;aSparks(b.x,bsy);hit=true;if(e.hp<=0){AG.score+=e.rw;AG.coins+=Math.ceil(e.rw/8);document.getElementById('vS').textContent=AG.score;document.getElementById('vC').textContent=AG.coins;aUpdUI();aExplode(e.x,e.y-AG.camY,12,e.type==='boss'?'#f06':'#f60');aDropCoins(e.x,e.y,Math.ceil(e.rw/8));e.alive=false;}break;}}
-      if(!hit){for(const o of OP.active){if(!o.alive)continue;const osy=o.y-AG.camY;if(b.x>o.x-o.w/2&&b.x<o.x+o.w/2&&b.y>o.y-o.h/2&&b.y<o.y+o.h/2){o.hp-=b.dmg;hit=true;aSparks(b.x,osy);if(o.hp<=0){aExplode(o.x,osy,8,'#c80');aDropCoins(o.x,o.y,2);o.alive=false;}break;}}}
-    }else{
-      const dist=Math.hypot(b.x-AG.ax,b.y-AG.ay);
-      if(dist<32){AG.ac=Math.max(0,AG.ac-1);aCalcSol();aSparks(b.x,bsy);hit=true;if(AG.ac<=0){AG.ac=0;document.getElementById('vA').textContent=0;aEndGame(false);return;}}
-    }
-    if(hit)toR.push(b);
-  }
-  toR.forEach(b=>BP.rel(b));
-  const toRP=[];for(const p of PP.active){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=110*dt;p.life-=dt;if(p.life<=0)toRP.push(p);}toRP.forEach(p=>PP.rel(p));
-  if(wLeft<=0&&alive===0&&!wDone){wDone=true;wDoneT=2.0;}
-  if(wDone){wDoneT-=dt;if(wDoneT<=0){if(AG.wave>=MAX_WAVE){aEndGame(true);return;}AG.wave++;document.getElementById('vW').textContent=AG.wave+'/12';const bonus=AG.wave*20;AG.coins+=bonus;document.getElementById('vC').textContent=AG.coins;aUpdUI();OP.relAll();aStartWave();aObT=2;}}
-  document.getElementById('vA').textContent=AG.ac;
-}
-
-function aDraw(){
-  const cv=document.getElementById('armyGc');if(!cv)return;
-  const ctx=cv.getContext('2d'),W=aGcW,H=aGcH;
-  ctx.fillStyle='#1a2a0a';ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle='rgba(0,80,0,0.15)';ctx.lineWidth=1;
-  const gs=60,goy=((AG.camY*0.4)%gs+gs)%gs;
-  for(let y=goy;y<H;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-  for(let x=0;x<W;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-  for(const o of OP.active){if(!o.alive)continue;const sy=o.y-AG.camY;if(sy<-60||sy>H+60)continue;ctx.fillStyle=o.col;if(o.type==='barrel'){ctx.beginPath();ctx.ellipse(o.x,sy,o.w/2,o.h/2,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(0,0,0,0.3)';ctx.lineWidth=2;ctx.stroke();}else{ctx.fillRect(o.x-o.w/2,sy-o.h/2,o.w,o.h);ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=1;ctx.strokeRect(o.x-o.w/2,sy-o.h/2,o.w,o.h);}const bw=o.w*.8;ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(o.x-bw/2,sy-o.h/2-6,bw,3);ctx.fillStyle='#f59e0b';ctx.fillRect(o.x-bw/2,sy-o.h/2-6,bw*(o.hp/o.mhp),3);}
-  for(const e of EP.active){if(!e.alive)continue;const sy=e.y-AG.camY;if(sy<-60||sy>H+60)continue;ctx.save();ctx.translate(e.x,sy);ctx.scale(e.sc,e.sc);if(e.fl>0)ctx.globalAlpha=0.5+e.fl*0.5;ctx.fillStyle=e.fl>0?'#faa':(e.type==='boss'?'#7c3aed':e.type==='elite'?'#be123c':'#dc2626');ctx.beginPath();ctx.arc(0,-8,10,0,Math.PI*2);ctx.fill();ctx.fillStyle=e.type==='boss'?'#6d28d9':'#9f1239';ctx.fillRect(-8,-2,16,16);ctx.fillStyle='#fff';ctx.fillRect(-5,-12,3,3);ctx.fillRect(2,-12,3,3);ctx.restore();const bw=28*e.sc;ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(e.x-bw/2,sy-30*e.sc,bw,4);ctx.fillStyle=e.hp/e.mhp>0.5?'#22c55e':e.hp/e.mhp>0.25?'#fbbf24':'#ef4444';ctx.fillRect(e.x-bw/2,sy-30*e.sc,bw*(e.hp/e.mhp),4);}
-  for(const b of BP.active){const bsy=b.y-AG.camY;if(b.trail.length>1){ctx.beginPath();ctx.moveTo(b.trail[0].x,b.trail[0].y);for(let i=1;i<b.trail.length;i++)ctx.lineTo(b.trail[i].x,b.trail[i].y);ctx.strokeStyle=b.fe?'rgba(255,80,0,0.25)':'rgba(255,220,0,0.28)';ctx.lineWidth=1.5;ctx.stroke();}ctx.fillStyle=b.fe?'#ef4444':'#ffd700';ctx.beginPath();ctx.arc(b.x,bsy,b.fe?2.5:2.8,0,Math.PI*2);ctx.fill();}
-  ctx.save();for(const p of PP.active){if(p.life<=0)continue;const a=Math.max(0,p.life/p.ml);ctx.globalAlpha=a;ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(p.x,p.y,Math.max(0.5,p.r*a),0,Math.PI*2);ctx.fill();}ctx.restore();
-  for(const c of CP.active){if(!c.alive)continue;const csy=c.y-AG.camY;if(csy<-20||csy>H+20)continue;const pulse=0.88+Math.sin(c.a)*0.12;ctx.save();ctx.translate(c.x,csy);ctx.scale(pulse,pulse);ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(0,0,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(0,0,0,0.5)';ctx.font='bold 7px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('$',0,0.5);ctx.restore();}
-  const asy=AG.ay-AG.camY,n=Math.min(aSolPos.length,AG.ac);
-  ctx.save();ctx.globalAlpha=0.13;ctx.fillStyle='#3b82f6';const acols=Math.ceil(Math.sqrt(n*1.5));ctx.beginPath();ctx.ellipse(AG.ax,asy,acols*13,n/acols*11+16,0,0,Math.PI*2);ctx.fill();ctx.restore();
-  for(let i=0;i<n;i++){const s=aSolPos[i];const sx=AG.ax+s.ox,sy=asy+s.oy;ctx.fillStyle='#2563eb';ctx.beginPath();ctx.arc(sx,sy-6,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1d4ed8';ctx.fillRect(sx-5,sy-2,10,12);}
-  if(wDone&&wDoneT>0.4){ctx.save();ctx.globalAlpha=Math.min(1,(2.0-wDoneT)*2);ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,H/2-28,W,56);ctx.fillStyle='#ffd700';ctx.font='bold 18px monospace';ctx.textAlign='center';ctx.fillText(AG.wave>=MAX_WAVE?'FINAL WAVE CLEAR!':'WAVE '+AG.wave+' CLEAR! +'+AG.wave*20+'🪙',W/2,H/2+7);ctx.restore();}
-  ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(W/2-60,H-8,120,4);ctx.fillStyle='#ffd700';ctx.fillRect(W/2-60,H-8,120*((AG.wave-1)/MAX_WAVE),4);
-}
-
+function aUpdate(ts){if(!AG.run)return;const dt=Math.min((ts-aLastT)/1000,0.05);aLastT=ts;const mv=getMv();AG.ax+=mv.dx*ASPD*dt;AG.ay+=mv.dy*ASPD*dt;AG.camY+=(AG.ay-aGcH*0.72-AG.camY)*6*dt;AG.ax=Math.max(aGcW*0.1,Math.min(aGcW*0.9,AG.ax));AG.ay=Math.max(AG.camY+aGcH*0.38,Math.min(AG.camY+aGcH*0.94,AG.ay));AG.st-=dt;if(AG.st<=0){aArmyFire();AG.st=gfr();}if(wLeft>0){wSpawnT-=dt;if(wSpawnT<=0){const cfg=waveCfg(AG.wave);aSpawnE(false,Math.random()<cfg.eliteChance);wLeft--;wSpawnT=cfg.spawnInterval;}}aObT-=dt;if(aObT<=0){aSpawnOb();aObT=1.4+Math.random()*2.2;}const cfg=waveCfg(AG.wave);let alive=0;for(const e of EP.active){if(!e.alive)continue;alive++;const dx=AG.ax-e.x,dy=AG.ay-e.y,dist=Math.hypot(dx,dy);if(dist>0.1){e.x+=dx/dist*cfg.speed*e.sc*0.5*dt;e.y+=dy/dist*cfg.speed*e.sc*0.5*dt;}e.vx+=(Math.random()-.5)*40*dt;e.vx=Math.max(-55,Math.min(55,e.vx));e.x+=e.vx*dt;if(e.x<12)e.vx+=35;if(e.x>aGcW-12)e.vx-=35;if(e.fl>0)e.fl-=dt*4;if(cfg.shootWave&&e.type!=='s'){e.st-=dt;if(e.st<=0){aFireB(e.x,e.y,true);e.st=1.1+Math.random();}}if(dist<32+e.sc*18){AG.ac=Math.max(0,AG.ac-Math.ceil(e.sc*2));aCalcSol();aExplode(e.x,e.y-AG.camY,10,'#f40');e.alive=false;if(AG.ac<=0){AG.ac=0;document.getElementById('vA').textContent=0;aEndGame(false);return;}}if(e.y-AG.camY>aGcH+80)e.alive=false;}for(const c of CP.active){if(!c.alive)continue;c.a+=dt*4;const dx=AG.ax-c.x,dy=AG.ay-c.y,dist=Math.hypot(dx,dy);if(dist<90){c.x+=dx/dist*210*dt;c.y+=dy/dist*210*dt;}if(dist<26){AG.coins++;c.alive=false;document.getElementById('vC').textContent=AG.coins;aUpdUI();}if(c.y-AG.camY>aGcH+40)c.alive=false;}const toR=[];for(const b of BP.active){b.trail.push({x:b.x,y:b.y-AG.camY});if(b.trail.length>5)b.trail.shift();b.x+=b.vx*dt;b.y+=b.vy*dt;b.life-=dt*1.1;const bsy=b.y-AG.camY;if(b.life<=0||bsy<-60||bsy>aGcH+60||b.x<-20||b.x>aGcW+20){toR.push(b);continue;}let hit=false;if(!b.fe){for(const e of EP.active){if(!e.alive)continue;const er=13*e.sc;if(Math.abs(b.x-e.x)<er&&Math.abs(b.y-e.y)<er*1.2){e.hp-=b.dmg;e.fl=1;aSparks(b.x,bsy);hit=true;if(e.hp<=0){AG.score+=e.rw;AG.coins+=Math.ceil(e.rw/8);document.getElementById('vS').textContent=AG.score;document.getElementById('vC').textContent=AG.coins;aUpdUI();aExplode(e.x,e.y-AG.camY,12,e.type==='boss'?'#f06':'#f60');aDropCoins(e.x,e.y,Math.ceil(e.rw/8));e.alive=false;}break;}}if(!hit){for(const o of OP.active){if(!o.alive)continue;const osy=o.y-AG.camY;if(b.x>o.x-o.w/2&&b.x<o.x+o.w/2&&b.y>o.y-o.h/2&&b.y<o.y+o.h/2){o.hp-=b.dmg;hit=true;aSparks(b.x,osy);if(o.hp<=0){aExplode(o.x,osy,8,'#c80');aDropCoins(o.x,o.y,2);o.alive=false;}break;}}}}else{const dist=Math.hypot(b.x-AG.ax,b.y-AG.ay);if(dist<32){AG.ac=Math.max(0,AG.ac-1);aCalcSol();aSparks(b.x,bsy);hit=true;if(AG.ac<=0){AG.ac=0;document.getElementById('vA').textContent=0;aEndGame(false);return;}}}if(hit)toR.push(b);}toR.forEach(b=>BP.rel(b));const toRP=[];for(const p of PP.active){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=110*dt;p.life-=dt;if(p.life<=0)toRP.push(p);}toRP.forEach(p=>PP.rel(p));if(wLeft<=0&&alive===0&&!wDone){wDone=true;wDoneT=2.0;}if(wDone){wDoneT-=dt;if(wDoneT<=0){if(AG.wave>=MAX_WAVE){aEndGame(true);return;}AG.wave++;document.getElementById('vW').textContent=AG.wave+'/12';const bonus=AG.wave*20;AG.coins+=bonus;document.getElementById('vC').textContent=AG.coins;aUpdUI();OP.relAll();aStartWave();aObT=2;}}document.getElementById('vA').textContent=AG.ac;}
+function aDraw(){const cv=document.getElementById('armyGc');if(!cv)return;const ctx=cv.getContext('2d'),W=aGcW,H=aGcH;ctx.fillStyle='#1a2a0a';ctx.fillRect(0,0,W,H);ctx.strokeStyle='rgba(0,80,0,0.15)';ctx.lineWidth=1;const gs=60,goy=((AG.camY*0.4)%gs+gs)%gs;for(let y=goy;y<H;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}for(let x=0;x<W;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}for(const o of OP.active){if(!o.alive)continue;const sy=o.y-AG.camY;if(sy<-60||sy>H+60)continue;ctx.fillStyle=o.col;if(o.type==='barrel'){ctx.beginPath();ctx.ellipse(o.x,sy,o.w/2,o.h/2,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(0,0,0,0.3)';ctx.lineWidth=2;ctx.stroke();}else{ctx.fillRect(o.x-o.w/2,sy-o.h/2,o.w,o.h);ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=1;ctx.strokeRect(o.x-o.w/2,sy-o.h/2,o.w,o.h);}const bw=o.w*.8;ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(o.x-bw/2,sy-o.h/2-6,bw,3);ctx.fillStyle='#f59e0b';ctx.fillRect(o.x-bw/2,sy-o.h/2-6,bw*(o.hp/o.mhp),3);}for(const e of EP.active){if(!e.alive)continue;const sy=e.y-AG.camY;if(sy<-60||sy>H+60)continue;ctx.save();ctx.translate(e.x,sy);ctx.scale(e.sc,e.sc);if(e.fl>0)ctx.globalAlpha=0.5+e.fl*0.5;ctx.fillStyle=e.fl>0?'#faa':(e.type==='boss'?'#7c3aed':e.type==='elite'?'#be123c':'#dc2626');ctx.beginPath();ctx.arc(0,-8,10,0,Math.PI*2);ctx.fill();ctx.fillStyle=e.type==='boss'?'#6d28d9':'#9f1239';ctx.fillRect(-8,-2,16,16);ctx.fillStyle='#fff';ctx.fillRect(-5,-12,3,3);ctx.fillRect(2,-12,3,3);ctx.restore();const bw=28*e.sc;ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(e.x-bw/2,e.y-AG.camY-30*e.sc,bw,4);ctx.fillStyle=e.hp/e.mhp>0.5?'#22c55e':e.hp/e.mhp>0.25?'#fbbf24':'#ef4444';ctx.fillRect(e.x-bw/2,e.y-AG.camY-30*e.sc,bw*(e.hp/e.mhp),4);}for(const b of BP.active){const bsy=b.y-AG.camY;if(b.trail.length>1){ctx.beginPath();ctx.moveTo(b.trail[0].x,b.trail[0].y);for(let i=1;i<b.trail.length;i++)ctx.lineTo(b.trail[i].x,b.trail[i].y);ctx.strokeStyle=b.fe?'rgba(255,80,0,0.25)':'rgba(255,220,0,0.28)';ctx.lineWidth=1.5;ctx.stroke();}ctx.fillStyle=b.fe?'#ef4444':'#ffd700';ctx.beginPath();ctx.arc(b.x,bsy,b.fe?2.5:2.8,0,Math.PI*2);ctx.fill();}ctx.save();for(const p of PP.active){if(p.life<=0)continue;const a=Math.max(0,p.life/p.ml);ctx.globalAlpha=a;ctx.fillStyle=p.col;ctx.beginPath();ctx.arc(p.x,p.y,Math.max(0.5,p.r*a),0,Math.PI*2);ctx.fill();}ctx.restore();for(const c of CP.active){if(!c.alive)continue;const csy=c.y-AG.camY;if(csy<-20||csy>H+20)continue;const pulse=0.88+Math.sin(c.a)*0.12;ctx.save();ctx.translate(c.x,csy);ctx.scale(pulse,pulse);ctx.fillStyle='#ffd700';ctx.beginPath();ctx.arc(0,0,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(0,0,0,0.5)';ctx.font='bold 7px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('$',0,0.5);ctx.restore();}const asy=AG.ay-AG.camY,n=Math.min(aSolPos.length,AG.ac);ctx.save();ctx.globalAlpha=0.13;ctx.fillStyle='#3b82f6';const acols=Math.ceil(Math.sqrt(n*1.5));ctx.beginPath();ctx.ellipse(AG.ax,asy,acols*13,n/acols*11+16,0,0,Math.PI*2);ctx.fill();ctx.restore();for(let i=0;i<n;i++){const s=aSolPos[i];const sx=AG.ax+s.ox,sy=asy+s.oy;ctx.fillStyle='#2563eb';ctx.beginPath();ctx.arc(sx,sy-6,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1d4ed8';ctx.fillRect(sx-5,sy-2,10,12);}if(wDone&&wDoneT>0.4){ctx.save();ctx.globalAlpha=Math.min(1,(2.0-wDoneT)*2);ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,H/2-28,W,56);ctx.fillStyle='#ffd700';ctx.font='bold 18px monospace';ctx.textAlign='center';ctx.fillText(AG.wave>=MAX_WAVE?'FINAL WAVE CLEAR!':'WAVE '+AG.wave+' CLEAR! +'+AG.wave*20+'🪙',W/2,H/2+7);ctx.restore();}ctx.fillStyle='rgba(0,0,0,0.4)';ctx.fillRect(W/2-60,H-8,120,4);ctx.fillStyle='#ffd700';ctx.fillRect(W/2-60,H-8,120*((AG.wave-1)/MAX_WAVE),4);}
 function aUpdUI(){const ks=[['fr','FR'],['dm','DM'],['sp','SP'],['ar','AR']];ks.forEach(([k,id])=>{const lv=UL[k],max=UM[k],cost=uCost(k);document.getElementById('ac'+id).textContent=lv>=max?'MAX':cost+'🪙';document.getElementById('al'+id).textContent=k==='ar'?'x'+AG.ac:'Lv.'+lv;document.getElementById('ac'+id).parentElement.style.opacity=(AG.coins>=cost&&lv<max)?'1':'0.5';});}
 window.aUpg=function(k){if(!AG.run)return;const cost=uCost(k);if(AG.coins<cost||UL[k]>=UM[k])return;AG.coins-=cost;UL[k]++;if(k==='ar'){AG.ac+=10;aCalcSol();}document.getElementById('vC').textContent=AG.coins;aUpdUI();};
-
-function aEndGame(win){
-  AG.run=false;
-  document.getElementById('armyMT').textContent=win?'VICTORY! 🏆':'DEFEATED';
-  document.getElementById('armyMT').style.color=win?'#ffd700':'#ef4444';
-  document.getElementById('armyMS').textContent='Score: '+AG.score+(win?'\n\nคุณชนะทั้ง 12 Waves!\nยอดเยี่ยมมาก!':'\nถึง Wave: '+AG.wave+'/12\n\nกองทัพถูกทำลายหมด!');
-  document.getElementById('armyMBtn').style.background=win?'#16a34a':'#dc2626';
-  document.getElementById('armyMBtn').textContent=win?'▶ PLAY AGAIN':'▶ RETRY';
-  document.getElementById('armyMsg').style.display='flex';
-  if(win){
-    // เพิ่ม coins เข้า slot game
-    const reward=AG.wave*50;gameState.coins+=reward;gameState.won+=reward;
-    if(!gameState.achievements.includes('army_won'))gameState.achievements.push('army_won');
-    saveGameState();updateUI();checkAchievements();
-    showToast('+'+reward+' coins จาก Army Rush! ⚔️','','green');
-  }
-}
-
-function aMainLoop(ts){
-  aRaf=requestAnimationFrame(aMainLoop);
-  aUpdate(ts);aDraw();
-}
-})();// end army rush IIFE
-
-// ===== TOPUP / WITHDRAW =====
-function setTopupAmt(amt){playClick();document.getElementById('topupAmount').value=amt;updateQR();}
-function updateQR(){const amt=parseInt(document.getElementById('topupAmount').value)||0,btn=document.getElementById('confirmTopup'),qs=document.getElementById('qrSection');if(amt>=1){qs.style.display='block';document.getElementById('qrAmountText').textContent='฿'+amt.toLocaleString();btn.disabled=false;generateQR(amt);}else{qs.style.display='none';btn.disabled=true;}}
-function generateQR(amt){try{const ph='0066'+PROMPTPAY.slice(1),mi='0016A000000677010111'+'0113'+ph,mf='29'+pad(mi.length)+mi,af='54'+pad(amt.toFixed(2).length)+amt.toFixed(2),raw='000201'+mf+'5303764'+af+'5802TH6304';new QRious({element:document.getElementById('qrCanvas'),value:raw+crc16(raw),size:180,background:'white',foreground:'#1a237e',level:'M'});}catch(e){new QRious({element:document.getElementById('qrCanvas'),value:'PromptPay:'+PROMPTPAY+':'+amt,size:180,background:'white',foreground:'#333',level:'M'});}}
-function pad(n){return n<10?'0'+n:''+n;}
-function crc16(s){let c=0xFFFF;for(let i=0;i<s.length;i++){c^=s.charCodeAt(i)<<8;for(let j=0;j<8;j++)c=(c&0x8000)?(c<<1)^0x1021:c<<1;}c&=0xFFFF;return c.toString(16).toUpperCase().padStart(4,'0');}
-async function doTopup(){const amt=parseInt(document.getElementById('topupAmount').value)||0;if(amt<1)return;const coins=amt*10;gameState.coins+=coins;if(!currentUserData.history)currentUserData.history=[];currentUserData.history.unshift({type:'เติมเงิน',amount:amt,coins,date:new Date().toLocaleString('th-TH'),status:'สำเร็จ'});await saveGameState();updateUI();renderHistory();document.getElementById('topupAmount').value='';document.getElementById('qrSection').style.display='none';document.getElementById('confirmTopup').disabled=true;playWin();showToast('+'+coins.toLocaleString()+' coins added! 🎉','','green');}
-function updateWithdraw(){const c=parseInt(document.getElementById('withdrawCoins').value)||0,b=Math.floor(c/100)*10,btn=document.getElementById('confirmWithdraw'),info=document.getElementById('withdrawInfo'),bg=document.getElementById('withdrawBankGroup');if(c>=100){info.style.display='block';bg.style.display='block';document.getElementById('withdrawBaht').textContent='฿'+b.toLocaleString();btn.disabled=false;}else{info.style.display='none';bg.style.display='none';btn.disabled=true;}}
-async function doWithdraw(){const c=parseInt(document.getElementById('withdrawCoins').value)||0,acc=document.getElementById('withdrawAccount').value.trim();if(c<100){showToast('Min 100 coins','error');return;}if(!acc){showToast('Enter account number','error');return;}if(c>gameState.coins){showToast('Insufficient balance','error');return;}const b=Math.floor(c/100)*10;gameState.coins-=c;if(!currentUserData.history)currentUserData.history=[];currentUserData.history.unshift({type:'ถอนเงิน',amount:b,coins:c,account:acc,date:new Date().toLocaleString('th-TH'),status:'รอดำเนินการ'});await saveGameState();updateUI();renderHistory();document.getElementById('withdrawCoins').value='';document.getElementById('withdrawAccount').value='';document.getElementById('withdrawInfo').style.display='none';document.getElementById('withdrawBankGroup').style.display='none';document.getElementById('confirmWithdraw').disabled=true;showToast('Withdrawal ฿'+b.toLocaleString()+' submitted 💸');}
-function filterHistory(type){playClick();historyFilter=type;document.querySelectorAll('.hist-filter').forEach(b=>b.classList.remove('active'));const map={all:'histAll',topup:'histTopup',withdraw:'histWithdraw'};document.getElementById(map[type]).classList.add('active');renderHistory();}
-function renderHistory(){const list=document.getElementById('historyList');let h=currentUserData?.history||[];if(historyFilter==='topup')h=h.filter(x=>x.type==='เติมเงิน');if(historyFilter==='withdraw')h=h.filter(x=>x.type==='ถอนเงิน');if(h.length===0){list.innerHTML='<div style="text-align:center;padding:22px;color:rgba(255,255,255,0.15);font-family:Cinzel,serif;font-size:10px;letter-spacing:2px;">NO TRANSACTIONS YET</div>';return;}list.innerHTML=h.slice(0,30).map(x=>`<div class="hist-item"><div><div class="hist-type">${x.type==='เติมเงิน'?'+ TOP UP':'− WITHDRAW'} &nbsp;${x.type==='เติมเงิน'?'+':'-'}${x.coins.toLocaleString()} coins</div><div class="hist-date">${x.date}${x.account?' → '+x.account:''}</div>${x.status?`<span class="hist-status ${x.status==='สำเร็จ'||x.status==='done'?'done':'pending'}">${x.status}</span>`:''}</div><div class="hist-amt ${x.type==='เติมเงิน'?'plus':'minus'}">${x.type==='เติมเงิน'?'+':'-'}฿${x.amount.toLocaleString()}</div></div>`).join('');}
+function aEndGame(win){AG.run=false;document.getElementById('armyMT').textContent=win?'VICTORY! 🏆':'DEFEATED';document.getElementById('armyMT').style.color=win?'#ffd700':'#ef4444';document.getElementById('armyMS').textContent='Score: '+AG.score+(win?'\n\nคุณชนะทั้ง 12 Waves!\nยอดเยี่ยมมาก!':'\nถึง Wave: '+AG.wave+'/12\n\nกองทัพถูกทำลายหมด!');document.getElementById('armyMBtn').style.background=win?'#16a34a':'#dc2626';document.getElementById('armyMBtn').textContent=win?'▶ PLAY AGAIN':'▶ RETRY';document.getElementById('armyMsg').style.display='flex';if(win){const reward=AG.wave*50;gameState.coins+=reward;gameState.won+=reward;if(!gameState.achievements.includes('army_won'))gameState.achievements.push('army_won');saveGameState();updateUI();checkAchievements();showToast('+'+reward+' coins จาก Army Rush! ⚔️','','green');}}
+function aMainLoop(ts){aRaf=requestAnimationFrame(aMainLoop);aUpdate(ts);aDraw();}
+})();
 
 // ===== PANELS =====
-function showPanel(name){playClick();document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));const pm={slot:'panelSlot',games:'panelGames',ach:'panelAch',lb:'panelLb',topup:'panelTopup'},nm={slot:'navSlot',games:'navGames',ach:'navAch',lb:'navLb',topup:'navTopup'};document.getElementById(pm[name]).classList.add('active');document.getElementById(nm[name]).classList.add('active');if(name==='ach'){renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();}if(name==='topup')renderHistory();}
+function showPanel(name){playClick();document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));const pm={slot:'panelSlot',games:'panelGames',ach:'panelAch',lb:'panelLb',topup:'panelTopup'},nm={slot:'navSlot',games:'navGames',ach:'navAch',lb:'navLb',topup:'navTopup'};document.getElementById(pm[name]).classList.add('active');document.getElementById(nm[name]).classList.add('active');if(name==='ach'){renderAchGrid();updateLevelUI();renderDailyGrid();checkDailyLogin();}if(name==='topup'){updateUI();loadUserRequests();}}
 function showToast(msg,type,theme){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type==='error'?' error':theme==='green'?' green':theme==='bonus'?' bonus':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
 
 // ===== ADMIN =====
@@ -1215,10 +1259,10 @@ const logo=document.getElementById('authLogo');
 if(logo){logo.addEventListener('mousedown',()=>{pressTimer=setTimeout(()=>{if(document.getElementById('authPage').classList.contains('active'))showPage('admin');},3000);});logo.addEventListener('touchstart',e=>{e.preventDefault();pressTimer=setTimeout(()=>{if(document.getElementById('authPage').classList.contains('active'))showPage('admin');},3000);},{passive:false});['mouseup','mouseleave','touchend','touchcancel'].forEach(ev=>logo.addEventListener(ev,()=>clearTimeout(pressTimer)));}
 let keysHeld=new Set();document.addEventListener('keydown',e=>{keysHeld.add(e.key.toUpperCase());if(keysHeld.has('A')&&keysHeld.has('D')&&keysHeld.has('M')&&document.getElementById('authPage').classList.contains('active'))showPage('admin');});document.addEventListener('keyup',e=>keysHeld.delete(e.key.toUpperCase()));
 function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const m={auth:'authPage',admin:'adminLoginPage',adminPanel:'adminPage',game:'gamePage'};document.getElementById(m[name]||name).classList.add('active');}
-async function doAdminLogin(){if(document.getElementById('adminPassInput').value===ADMIN_PASS){document.getElementById('adminPassInput').value='';showPage('adminPanel');await renderAdminStats();await renderUserTable();await loadAdminWinRate();}else document.getElementById('adminLoginError').textContent='Incorrect password';}
+async function doAdminLogin(){if(document.getElementById('adminPassInput').value===ADMIN_PASS){document.getElementById('adminPassInput').value='';showPage('adminPanel');startAdminReqsListener();await renderAdminStats();await renderUserTable();await loadAdminWinRate();}else document.getElementById('adminLoginError').textContent='Incorrect password';}
 document.getElementById('adminPassInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')doAdminLogin();});
-function adminLogout(){showPage('auth');}
-function showAdminPanel(name){document.querySelectorAll('.admin-panel-pg').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('active'));const n=name.charAt(0).toUpperCase()+name.slice(1);document.getElementById('ap'+n).classList.add('active');document.getElementById('anBtn'+n).classList.add('active');if(name==='users')renderUserTable();if(name==='win')renderAdminStats();}
+function adminLogout(){if(_reqsListener){_reqsListener();_reqsListener=null;}showPage('auth');}
+function showAdminPanel(name){document.querySelectorAll('.admin-panel-pg').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.admin-nav-btn').forEach(b=>b.classList.remove('active'));const n=name==='reqs'?'Reqs':name.charAt(0).toUpperCase()+name.slice(1);document.getElementById('ap'+n).classList.add('active');document.getElementById('anBtn'+n).classList.add('active');if(name==='users')renderUserTable();if(name==='win')renderAdminStats();if(name==='reqs')renderAdminReqsFromDB();}
 async function loadAdminWinRate(){const r=await getWinRateSetting();document.getElementById('winRateSlider').value=r;updateRateDisplay(r);const snap=await db.collection('settings').doc('fsrate').get();const sw=snap.exists?(snap.data().starWeight||2):2;currentStarWeight=sw;document.getElementById('fsRateSlider').value=sw;updateFsRateDisplay(sw);}
 function updateRateDisplay(v){v=parseInt(v);document.getElementById('winRateNum').textContent=v;document.getElementById('rateInfo').textContent='Rate: '+v+'% — Approx. '+v+' wins per 100 spins';document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active-p'));[10,30,50,70].forEach((val,i)=>{if(val===v)document.querySelectorAll('.preset-btn')[i].classList.add('active-p');});}
 function setRate(v){document.getElementById('winRateSlider').value=v;updateRateDisplay(v);}
@@ -1227,7 +1271,7 @@ function updateFsRateDisplay(v){v=parseInt(v);document.getElementById('fsRateNum
 function setFsRate(v){document.getElementById('fsRateSlider').value=v;updateFsRateDisplay(v);}
 async function saveFsRate(){const w=parseInt(document.getElementById('fsRateSlider').value);await saveFsRateToDB(w);showToast('Star weight saved: '+w+' ('+getFsRateDesc(w)+')','','green');}
 window.updateFsRateDisplay=updateFsRateDisplay;window.setFsRate=setFsRate;window.saveFsRate=saveFsRate;
-async function renderAdminStats(){const all=Object.values(await getAllUsers()),tu=all.length,ts=all.reduce((a,u)=>a+(u.spins||0),0),tw=all.reduce((a,u)=>a+(u.won||0),0),tp=all.reduce((a,u)=>(u.history||[]).filter(h=>h.type==='เติมเงิน').reduce((s,h)=>s+h.amount,0)+a,0),twd=all.reduce((a,u)=>(u.history||[]).filter(h=>h.type==='ถอนเงิน').reduce((s,h)=>s+h.amount,0)+a,0);document.getElementById('overallStats').innerHTML=[['Users',tu],['Spins',ts.toLocaleString()],['Won',tw.toLocaleString()],['Top Up','฿'+tp.toLocaleString()],['Withdrawn','฿'+twd.toLocaleString()]].map(([l,v])=>`<div class="admin-stat"><span class="lbl">${l}</span><span class="val">${v}</span></div>`).join('');}
+async function renderAdminStats(){const all=Object.values(await getAllUsers()),tu=all.length,ts=all.reduce((a,u)=>a+(u.spins||0),0),tw=all.reduce((a,u)=>a+(u.won||0),0);const reqSnap=await db.collection('depositRequests').get();const tp=reqSnap.docs.filter(d=>d.data().status==='approved').reduce((s,d)=>s+(d.data().amount||0),0);const tpend=reqSnap.docs.filter(d=>d.data().status==='pending').length;document.getElementById('overallStats').innerHTML=[['Users',tu],['Spins',ts.toLocaleString()],['Won Coins',tw.toLocaleString()],['Deposited','฿'+tp.toLocaleString()],['Pending Reqs',tpend]].map(([l,v])=>`<div class="admin-stat"><span class="lbl">${l}</span><span class="val">${v}</span></div>`).join('');}
 async function renderUserTable(){const tbody=document.getElementById('userTableBody');tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:18px;font-family:Cinzel,serif;font-size:10px;">Loading...</td></tr>';const globalRate=await getWinRateSetting(),all=Object.entries(await getAllUsers());if(!all.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.2);padding:18px">No users yet</td></tr>';return;}tbody.innerHTML=all.map(([uname,u])=>{const ur=u.winRate!=null?u.winRate:null,dr=ur!=null?ur:globalRate,ic=ur!=null;return`<tr><td><span style="font-family:Cinzel,serif;color:rgba(245,166,35,0.85)">${uname}</span><br><span style="font-size:10px;color:rgba(255,255,255,0.25)">${u.email||''}</span></td><td style="font-family:Cinzel,serif;color:#f5a623">${(u.coins||0).toLocaleString()}</td><td>${(u.spins||0).toLocaleString()}</td><td><div style="min-width:150px"><div style="display:flex;align-items:center;gap:5px;margin-bottom:3px"><span style="font-family:Cinzel,serif;font-size:15px;font-weight:700;color:${ic?'#cc44ff':'rgba(255,255,255,0.4)'}" id="urNum_${uname}">${dr}%</span>${ic?`<span style="font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(204,68,255,0.15);color:#cc44ff;border:1px solid rgba(204,68,255,0.3)">CUSTOM</span>`:`<span style="font-size:9px;padding:1px 6px;border-radius:10px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.08)">GLOBAL</span>`}</div><input type="range" min="1" max="90" value="${dr}" style="width:100%;accent-color:#cc44ff;height:3px;cursor:pointer" oninput="previewUserRate('${uname}',this.value)" id="urSlider_${uname}"><div style="display:flex;gap:4px;margin-top:3px"><button class="coins-edit-btn" style="font-size:9px;padding:3px 7px" onclick="setUserRate('${uname}',document.getElementById('urSlider_${uname}').value)">✓ Save</button><button class="coins-edit-btn" style="font-size:9px;padding:3px 7px;border-color:rgba(255,100,100,0.25);color:rgba(255,120,120,0.6)" onclick="resetUserRate('${uname}')">↺ Reset</button></div></div></td><td><div class="coins-edit-row"><input type="number" id="ci_${uname}" placeholder="Amount"><button class="coins-edit-btn" onclick="addCoins('${uname}')">+ Add</button><button class="coins-edit-btn" onclick="setCoins('${uname}')">= Set</button></div></td></tr>`;}).join('');}
 async function addCoins(u){const v=parseInt(document.getElementById('ci_'+u).value)||0;if(!v)return;const d=await getUserData(u);if(!d)return;d.coins=(d.coins||0)+v;await saveUserData(u,d);if(currentUser===u){gameState.coins=d.coins;currentUserData=d;updateUI();}await renderUserTable();showToast('Added '+v+' coins to '+u,'','green');}
 async function setCoins(u){const v=parseInt(document.getElementById('ci_'+u).value);if(isNaN(v))return;const d=await getUserData(u);if(!d)return;d.coins=v;await saveUserData(u,d);if(currentUser===u){gameState.coins=v;currentUserData=d;updateUI();}await renderUserTable();showToast('Set '+u+' coins to '+v,'','green');}
@@ -1235,8 +1279,8 @@ function previewUserRate(uname,val){const el=document.getElementById('urNum_'+un
 async function setUserRate(uname,val){const rate=Math.min(90,Math.max(1,parseInt(val)||30));const d=await getUserData(uname);if(!d)return;d.winRate=rate;await saveUserData(uname,d);if(currentUser===uname)currentUserData.winRate=rate;await renderUserTable();showToast('Win rate for '+uname+' set to '+rate+'%','','green');}
 async function resetUserRate(uname){const d=await getUserData(uname);if(!d)return;delete d.winRate;await saveUserData(uname,d);if(currentUser===uname)delete currentUserData.winRate;await renderUserTable();showToast(uname+' reset to global rate','','green');}
 
-// ===== EXPOSE =====
-window.doLogin=doLogin;window.doSignup=doSignup;window.doLogout=doLogout;window.switchTab=switchTab;window.showPanel=showPanel;window.showPage=showPage;window.updateQR=updateQR;window.doTopup=doTopup;window.setTopupAmt=setTopupAmt;window.updateWithdraw=updateWithdraw;window.doWithdraw=doWithdraw;window.filterHistory=filterHistory;window.loadLeaderboard=loadLeaderboard;window.claimDaily=claimDaily;window.doAdminLogin=doAdminLogin;window.adminLogout=adminLogout;window.showAdminPanel=showAdminPanel;window.saveWinRate=saveWinRate;window.setRate=setRate;window.updateRateDisplay=updateRateDisplay;window.addCoins=addCoins;window.setCoins=setCoins;window.previewUserRate=previewUserRate;window.setUserRate=setUserRate;window.resetUserRate=resetUserRate;window.toggleAuto=toggleAuto;window.setAutoCount=setAutoCount;window.onBetInput=onBetInput;window.onBetBlur=onBetBlur;
+window.doLogin=doLogin;window.doSignup=doSignup;window.doLogout=doLogout;window.switchTab=switchTab;window.showPanel=showPanel;window.showPage=showPage;window.doAdminLogin=doAdminLogin;window.adminLogout=adminLogout;window.showAdminPanel=showAdminPanel;window.saveWinRate=saveWinRate;window.setRate=setRate;window.updateRateDisplay=updateRateDisplay;window.addCoins=addCoins;window.setCoins=setCoins;window.previewUserRate=previewUserRate;window.setUserRate=setUserRate;window.resetUserRate=resetUserRate;window.toggleAuto=toggleAuto;window.setAutoCount=setAutoCount;window.onBetInput=onBetInput;window.onBetBlur=onBetBlur;
+window.setReqAmt=setReqAmt;window.updateCoinsPreview=updateCoinsPreview;window.submitDepositRequest=submitDepositRequest;
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('regPass2').addEventListener('keydown',e=>{if(e.key==='Enter')doSignup();});
 
