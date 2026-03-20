@@ -844,6 +844,18 @@ function playClick(){playTone(600,0.04,'square',0.08);}
 function playAch(){[523,659,784,1047,1319].forEach((f,i)=>setTimeout(()=>playTone(f,0.2,'triangle',0.3),i*70));}
 function playNoise(){try{const c=getAudio(),buf=c.createBuffer(1,c.sampleRate*0.06,c.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.1;const s=c.createBufferSource(),g=c.createGain();s.buffer=buf;s.connect(g);g.connect(c.destination);g.gain.setValueAtTime(0.15,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.06);s.start();s.stop(c.currentTime+0.06);}catch(e){}}
 
+// ===== GLOBAL PROXIES (must be outside load event for onclick to work) =====
+var _appReady=false,_appQueue=[];
+function _callWhenReady(fn,args){if(_appReady&&window['_app_'+fn])window['_app_'+fn].apply(null,args);else _appQueue.push({fn,args});}
+['loadLeaderboard','showPanel','showPage','doLogin','doSignup','doLogout','switchTab',
+ 'doAdminLogin','adminLogout','showAdminPanel','saveWinRate','setRate','updateRateDisplay',
+ 'addCoins','setCoins','previewUserRate','setUserRate','resetUserRate','toggleAuto',
+ 'setAutoCount','onBetInput','onBetBlur','claimDaily','setReqAmt','updateCoinsPreview',
+ 'submitDepositRequest','approveRequest','rejectRequest','adminFilterReqs','closeEmptyOverlay',
+ 'startBonus','showMiniGame','spinWheel','newScratchCard','aStartGame','aUpg',
+ 'saveFsRate','setFsRate','updateFsRateDisplay','onSlipSelected','removeSlip'
+].forEach(function(name){window[name]=function(){_callWhenReady(name,Array.from(arguments));};});
+
 window.addEventListener('load',function(){
 
 // ===== FIREBASE =====
@@ -1339,6 +1351,19 @@ async function resetUserRate(uname){const d=await getUserData(uname);if(!d)retur
 
 window.doLogin=doLogin;window.doSignup=doSignup;window.doLogout=doLogout;window.switchTab=switchTab;window.showPanel=showPanel;window.showPage=showPage;window.doAdminLogin=doAdminLogin;window.adminLogout=adminLogout;window.showAdminPanel=showAdminPanel;window.saveWinRate=saveWinRate;window.setRate=setRate;window.updateRateDisplay=updateRateDisplay;window.addCoins=addCoins;window.setCoins=setCoins;window.previewUserRate=previewUserRate;window.setUserRate=setUserRate;window.resetUserRate=resetUserRate;window.toggleAuto=toggleAuto;window.setAutoCount=setAutoCount;window.onBetInput=onBetInput;window.onBetBlur=onBetBlur;window.loadLeaderboard=loadLeaderboard;window.claimDaily=claimDaily;window.saveFsRate=saveFsRate;window.setFsRate=setFsRate;window.updateFsRateDisplay=updateFsRateDisplay;
 window.setReqAmt=setReqAmt;window.updateCoinsPreview=updateCoinsPreview;window.submitDepositRequest=submitDepositRequest;
+// Register _app_ versions for proxy and flush queue
+['loadLeaderboard','showPanel','showPage','doLogin','doSignup','doLogout','switchTab',
+ 'doAdminLogin','adminLogout','showAdminPanel','saveWinRate','setRate','updateRateDisplay',
+ 'addCoins','setCoins','previewUserRate','setUserRate','resetUserRate','toggleAuto',
+ 'setAutoCount','onBetInput','onBetBlur','claimDaily','setReqAmt','updateCoinsPreview',
+ 'submitDepositRequest','approveRequest','rejectRequest','adminFilterReqs','closeEmptyOverlay',
+ 'startBonus','showMiniGame','spinWheel','newScratchCard','aStartGame',
+ 'saveFsRate','setFsRate','updateFsRateDisplay','onSlipSelected','removeSlip'
+].forEach(function(name){if(window[name])window['_app_'+name]=window[name];});
+window['_app_aUpg']=function(k){if(!AG.run)return;const cost=uCost(k);if(AG.coins<cost||UL[k]>=UM[k])return;AG.coins-=cost;UL[k]++;if(k==='ar'){AG.ac+=10;aCalcSol();}document.getElementById('vC').textContent=AG.coins;aUpdUI();};
+_appReady=true;
+_appQueue.forEach(function(item){if(window['_app_'+item.fn])window['_app_'+item.fn].apply(null,item.args);});
+_appQueue=[];
 document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('regPass2').addEventListener('keydown',e=>{if(e.key==='Enter')doSignup();});
 
